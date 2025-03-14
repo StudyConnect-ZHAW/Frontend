@@ -1,26 +1,56 @@
 # StudyConnect Frontend
 
-This project is part of the **StudyConnect** platform, which aims to help students connect, collaborate, and organize study sessions. 
+Welcome to the **StudyConnect** frontend repository! StudyConnect helps students easily connect, collaborate, and organize effective study sessions.
 
-This is a [Next.js](https://nextjs.org) project.   It uses **TypeScript** for type-safe development and **Tailwind CSS** for a utility-first styling approach.
+This project is built with [Next.js](https://nextjs.org).   It uses **TypeScript** for type-safe development and **Tailwind CSS** for a utility-first styling approach.
 
 ## Getting Started
 
-First, run the development server:
+Follow these simple steps to run the project locally:
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+- **Node.js** version **20.10.0** or higher ([download Node.js](https://nodejs.org/))
+- **npm** (automatically included with Node.js)
+
+Check your installed Node.js version with:
 
 ```bash
+node -v
+```
+
+### Production Build
+
+Run the following commands to create an optimized production build:
+
+```bash
+npm install
+npm run build
+npm run start
+```
+
+The app will now be accessible at [http://localhost:3000](http://localhost:3000).
+
+### Development Mode
+
+For development with live updates and easy debugging:
+
+```bash
+npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the app in real-time.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Start editing `app/page.tsx`, and your changes will auto-update instantly
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to optimize and load [Geist](https://vercel.com/font), a modern font provided by Vercel.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+Enhance your Next.js skills with these resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Next.js Documentation](https://nextjs.org/docs) - Comprehensive guide to Next.js features.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
