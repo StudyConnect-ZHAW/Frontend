@@ -42,6 +42,12 @@ npm install
 npm run dev
 ```
 
+If you get an error like
+```
+[Error: `turbo.createProject` is not supported by the wasm bindings.]
+```
+try deleting `node_modules` and `.next` and running `npm install` again to get rid of old settings or dependencies.
+
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the app in real-time.
 
 Start editing `app/page.tsx`, and your changes will auto-update instantly
