@@ -26,6 +26,7 @@ jobs:
         run: npm test --coverage
 
       - name: Run SonarQube analysis
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: npm run sonar
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Example: "https://your-sonarqube-server.com"
