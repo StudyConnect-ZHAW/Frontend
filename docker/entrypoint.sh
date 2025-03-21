@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+# Entrypoint script
 
-# Replace placeholder in .next files with actual API URL
-find .next -type f -exec sed -i "s|__BACKEND_API__|${NEXT_PUBLIC_API_URL}|g" {} \;
+# You can add any logic here (e.g., waiting for the backend to be ready)
 
-# Start Next.js
-exec npm run start
+echo "Starting frontend..."
+exec npm start  # This will run `npm start` to launch the Next.js app

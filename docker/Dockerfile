@@ -39,3 +39,7 @@ EXPOSE 3000
 
 # Start using the entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
+
+# Add a health check to the Dockerfile
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD curl --silent --fail http://localhost:3000 || exit 1

@@ -35,16 +35,9 @@ The app will now be accessible at [http://localhost:3000](http://localhost:3000)
 
 Alternatively for the relase [Docker](https://www.docker.com) is required.
 
-The frontend image should be built with the following command:
-
+The frontend image can be ran with the following command:
 ```bash
-docker build -t studyconnect-frontend -f docker/Dockerfile.frontend .  
-```
-
-After building it the image can be applied to a container with:
-
-```bash
-docker run -e NEXT_PUBLIC_API_URL="http://localhost:8080/swagger/index.html" -p 3000:3000 studyconnect-frontend
+docker-compose -f ./docker/compose.yaml up --build
 ```
 
 Please note that the [backend](https://github.com/StudyConnect-ZHAW/Backend) docker environment has to already be running for the interfaces to be available and proper mapping can be applied.

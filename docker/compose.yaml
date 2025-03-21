@@ -1,7 +1,16 @@
-frontend:
-  image: sc-frontend
-  build: .
-  environment:
-    - NEXT_PUBLIC_API_URL=${BACKEND_API_URL}
-  ports:
-    - "3000:3000"
+version: "3.8"
+
+
+services:
+  frontend:
+    image: sc-frontend
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080  # This is the URL the frontend will use to communicate with the backend
+    ports:
+      - "3000:3000"
+    # Ensure the container runs and automatically removes after stopping
+    # Alternatively, you can use the `--rm` flag in `docker run` via a script if needed
+    restart: unless-stopped  # Optional: ensures the service will restart unless manually stopped
