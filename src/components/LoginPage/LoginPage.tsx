@@ -17,7 +17,7 @@ const LoginPage = () => {
       <h1 className={styles.loginTitle}>Login</h1>
 
       <button onClick={handleLogin} className={styles.microsoftButtonWrapper}>
-        <Image src="/microsoft-login-button.png" alt="Microsoft SSO Login" width={342} height={54} />
+        <Image src="/microsoft-login-button.png" alt="Microsoft SSO Login" width={320} height={54} style={{ width: '100%', height: 'auto' }} />
       </button>
 
       <p className={styles.forgotPassword}>Passwort vergessen?</p>

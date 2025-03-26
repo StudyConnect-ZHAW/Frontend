@@ -7,7 +7,7 @@
     justify-content: center;
   
     min-height: 100vh;
-    padding: 2rem;
+    padding: 2rem 1rem;
 
     background: #ffd36908;
 }
@@ -18,16 +18,6 @@
     margin-bottom: 2rem;
   }
   
-  .logoImage {
-    position: absolute;
-    width: 605.95px;
-    height: 370.58px;
-    left: 0.97px;
-    top: 0px;
-    background: url(/logo.png);
-    transform: rotate(0.15deg);
-  }
-  
   .loginTitle {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
@@ -36,30 +26,10 @@
   }
   
   .microsoftButtonWrapper {
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin-bottom: 1rem;
-  }
-  
-  .microsoftButton {
+    width: 100%;
+    max-width: 320px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 22px;
-    width: 342px;
-    height: 46px;
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 150%;
-    letter-spacing: 0.15px;
-    color: #000000;
-    background: none;
-    border: none;
-    cursor: pointer;
+    justify-content: center;
   }
   
   .forgotPassword {
@@ -68,4 +38,21 @@
     text-align: center;
     cursor: pointer;
     margin-top: 1rem;
+  }
+
+
+  @media (min-width: 768px) {
+    .loginTitle {
+      font-size: 2.5rem;
+    }
+  
+    .forgotPassword {
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 390px) {
+    .logoFrame {
+      max-width: 300px;
+    }
   }
