@@ -11,14 +11,13 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logoFrame}>
-        <Image src="/images/logo.png" alt="StudyConnect" width={606} height={372} />
+        <Image src="/logo.png" alt="StudyConnect" width={606} height={372} style={{ width: '100%', height: 'auto' }} />
       </div>
 
       <h1 className={styles.loginTitle}>Login</h1>
 
-      {/* Microsoft Login Button direkt hier */}
       <button onClick={handleLogin} className={styles.microsoftButtonWrapper}>
-        <Image src="/images/microsoft-login-button.png" alt="Microsoft SSO Login" width={342} height={54} />
+        <Image src="/microsoft-login-button.png" alt="Microsoft SSO Login" width={342} height={54} />
       </button>
 
       <p className={styles.forgotPassword}>Passwort vergessen?</p>

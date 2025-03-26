@@ -1,18 +1,21 @@
 /* LoginPage*/
 
 .container {
-    position: relative;
-    width: 1440px;
-    height: 1024px;
-    background: rgba(255, 211, 105, 0.03);
-  }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  
+    min-height: 100vh;
+    padding: 2rem;
+
+    background: #ffd36908;
+}
   
   .logoFrame {
-    position: absolute;
-    width: 606.92px;
-    height: 372.17px;
-    left: 417px;
-    top: 140px;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 2rem;
   }
   
   .logoImage {
@@ -26,34 +29,17 @@
   }
   
   .loginTitle {
-    position: absolute;
-    width: 112px;
-    height: 65px;
-    left: 664px;
-    top: 546px;
     font-family: 'Poppins', sans-serif;
-    font-style: normal;
     font-weight: 700;
-    font-size: 40px;
-    line-height: 60px;
-    color: #000000;
+    font-size: 2rem;
+    margin-bottom: 1rem;
   }
   
   .microsoftButtonWrapper {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0px;
-    position: absolute;
-    width: 342px;
-    height: 54px;
-    left: 549px;
-    top: 631px;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(30, 36, 50, 0.23);
-    border-radius: 8px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
   }
   
   .microsoftButton {
@@ -77,35 +63,9 @@
   }
   
   .forgotPassword {
-    position: absolute;
-    width: 195px;
-    height: 42px;
-    left: 622px;
-    top: 725px;
     font-family: 'Poppins', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 27px;
-    color: #000000;
+    font-size: 1rem;
     text-align: center;
     cursor: pointer;
-  }
-  
-  .frame1 {
-    position: absolute;
-    width: 5px;
-    height: 360px;
-    left: 1167px;
-    top: 365px;
-    background: #ccc; /* Beispielwert */
-  }
-  
-  .frame2 {
-    position: absolute;
-    width: 2px;
-    height: 361px;
-    left: 1170px;
-    top: 365px;
-    background: #999; /* Beispielwert */
+    margin-top: 1rem;
   }
