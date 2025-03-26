@@ -1,0 +1,111 @@
+/* LoginPage*/
+
+.container {
+    position: relative;
+    width: 1440px;
+    height: 1024px;
+    background: rgba(255, 211, 105, 0.03);
+  }
+  
+  .logoFrame {
+    position: absolute;
+    width: 606.92px;
+    height: 372.17px;
+    left: 417px;
+    top: 140px;
+  }
+  
+  .logoImage {
+    position: absolute;
+    width: 605.95px;
+    height: 370.58px;
+    left: 0.97px;
+    top: 0px;
+    background: url(/logo.png);
+    transform: rotate(0.15deg);
+  }
+  
+  .loginTitle {
+    position: absolute;
+    width: 112px;
+    height: 65px;
+    left: 664px;
+    top: 546px;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 60px;
+    color: #000000;
+  }
+  
+  .microsoftButtonWrapper {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px;
+    position: absolute;
+    width: 342px;
+    height: 54px;
+    left: 549px;
+    top: 631px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(30, 36, 50, 0.23);
+    border-radius: 8px;
+  }
+  
+  .microsoftButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 22px;
+    width: 342px;
+    height: 46px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    letter-spacing: 0.15px;
+    color: #000000;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .forgotPassword {
+    position: absolute;
+    width: 195px;
+    height: 42px;
+    left: 622px;
+    top: 725px;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 27px;
+    color: #000000;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .frame1 {
+    position: absolute;
+    width: 5px;
+    height: 360px;
+    left: 1167px;
+    top: 365px;
+    background: #ccc; /* Beispielwert */
+  }
+  
+  .frame2 {
+    position: absolute;
+    width: 2px;
+    height: 361px;
+    left: 1170px;
+    top: 365px;
+    background: #999; /* Beispielwert */
+  }
