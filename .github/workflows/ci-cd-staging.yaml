@@ -4,6 +4,10 @@ on:
   workflow_call:  # Allows this workflow to be triggered by another workflow
   workflow_dispatch: # enables manual trigger
 
+permissions:
+  packages: write
+  contents: read
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
