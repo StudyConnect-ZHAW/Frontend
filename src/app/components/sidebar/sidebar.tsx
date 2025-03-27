@@ -10,6 +10,7 @@ const Sidebar = () => {
   /// setActiveIcon NOT YET IMPLEMENTED CORRECTLY!!!!!!
   /// JUST A TEMPLATE FOR NOW!!!
 
+  // Tracks which icon is currently active (clicked)
   return (
     <div className={styles.container}>
       <div className={styles.iconWrapper}>
