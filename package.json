@@ -11,7 +11,7 @@
     "sonar": "sonar-scanner"
   },
   "dependencies": {
-    "next": "15.2.1",
+    "next": "15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "vite": "^6.2.2"
