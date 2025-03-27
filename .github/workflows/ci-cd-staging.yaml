@@ -16,8 +16,8 @@ jobs:
 
       - name: Build and push frontend image
         run: |
-          docker build -t ghcr.io/StudyConnect-ZHAW/frontend:latest .
-          docker push ghcr.io/StudyConnect-ZHAW/frontend:latest
+          docker build -t ghcr.io/studyconnect-zhaw/frontend/staging:latest -f docker/Dockerfile .
+          docker push ghcr.io/studyconnect-zhaw/frontend/staging:latest
 
       - name: Clone StudyConnect-ZHAW GitOps repository
         run: |
@@ -28,13 +28,13 @@ jobs:
   
       - name: Update deployment manifest
         run: |
-          sed -i 's|image: ghcr.io/StudyConnect-ZHAW/frontend:.*|image: ghcr.io/StudyConnect-ZHAW/frontend:latest|' ../gitops-repo/deployment/frontend/k8/staging/deployment.yaml
+          sed -i 's|image: ghcr.io/studyconnect-zhaw/frontend/staging:.*|image: ghcr.io/studyconnect-zhaw/frontend/staging:latest|' ../gitops-repo/deployment/frontend/K8s/staging/deployment.yaml
 
       - name: Commit and push changes
         run: |
           cd ../gitops-repo
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          git add deployment/frontend/k8/staging/deployment.yaml
-          git commit -m "Update backend image"
+          git add deployment/frontend/K8s/staging/deployment.yaml
+          git commit -m "Update frontend image"
           git push
