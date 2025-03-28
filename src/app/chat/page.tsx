@@ -1,10 +1,10 @@
 import PageHeader from '@/components/PageHeader';
 import React from 'react';
 
-export default function Home() {
+export default function ChatPage() {
     return (
         <>
-            <PageHeader title='Welcome User' />
+            <PageHeader title='Chat' />
             <div className='page-container'>
                 {/** Code for page here */}
             </div>

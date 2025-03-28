@@ -1,10 +1,10 @@
 import PageHeader from '@/components/PageHeader';
 import React from 'react';
 
-export default function Home() {
+export default function ForumPage() {
     return (
         <>
-            <PageHeader title='Welcome User' />
+            <PageHeader title='Forum' />
             <div className='page-container'>
                 {/** Code for page here */}
             </div>
