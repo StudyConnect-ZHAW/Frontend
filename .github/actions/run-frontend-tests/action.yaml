@@ -1,0 +1,58 @@
+name: "Run Frontend Tests"
+description: "Installs dependencies and runs tests in a Node.js project"
+
+inputs:
+  working-directory:
+    description: "The working directory where your frontend project is located"
+    required: true
+    default: "."
+  codecov-token:
+    description: "Codecov token for uploading coverage"
+    required: true
+  node-env:
+    description: "Node environment"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4.3.0
+      with:
+        node-version: '20.x'
+
+    - name: Install Dependencies
+      run: |
+        cd ${{ inputs.working-directory }}
+        npm install
+      shell: bash
+    
+    - name: Build Project
+      run: |
+        cd ${{ inputs.working-directory }}
+        npm run build
+      shell: bash
+
+    - name : Run Tests
+      run: |
+        cd ${{ inputs.working-directory }}
+        npm test --coverage
+      shell: bash
+
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v5.4.0
+      with:
+        token: ${{ inputs.codecov-token }}
+        directory: ${{ inputs.working-directory }}/coverage
+        flags: frontend
+        fail_ci_if_error: false
+        verbose: true
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: frontend-test-results
+        path: ${{ inputs.working-directory }}/coverage
