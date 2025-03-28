@@ -5,28 +5,159 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch: # enables manual trigger
 
+permissions:
+  issues: write         # Required for create-or-update-comment
+  pull-requests: write  # Required for SonarQube PR decoration and create-or-update-comment
+  contents: read        # Required for actions/checkout
+  # Optional: Needed if SonarQube needs to check security hotspots. Add if required.
+  security-events: read
 
 jobs:
-  build:
+  frontend-tests:
+    runs-on: ubuntu-latest
+    outputs: # Define output for artifact name
+      artifact_name: frontend-test-results-${{ github.run_id }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Use v4
+
+      - name: Run Frontend Tests and Generate Coverage
+        # Assuming this action generates coverage reports (e.g., lcov.info)
+        # inside the specified output path (default './coverage')
+        uses: ./.github/actions/run-frontend-tests
+        id: run_tests
+        with:
+          working-directory: "."
+          node-env: 'test'
+          # Ensure this action outputs coverage to a predictable path, e.g., ./coverage/lcov.info
+
+      - name: Upload Frontend Test Coverage Artifact
+        uses: actions/upload-artifact@v4 # Use v4
+        with:
+          name: ${{ steps.run_tests.outputs.artifact_name || format('frontend-test-results-{0}', github.run_id) }} # Use output or fallback
+          path: ./coverage # Adjust if your action outputs coverage elsewhere
+
+  sonarqube-analysis:
+    needs: [frontend-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
+          fetch-depth: 0 # Required for SonarQube PR analysis
 
-      - name: Run tests and generate coverage
-        run: npm test --coverage
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17 # SonarScanner supports LTS versions like 11, 17
+          distribution: "temurin"
 
-      - name: Run SonarQube analysis
-        uses: sonarsource/sonarqube-scan-action@master
+      - name: Download Frontend Test Results
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.frontend-tests.outputs.artifact_name }} # Use output from needs context
+          path: ./coverage # Download to the expected path
+
+      # Optional: Verify downloaded coverage file exists
+      - name: List downloaded files
+        run: ls -R ./coverage
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Install jq (for parsing results)
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2.1.0 # Use official action v2+
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Example: "https://your-sonarqube-server.com"
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Pass token for PR decoration
+        with:
+          projectBaseDir: . # Optional: default is .
+          args: >
+            -Dsonar.projectKey=StudyConnect-frontend
+            -Dsonar.sources=.
+            -Dsonar.tests=. # Adjust if tests are in a specific dir
+            -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js # Adjust pattern as needed
+            -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info # IMPORTANT: Point to the LCOV file
+            # Add other parameters if needed, e.g., exclusions
+
+      # Wait for SonarQube analysis to complete. Adjust sleep time as needed.
+      # A more robust method would poll the /api/ce/task endpoint.
+      - name: Wait for SonarQube Analysis Task
+        run: sleep 60 # Wait 60 seconds
+
+      - name: Fetch SonarQube Analysis Results
+        id: fetch_sonar_results
+        run: |
+          project_key="StudyConnect-frontend"
+          sonar_host="${{ secrets.SONAR_HOST_URL }}"
+          sonar_token="${{ secrets.SONAR_TOKEN }}"
+
+          echo "Fetching Quality Gate status from: $sonar_host/api/qualitygates/project_status?projectKey=$project_key"
+
+          # Fetch SonarQube analysis result
+          # Use --fail to make curl exit with non-zero status on HTTP errors (like 401 Unauthorized)
+          analysis_result=$(curl -s -u "$sonar_token:" --fail "$sonar_host/api/qualitygates/project_status?projectKey=$project_key")
+
+          if [ -z "$analysis_result" ]; then
+            echo "::error::Failed to fetch SonarQube analysis results. Response was empty."
+            exit 1
+          fi
+          echo "Raw analysis result: $analysis_result"
+
+          # Extract Quality Gate Status
+          quality_gate_status=$(echo "$analysis_result" | jq -r '.projectStatus.status')
+          if [ "$quality_gate_status" == "null" ] || [ -z "$quality_gate_status" ]; then
+             echo "::error::Could not extract Quality Gate status from SonarQube response."
+             echo "Response JSON:"
+             echo "$analysis_result"
+             exit 1
+          fi
+
+          # Extract individual conditions (e.g., coverage, bugs, vulnerabilities, etc.)
+          # Format conditions nicely
+          conditions=$(echo "$analysis_result" | jq -r '.projectStatus.conditions | map("- \(.metricKey) (\(.status)): \(.actualValue // "N/A") (required \(.errorThreshold // "-"))") | join("\n")')
+
+          # Store extracted values in GitHub environment
+          echo "Quality Gate Status: $quality_gate_status"
+          echo "quality_gate_status=$quality_gate_status" >> "$GITHUB_ENV"
+          echo "conditions<<EOF" >> "$GITHUB_ENV"
+          echo "$conditions" >> "$GITHUB_ENV"
+          echo "EOF" >> "$GITHUB_ENV"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+
+      - name: Post Comment on PR
+        # Only run for pull request events
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **SonarQube Analysis Results**
+
+            *   **Quality Gate Status:** `${{ env.quality_gate_status }}`
+
+            *   **Conditions:**
+                ```
+                ${{ env.conditions }}
+                ```
+
+            [View Full Report on SonarQube](${{ secrets.SONAR_HOST_URL }}/dashboard?id=StudyConnect-frontend&pullRequest=${{ github.event.pull_request.number }})
+
+      - name: Check Quality Gate Status
+        # Fail the job if Quality Gate is not OK
+        if: env.quality_gate_status != 'OK' && env.quality_gate_status != 'NONE' # NONE means no Quality Gate defined
+        run: |
+          echo "::error::SonarQube Quality Gate status is ${{ env.quality_gate_status }}. Failing the workflow."
+          exit 1
