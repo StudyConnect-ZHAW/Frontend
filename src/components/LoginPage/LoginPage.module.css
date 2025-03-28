@@ -6,30 +6,29 @@
     align-items: center;
     justify-content: center;
   
-    min-height: 100vh;
+    min-height: 80vh;
     padding: 2rem 1rem;
-
-    background: #ffd36908;
 }
   
   .logoFrame {
     width: 100%;
-    max-width: 600px;
-    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-bottom: 3rem;
   }
   
   .loginTitle {
     font-family: 'Poppins', sans-serif;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 2rem;
-    margin-bottom: 1rem;
   }
   
   .microsoftButtonWrapper {
     width: 100%;
-    max-width: 320px;
+    max-width: 380px;
     display: flex;
     justify-content: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
   }
   
   .forgotPassword {
@@ -37,22 +36,25 @@
     font-size: 1rem;
     text-align: center;
     cursor: pointer;
-    margin-top: 1rem;
   }
 
 
-  @media (min-width: 768px) {
+  @media (min-width: 480px) {
     .loginTitle {
       font-size: 2.5rem;
     }
   
     .forgotPassword {
-      font-size: 1.1rem;
+      font-size: 1.0rem;
     }
   }
 
-  @media (max-width: 390px) {
+  @media (max-width: 480px) {
     .logoFrame {
       max-width: 300px;
     }
+
+    .microsoftButtonWrapper {
+        max-width: 280px;
+      }
   }
