@@ -11,7 +11,7 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logoFrame}>
-        <Image src="/logo.png" alt="StudyConnect" width={606} height={372} style={{ width: '100%', height: 'auto' }} />
+        <Image src="/logo.png" alt="StudyConnect" width={606} height={372} style={{ width: '100%', height: 'auto' }} priority={true}/>
       </div>
 
       <h1 className={styles.loginTitle}>Login</h1>
