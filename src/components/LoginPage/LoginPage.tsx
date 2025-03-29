@@ -5,6 +5,7 @@ import styles from './LoginPage.module.css';
 
 const LoginPage = () => {
   const handleLogin = () => {
+    // TODO: Implement full login logic here
     console.log('Redirect to Microsoft login...');
   };
 
