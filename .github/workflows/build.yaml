@@ -32,7 +32,7 @@ jobs:
           # Ensure this action outputs coverage to a predictable path, e.g., ./coverage/lcov.info
 
       - name: Upload Frontend Test Coverage Artifact
-        uses: actions/upload-artifact@v4 # Use v4
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.run_tests.outputs.artifact_name || format('frontend-test-results-{0}', github.run_id) }} # Use output or fallback
           path: ./coverage # Adjust if your action outputs coverage elsewhere
@@ -46,10 +46,10 @@ jobs:
         with:
           fetch-depth: 0 # Required for SonarQube PR analysis
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17 # SonarScanner supports LTS versions like 11, 17
+          java-version: 21 # SonarScanner supports LTS versions like 21
           distribution: "temurin"
 
       - name: Download Frontend Test Results
@@ -58,22 +58,19 @@ jobs:
           name: ${{ needs.frontend-tests.outputs.artifact_name }} # Use output from needs context
           path: ./coverage # Download to the expected path
 
-      # Optional: Verify downloaded coverage file exists
-      - name: List downloaded files
-        run: ls -R ./coverage
-
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+          path: ~/.sonar
+          key: ${{ runner.os }}-sonar-${{ hashFiles('**/pom.xml', '**/build.gradle', '**/package-lock.json', '**/yarn.lock') }} # Optional: Make key more specific
+          restore-keys: |
+            ${{ runner.os }}-sonar-
 
       - name: Install jq (for parsing results)
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2.1.0 # Use official action v2+
+        uses: SonarSource/sonarqube-scan-action@v5 # Use official action v5+
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
