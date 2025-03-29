@@ -88,10 +88,105 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info # IMPORTANT: Point to the LCOV file
             # Add other parameters if needed, e.g., exclusions
 
-      # Wait for SonarQube analysis to complete. Adjust sleep time as needed.
-      # A more robust method would poll the /api/ce/task endpoint.
-      - name: Wait for SonarQube Analysis Task
-        run: sleep 60 # Wait 60 seconds
+      - name: Wait for SonarQube Analysis Task Completion
+        id: wait_for_sonar_task
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          # --- Configuration ---
+          TASK_REPORT_FILE=".scannerwork/report-task.txt"
+          # Max time to wait in seconds (e.g., 10 minutes)
+          TOTAL_TIMEOUT_SEC=600
+          # Time to wait between polling attempts in seconds
+          POLL_INTERVAL_SEC=10
+
+          # --- Script ---
+          echo "Waiting for SonarQube analysis task to complete..."
+
+          if [ ! -f "$TASK_REPORT_FILE" ]; then
+            echo "::error::Task report file '$TASK_REPORT_FILE' not found. Was the SonarQube Scan successful?"
+            exit 1
+          fi
+
+          # Extract Task ID and Analysis ID (optional, but useful for logging)
+          TASK_ID=$(grep 'ceTaskId=' "$TASK_REPORT_FILE" | cut -d= -f2)
+          ANALYSIS_ID=$(grep 'analysisId=' "$TASK_REPORT_FILE" | cut -d= -f2) # Might not always be present
+
+          if [ -z "$TASK_ID" ]; then
+            echo "::error::Could not extract Task ID (ceTaskId) from '$TASK_REPORT_FILE'."
+            cat "$TASK_REPORT_FILE" # Print file content for debugging
+            exit 1
+          fi
+
+          echo "Found SonarQube Task ID: $TASK_ID"
+          if [ -n "$ANALYSIS_ID" ]; then
+            echo "Found SonarQube Analysis ID: $ANALYSIS_ID"
+          fi
+
+          TASK_URL="$SONAR_HOST_URL/api/ce/task?id=$TASK_ID"
+          echo "Polling URL: $TASK_URL"
+
+          start_time=$(date +%s)
+          while true; do
+            current_time=$(date +%s)
+            elapsed_time=$((current_time - start_time))
+
+            if [ "$elapsed_time" -ge "$TOTAL_TIMEOUT_SEC" ]; then
+              echo "::error::Timeout waiting for SonarQube task $TASK_ID to complete after $TOTAL_TIMEOUT_SEC seconds."
+              exit 1
+            fi
+
+            echo "Checking task status (attempt $((elapsed_time / POLL_INTERVAL_SEC + 1)))..."
+            # Use --fail to make curl exit non-zero on server errors (4xx, 5xx)
+            # Use -s for silent mode (no progress meter)
+            # Use -u for authentication
+            response=$(curl -s -u "$SONAR_TOKEN:" --fail "$TASK_URL")
+            exit_code=$?
+
+            if [ $exit_code -ne 0 ]; then
+                echo "::warning::curl command failed with exit code $exit_code attempting to fetch task status. Retrying..."
+                # Optionally add more robust error handling here (e.g., retry limit for curl failures)
+                sleep "$POLL_INTERVAL_SEC"
+                continue # Retry the loop
+            fi
+
+            # Use jq to safely parse the JSON and extract the status
+            status=$(echo "$response" | jq -r '.task.status')
+
+            if [ "$status" == "null" ] || [ -z "$status" ]; then
+                echo "::warning::Could not extract task status from API response. Raw response:"
+                echo "$response"
+                echo "Retrying..."
+                sleep "$POLL_INTERVAL_SEC"
+                continue # Retry the loop
+            fi
+
+            echo "Current task status: $status"
+
+            case "$status" in
+              SUCCESS)
+                echo "SonarQube analysis task $TASK_ID completed successfully."
+                exit 0 # Success!
+                ;;
+              FAILED|CANCELED)
+                echo "::error::SonarQube analysis task $TASK_ID failed or was canceled (Status: $status)."
+                # Optionally fetch component details for more info if needed
+                # component_url="$SONAR_HOST_URL/api/ce/component?componentId=$(echo "$response" | jq -r '.task.componentId')"
+                # component_details=$(curl -s -u "$SONAR_TOKEN:" --fail "$component_url")
+                # echo "::error::Component Details: $component_details"
+                exit 1 # Failure!
+                ;;
+              PENDING|IN_PROGRESS)
+                echo "Analysis is $status. Waiting ${POLL_INTERVAL_SEC}s..."
+                sleep "$POLL_INTERVAL_SEC"
+                ;;
+              *)
+                echo "::warning::Unknown task status '$status' received. Treating as 'in progress'."
+                sleep "$POLL_INTERVAL_SEC"
+                ;;
+            esac
+          done
 
       - name: Fetch SonarQube Analysis Results
         id: fetch_sonar_results
