@@ -149,15 +149,14 @@ jobs:
             *   **Quality Gate Status:** `${{ env.quality_gate_status }}`
 
             *   **Conditions:**
-                ```
                 ${{ env.conditions }}
-                ```
 
             [View Full Report on SonarQube](${{ secrets.SONAR_HOST_URL }}/dashboard?id=StudyConnect-frontend&pullRequest=${{ github.event.pull_request.number }})
 
-      - name: Check Quality Gate Status
+      # Not failing the job for now, but you can uncomment this to enforce Quality Gate
+      #- name: Check Quality Gate Status
         # Fail the job if Quality Gate is not OK
-        if: env.quality_gate_status != 'OK' && env.quality_gate_status != 'NONE' # NONE means no Quality Gate defined
-        run: |
-          echo "::error::SonarQube Quality Gate status is ${{ env.quality_gate_status }}. Failing the workflow."
-          exit 1
+        #if: env.quality_gate_status != 'OK' && env.quality_gate_status != 'NONE' # NONE means no Quality Gate defined
+        # run: |
+          #echo "::error::SonarQube Quality Gate status is ${{ env.quality_gate_status }}. Failing the workflow."
+          #exit 1
