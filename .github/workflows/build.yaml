@@ -82,9 +82,9 @@ jobs:
           projectBaseDir: . # Optional: default is .
           args: >
             -Dsonar.projectKey=StudyConnect-frontend
-            -Dsonar.sources=.
-            -Dsonar.tests=. # Adjust if tests are in a specific dir
-            -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js # Adjust pattern as needed
+            -Dsonar.sources=src/app/
+            -Dsonar.tests=src/__tests__ # Adjust if tests are in a specific dir
+            -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/build/**,**/coverage/**,**/*.test.js,**/*.spec.js,**/*.test.ts,**/*.spec.ts,**/*.test.tsx,**/*.spec.tsx
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info # IMPORTANT: Point to the LCOV file
             # Add other parameters if needed, e.g., exclusions
 
