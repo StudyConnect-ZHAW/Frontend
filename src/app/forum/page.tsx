@@ -1,13 +1,13 @@
 import PageHeader from '@/components/PageHeader';
 import React from 'react';
+import WIPSection from "@/components/WIPSection";
 
 export default function ForumPage() {
     return (
         <>
-            <PageHeader title='Forum' />
-            <div className='page-container'>
-                {/** Code for page here */}
-            </div>
+            <PageHeader title='Forum'/>
+
+            <WIPSection/>
         </>
     );
 }

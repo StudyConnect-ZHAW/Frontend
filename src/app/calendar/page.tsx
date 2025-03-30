@@ -1,13 +1,13 @@
-import PageHeader from '@/components/PageHeader';
 import React from 'react';
+import PageHeader from '@/components/PageHeader';
+import WIPSection from "@/components/WIPSection";
 
 export default function CalendarPage() {
     return (
         <>
-            <PageHeader title='Calendar' />
-            <div className='page-container'>
-                {/** Code for page here */}
-            </div>
+            <PageHeader title='Calendar'/>
+
+            <WIPSection/>
         </>
     );
 }
