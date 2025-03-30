@@ -16,6 +16,10 @@ const navItems = [
     {icon: FiSettings, label: 'Settings', path: '/settings'},
 ]
 
+/**
+ * Component representing the sidebar displayed on the left side of each page. It handles routing
+ * and jumping to the respective page.
+ */
 const Sidebar = () => {
     const pathname = usePathname();
 
