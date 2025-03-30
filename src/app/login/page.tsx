@@ -1,29 +1,27 @@
 'use client';
 
 import Image from 'next/image';
-import styles from './login.module.css';
+import AuthPanel from '@/components/AuthPanel';
 
 const LoginPage = () => {
-  const handleLogin = () => {
-    // TODO: Implement full login logic here
-    console.log('Redirect to Microsoft login...');
-  };
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.logoFrame}>
-        <Image src="/logo.png" alt="StudyConnect" width={606} height={372} style={{ width: '100%', height: 'auto' }} priority={true}/>
-      </div>
+    return (
+        <div className="flex-grow flex flex-col items-center justify-center gap-10">
+            {/* Logo */}
+            <div className="w-full max-w-[500px]">
+                <Image
+                    src="/logo.png"
+                    alt="StudyConnect"
+                    width={600}
+                    height={600}
+                    className="w-full h-auto"
+                    priority
+                />
+            </div>
 
-      <h1 className={styles.loginTitle}>Login</h1>
-
-      <button onClick={handleLogin} className={styles.microsoftButtonWrapper}>
-        <Image src="/microsoft-login-button.png" alt="Microsoft SSO Login" width={320} height={54} style={{ width: '100%', height: 'auto' }} />
-      </button>
-
-      <p className={styles.forgotPassword}>Passwort vergessen?</p>
-    </div>
-  );
+            <AuthPanel/>
+        </div>
+    );
 };
 
 export default LoginPage;
