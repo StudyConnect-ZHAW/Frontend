@@ -11,9 +11,11 @@
     "sonar": "sonar-scanner"
   },
   "dependencies": {
-    "next": "15.2.3",
+    "lucide-react": "^0.484.0",
+    "next": "^15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
     "vite": "^6.2.2"
   },
   "devDependencies": {
