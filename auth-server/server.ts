@@ -2,9 +2,6 @@ import app from './app';
 import debug from 'debug';
 import http from 'http';
 
-//TODO: fix debug import issue
-const log = debug('msal:server');
-
 /**
  * Get port from environment and store in Express.
  */

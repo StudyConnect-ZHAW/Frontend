@@ -27,11 +27,11 @@ export const msalConfig = {
   },
   system: {
     loggerOptions: {
-      loggerCallback(loglevel: any, message: string, containsPii: boolean): void {
+      loggerCallback(loglevel: LogLevel, message: string): void {
         console.log(message);
       },
       piiLoggingEnabled: false,
-      logLevel: LogLevel.Info, // You can also use LogLevel.Info if imported
+      logLevel: LogLevel.Info,
     },
   },
 };

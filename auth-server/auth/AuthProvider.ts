@@ -36,8 +36,7 @@ class AuthProvider {
   async login(
     req: Request,
     res: Response,
-    next: NextFunction,
-    options = {}
+    next: NextFunction
   ): Promise<void> {
     // create a GUID for crsf
     req.session.csrfToken = this.cryptoProvider.createNewGuid();
@@ -109,7 +108,7 @@ class AuthProvider {
 
     try {
       const msalInstance = this.getMsalInstance(this.config.msalConfig);
-      msalInstance.getTokenCache().deserialize(req.session.tokenCache?? '');
+      msalInstance.getTokenCache().deserialize(req.session.tokenCache ?? '');
 
       const tokenResponse = await msalInstance.acquireTokenByCode(
         authCodeRequest,
@@ -138,7 +137,6 @@ class AuthProvider {
   async logout(
     req: Request,
     res: Response,
-    next: NextFunction
   ): Promise<void> {
     /**
      * Construct a logout URI and redirect the user to end the
@@ -170,8 +168,8 @@ class AuthProvider {
     // Set generated PKCE codes and method as session vars
     req.session.pkceCodes = {
       challengeMethod: 'S256',
-      verifier: verifier,
-      challenge: challenge,
+      verifier,
+      challenge,
     };
 
     /**
@@ -209,13 +207,14 @@ class AuthProvider {
    * Retrieves oidc metadata from the openid endpoint
    * @returns
    */
-  async getAuthorityMetadata(): Promise<any> {
+  async getAuthorityMetadata(): Promise<Record<string, unknown>> {
     const endpoint = `${this.config.msalConfig.auth.authority}${TENANT_SUBDOMAIN}.onmicrosoft.com/v2.0/.well-known/openid-configuration`;
     try {
       const response = await axios.get(endpoint);
       return response.data;
     } catch (error) {
       console.error(error);
+      return {};
     }
   }
 }
