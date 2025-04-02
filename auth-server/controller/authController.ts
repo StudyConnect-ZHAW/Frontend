@@ -18,6 +18,6 @@ export const handleRedirect = async (req: Request, res: Response, next: NextFunc
 /**
  * Signs out the user and destroys the session.
  */
-export const signOut = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  return authProvider.logout(req, res, next);
+export const signOut = async (req: Request, res: Response): Promise<void> => {
+  return authProvider.logout(req, res);
 };

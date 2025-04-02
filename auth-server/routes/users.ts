@@ -21,7 +21,7 @@ function isAuthenticated(req: Request, res: Response, next: NextFunction): void 
 router.get(
   '/id',
   isAuthenticated, // check if user is authenticated
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     res.render('id', {
       idTokenClaims: req.session.account?.idTokenClaims,
     });
