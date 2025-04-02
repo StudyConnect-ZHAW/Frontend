@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import PageHeader from "@/components/PageHeader";
 import WIPSection from "@/components/WIPSection";
 
-const availableModules = ['SWEN 2', 'Computertechnik 2', 'Physics Engines', 'Betriebssysteme', 'Cloud Computing'];
+const availableModules = ['SWEN 2', 'Computertechnik 2', 'Physics Engines', 'Betriebssysteme', 'Cloud Computing','Lineare Algebra','Theoretische Informatik','Datenbanken','Programmieren 1'];
 const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 
 export default function ProfilePage() {
@@ -71,31 +71,28 @@ export default function ProfilePage() {
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Modulpräferenzen</label>
-                    <div className="flex flex-wrap gap-2">
-                        {availableModules.map(mod => (
-                            <button
-                                key={mod}
-                                onClick={() =>
-                                    setSelectedModules(prev =>
-                                        prev.includes(mod)
-                                            ? prev.filter(m => m !== mod)
-                                            : [...prev, mod]
-                                    )
-                                }
-                                className={`px-3 py-1 rounded-full border ${
-                                    selectedModules.includes(mod)
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-100'
-                                }`}
-                            >
+                    <select
+                        multiple
+                        value={selectedModules}
+                        onChange={(e) => {
+                            const selected = Array.from(e.target.selectedOptions).map(option => option.value);
+                            setSelectedModules(selected);
+                        }}
+                        className="w-full border rounded-md px-4 py-2 h-40"
+                    >
+                        {availableModules.map((mod) => (
+                            <option key={mod} value={mod}>
                                 {mod}
-                            </button>
+                            </option>
                         ))}
-                    </div>
+                    </select>
+                    <p className="text-sm text-gray-500 mt-1">
+                        Halte <strong>Strg</strong> (Windows) oder <strong>Cmd</strong> (Mac), um mehrere Module auszuwählen.
+                    </p>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Verfügbarkeit (Wochentage)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Verfügbarkeit</label>
                     <div className="flex flex-wrap gap-4">
                         {weekdays.map(day => (
                             <label key={day} className="flex items-center space-x-2">
