@@ -12,7 +12,7 @@ import {
   TENANT_SUBDOMAIN,
   REDIRECT_URI,
   POST_LOGOUT_REDIRECT_URI,
-} from '../authConfig';
+} from '../authConfig.js';
 
 interface AuthProviderConfig {
   msalConfig: Configuration;

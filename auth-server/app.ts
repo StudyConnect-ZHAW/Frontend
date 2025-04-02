@@ -2,17 +2,20 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import path from 'path';
+import { fileURLToPath } from 'url';
 import express, { Request, Response, NextFunction } from 'express';
 import session from 'express-session';
 import createError from 'http-errors';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import indexRouter from './routes/index';
-import usersRouter from './routes/users';
-import authRouter from './routes/auth';
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
+import authRouter from './routes/auth.js';
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Using express-session middleware for persistent user session.

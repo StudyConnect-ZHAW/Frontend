@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import authProvider from '../auth/AuthProvider';
+import authProvider from '../auth/AuthProvider.js';
 
 /**
  * Initiates the sign-in process by triggering MSAL login.
