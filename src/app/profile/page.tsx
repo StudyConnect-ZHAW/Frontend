@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import PageHeader from "@/components/PageHeader";
 import WIPSection from "@/components/WIPSection";
 
-const availableModules = ['Mathematik', 'Informatik', 'Physik', 'Betriebssysteme', 'Cloud Computing'];
+const availableModules = ['SWEN 2', 'Computertechnik 2', 'Physics Engines', 'Betriebssysteme', 'Cloud Computing'];
 const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 
 export default function ProfilePage() {
