@@ -4,7 +4,9 @@ import React, { useState } from 'react';
 import PageHeader from "@/components/PageHeader";
 import WIPSection from "@/components/WIPSection";
 
-const availableModules = ['SWEN 2', 'Computertechnik 2', 'Physics Engines', 'Betriebssysteme', 'Cloud Computing'];
+const availableModules = ['SWEN 2', 'Computertechnik 1', 'Computertechnik 2', 'Physics Engines', 
+'Betriebssysteme', 'Cloud Computing','Lineare Algebra','Theoretische Informatik','Datenbanken',
+'Programmieren 1', 'Programmieren 2'];
 const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 
 type Availability = {
@@ -76,7 +78,7 @@ export default function ProfilePage() {
           />
         </div>
 
-        {/* Avatar */}
+        /* Avatar */
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Profilbild-URL</label>
           <input
