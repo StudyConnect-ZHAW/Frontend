@@ -23,7 +23,7 @@ export default function ProfilePage() {
 
     const handleSubmit = () => {
         try {
-            // Hier würdest du z. B. einen API-Call machen
+            // API-Call
             console.log({
                 name,
                 avatarUrl,
