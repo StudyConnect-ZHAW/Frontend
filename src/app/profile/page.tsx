@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import PageHeader from "@/components/PageHeader";
 import WIPSection from "@/components/WIPSection";
 
-const availableModules = ['Mathematik', 'Informatik', 'Physik', 'Design', 'AI'];
-const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
+const availableModules = ['Mathematik', 'Informatik', 'Physik', 'Betriebssysteme', 'Cloud Computing'];
+const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 
 export default function ProfilePage() {
     const [name, setName] = useState('Max Mustermann');
