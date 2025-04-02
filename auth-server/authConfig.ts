@@ -11,8 +11,8 @@ import { LogLevel } from '@azure/msal-node';
  * Diese Umgebungsvariablen definieren URLs und Subdomain-Kontext für MSAL.
  */
 export const TENANT_SUBDOMAIN: string = process.env.TENANT_SUBDOMAIN || 'studyconnectpm4';
-export const REDIRECT_URI: string = process.env.REDIRECT_URI || 'http://localhost:3000/auth/redirect';
-export const POST_LOGOUT_REDIRECT_URI: string = process.env.POST_LOGOUT_REDIRECT_URI || 'http://localhost:3000';
+export const REDIRECT_URI: string = process.env.REDIRECT_URI || 'http://localhost:3001/auth/redirect';
+export const POST_LOGOUT_REDIRECT_URI: string = process.env.POST_LOGOUT_REDIRECT_URI || 'http://localhost:3001';
 
 /**
  * Configuration object to be passed to MSAL instance on creation.
