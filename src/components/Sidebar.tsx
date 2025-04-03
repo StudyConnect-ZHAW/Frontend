@@ -16,6 +16,7 @@ import {
 
 // TODO: Find suitable icon for forum
 
+// Navigation items for the sidebar
 const navItems = [
   { icon: FiHome, label: "Home", path: "/" },
   { icon: FiUser, label: "Profile", path: "/profile" },
@@ -117,8 +118,8 @@ function ToggleSwitch({
         position: "relative",
         width: "40px",
         height: "80px",
-        border: "2px solid #ec3349", // rote Umrandung
-        borderRadius: "9999px", // pillenförmiges Oval
+        border: "2px solid #ec3349",
+        borderRadius: "9999px", 
         backgroundColor: "#fff",
         cursor: "pointer",
       }}
@@ -155,15 +156,13 @@ function ToggleSwitch({
           height: "24px",
           borderRadius: "50%",
           backgroundColor: "transparent",
-          border: "2px solid #ec3349", // rote Umrandung
+          border: "2px solid #ec3349",
           transformOrigin: "center",
           transition: "transform 0.3s",
-          // Light: oben (0)
-          // Dark: z. B. 40px weiter unten
           transform:
             theme === "light"
-              ? "translate(-50%, 0)" // Licht: weiter oben
-              : "translate(-50%, 40px)", // Dunkel: nach unten verschoben
+              ? "translate(-50%, 0)" 
+              : "translate(-50%, 40px)",
         }}
       />
     </div>
