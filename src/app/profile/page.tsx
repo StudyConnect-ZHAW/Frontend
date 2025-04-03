@@ -56,7 +56,7 @@ export default function ProfilePage() {
 
       setStatus('success');
       setTimeout(() => setStatus(null), 3000);
-    } catch (err) {
+    } catch {
       setStatus('error');
       setTimeout(() => setStatus(null), 3000);
     }
@@ -78,7 +78,7 @@ export default function ProfilePage() {
           />
         </div>
 
-        /* Avatar */
+        {/* Avatar */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Profilbild-URL</label>
           <input
