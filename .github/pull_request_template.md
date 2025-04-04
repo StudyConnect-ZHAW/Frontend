@@ -16,6 +16,7 @@ Please make sure that the following items have been completed before submitting 
 - [ ] Meets coding standards
 - [ ] Code has been properly documented with comments
 - [ ] Code has been reviewed for clarity, readability, and maintainability by at least two people
+- [ ] Manual Testing was done by Developer and Reviewer
 - [ ] Refactoring is done (if needed)
 - [ ] Documentation (README/API/UX/ARC42) updated
 - [ ] Linked issue is closed or updated
