@@ -117,7 +117,7 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        {/* Verfügbarkeit */}
+        {/* Availability */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Verfügbarkeit (Wochentage & Zeiten)</label>
           <div className="space-y-2">
