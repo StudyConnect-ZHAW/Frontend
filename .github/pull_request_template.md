@@ -10,9 +10,13 @@ Please include a summary of the change and which issue is closed with this PR. P
 
 Please make sure that the following items have been completed before submitting this pull request:
 
+- [ ] All acceptance criteria are fulfilled
 - [ ] All code has been properly tested
 - [ ] All tests pass successfully
-- [ ] Code has been reviewed for clarity, readability, and maintainability
+- [ ] Meets coding standards
 - [ ] Code has been properly documented with comments
+- [ ] Code has been reviewed for clarity, readability, and maintainability by at least two people
+- [ ] Refactoring is done (if needed)
+- [ ] Documentation (README/API/UX/ARC42) updated
 - [ ] Linked issue is closed or updated
-- [ ] Meets the [global DoD](https://github.com/StudyConnect-ZHAW/StudyConnect/wiki/Scrum-Principles#definition-of-done)
+- [ ] Deployed to DEV environment
