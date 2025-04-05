@@ -9,7 +9,7 @@ Please include a summary of the change and which issue is closed with this PR. P
 
 Please make sure that the following items have been completed before submitting this pull request:
 
-- [ ] All acceptance criteria are fulfilled
+- [ ] All issue acceptance criteria are fulfilled
 - [ ] All code has been properly tested
 - [ ] All tests pass successfully
 - [ ] Meets coding standards
