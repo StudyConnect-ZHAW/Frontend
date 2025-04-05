@@ -18,4 +18,3 @@ Please make sure that the following items have been completed before submitting 
 - [ ] Refactoring is done (if needed)
 - [ ] Documentation (README/API/UX/ARC42) updated
 - [ ] Linked issue is closed or updated
-- [ ] Deployed to DEV environment
