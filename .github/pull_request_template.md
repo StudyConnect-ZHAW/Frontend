@@ -17,4 +17,4 @@ Please make sure that the following items have been completed before submitting 
 - [ ] Manual Testing was done by Developer and Reviewer
 - [ ] Refactoring is done (if needed)
 - [ ] Documentation (README/API/UX/ARC42) updated
-- [ ] Linked issue is closed or updated
+- [ ] Related non-linked issue is updated
