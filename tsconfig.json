@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "typeRoots": ["./auth-server/types", "./node_modules/@types"]
   },
 
   "include": [
