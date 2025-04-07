@@ -5,10 +5,12 @@ import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
 const HomePage = () => {
+    // Store the formatted date to display on the UI
     const [formattedDate, setFormattedDate] = useState<string | null>(null);
 
     useEffect(() => {
         // TODO: Maybe make the locale selection dynamic depending on the user's navigator.language property
+        // Format the current date using a fixed Swiss German locale ('de-CH')
         const userLocale = 'de-CH';
         const date = new Intl.DateTimeFormat(userLocale, {
             weekday: 'long',
@@ -16,6 +18,7 @@ const HomePage = () => {
             month: '2-digit',
             year: 'numeric',
         }).format(new Date());
+
         setFormattedDate(date);
     }, []);
 
