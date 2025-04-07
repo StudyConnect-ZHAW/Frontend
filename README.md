@@ -35,7 +35,7 @@ The app will now be accessible at [http://localhost:3000](http://localhost:3000)
 
 Alternatively for the relase [Docker](https://www.docker.com) is required.
 
-The frontend image can be ran with the following command:
+The frontend image can be run with the following command:
 ```bash
 docker-compose -f ./docker/compose.yaml up --build
 ```
