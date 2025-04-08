@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import ToggleSwitch from "./ToggleSwitch";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -10,11 +11,8 @@ import {
   FiMessageSquare,
   FiCalendar,
   FiSettings,
-  FiMoon,
-  FiSun,
+  FiStar,
 } from "react-icons/fi";
-
-// TODO: Find suitable icon for forum
 
 // Navigation items for the sidebar
 const navItems = [
@@ -24,6 +22,7 @@ const navItems = [
   { icon: FiMessageSquare, label: "Chat", path: "/chat" },
   { icon: FiCalendar, label: "Calendar", path: "/calendar" },
   { icon: FiSettings, label: "Settings", path: "/settings" },
+  { icon: FiStar, label: "Forum", path: "/forum" },
 ];
 
 /**
@@ -60,15 +59,21 @@ export default function Sidebar() {
     }
   };
 
+  const borderAndShadowColor = theme === "dark" ? "#FDBA15" : "#ec3349";
+  const iconColorClass = theme === "dark" ? "text-[#FDBA15]" : "text-[#ec3349]";
+
   return (
     <div
+      style={{
+        border: `3px solid ${borderAndShadowColor}`,
+        boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
+        transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+      }}
       className={`
         flex
         flex-col
         justify-between
         m-4 mb-0 w-20 
-        border-[3px] border-[#f03246]/50 
-        shadow-[4px_4px_10px_#EC3349] 
         rounded-xl 
         p-4 gap-4 
         items-center
@@ -86,8 +91,8 @@ export default function Sidebar() {
               aria-label={label}
               className={`text-[35px] transition-all duration-200 cursor-pointer ${
                 isActive
-                  ? "text-[#ec3349] scale-125"
-                  : "hover:scale-125 hover:text-[#ec3349]"
+                  ? `${iconColorClass} scale-125`
+                  : `hover:scale-125 hover:${iconColorClass}`
               }`}
             >
               <Icon />
@@ -100,71 +105,6 @@ export default function Sidebar() {
       <div style={{ marginTop: "16px" }}>
         <ToggleSwitch theme={theme} toggleTheme={toggleTheme} />
       </div>
-    </div>
-  );
-}
-
-function ToggleSwitch({
-  theme,
-  toggleTheme,
-}: {
-  theme: "light" | "dark";
-  toggleTheme: () => void;
-}) {
-  return (
-    <div
-      onClick={toggleTheme}
-      style={{
-        position: "relative",
-        width: "40px",
-        height: "80px",
-        border: "2px solid #ec3349",
-        borderRadius: "9999px", 
-        backgroundColor: "#fff",
-        cursor: "pointer",
-      }}
-    >
-      {/* Mond-Icon (oben) */}
-      <FiMoon
-        style={{
-          position: "absolute",
-          top: "10px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          fontSize: "18px",
-        }}
-      />
-
-      {/* Sonnensymbol (unten) */}
-      <FiSun
-        style={{
-          position: "absolute",
-          bottom: "8px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          fontSize: "18px",
-        }}
-      />
-
-      {/* Der "runde" Handle in der Mitte */}
-      <span
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "8px",
-          width: "24px",
-          height: "24px",
-          borderRadius: "50%",
-          backgroundColor: "transparent",
-          border: "2px solid #ec3349",
-          transformOrigin: "center",
-          transition: "transform 0.3s",
-          transform:
-            theme === "light"
-              ? "translate(-50%, 0)" 
-              : "translate(-50%, 40px)",
-        }}
-      />
     </div>
   );
 }
