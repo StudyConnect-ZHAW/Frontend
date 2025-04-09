@@ -12,7 +12,7 @@ export default function AuthPanel() {
    */
   const handleLogin = () => {
     // Redirect to the Microsoft SSO login endpoint via Next.js proxy
-    window.location.href = '/auth/signin';
+    window.location.href = '/auth/login';
   };
 
     const handlePasswordForgotten = () => {
