@@ -15,14 +15,9 @@ export default function AuthPanel() {
     window.location.href = '/auth/login';
   };
 
-    const handlePasswordForgotten = () => {
-        // TODO: Implement logic for resetting user password
-        console.log("User forgot their password...")
-    }
-
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-4 border-4 border-yellow-400 rounded-xl min-h-[25vh]">
-      <h1 className="text-4xl">Login</h1>
+      <h1 className="text-4xl font-bold">Login</h1>
 
       <button onClick={handleLogin} className="cursor-pointer">
         <Image
@@ -30,15 +25,9 @@ export default function AuthPanel() {
           alt="Microsoft SSO Login"
           width={320}
           height={54}
-          className="w-full h-auto"
+          className="w-full h-auto transition-all duration-300 hover:scale-105 hover:drop-shadow-lg"
         />
       </button>
-
-            <p
-                onClick={handlePasswordForgotten}
-                className="text-center cursor-pointer hover:underline">
-                Forgot password?
-            </p>
         </div>
     );
 }
