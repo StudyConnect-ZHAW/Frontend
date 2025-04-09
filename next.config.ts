@@ -7,4 +7,16 @@ const nextConfig: NextConfig = {
   },
 };
 
+// proxy configuration for the auth server
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/auth/:path*',
+        destination: 'http://localhost:3001/auth/:path*',
+      },
+    ];
+  },
+};
+
 export default nextConfig;

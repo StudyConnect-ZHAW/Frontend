@@ -11,9 +11,8 @@ export default function AuthPanel() {
    * Redirects the user to the Express Auth server for Microsoft SSO login.
    */
   const handleLogin = () => {
-    // Redirect to Express Auth Server (MSAL login flow)
-    // TODO: Make sure to update the port if your Express server is running on a different port
-    window.location.href = 'http://localhost:3001/auth/signin';
+    // Redirect to the Microsoft SSO login endpoint via Next.js proxy
+    window.location.href = '/auth/signin';
   };
 
     const handlePasswordForgotten = () => {
