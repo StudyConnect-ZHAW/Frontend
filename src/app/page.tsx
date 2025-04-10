@@ -2,19 +2,25 @@
 
 import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
 import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
+import '@/i18n';
+
 const HomePage = () => {
-  // Store the formatted date to display on the UI
+  const { t, i18n } = useTranslation('common');
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+
     // TODO: Maybe make the locale selection dynamic depending on the user's navigator.language property
     // Format the current date using a fixed Swiss German locale ('de-CH')
     const userLocale = 'de-CH';
-    const date = new Intl.DateTimeFormat(userLocale, {
+    const date = new Intl.DateTimeFormat(i18n.language, {
       weekday: 'long',
       day: '2-digit',
       month: '2-digit',
@@ -39,15 +45,18 @@ const HomePage = () => {
     };
 
     fetchUser();
-  }, []);
+  }, [i18n.language]);
 
   if (!userName) {
     return null;
   }
 
+  // Avoid hydration mismatch by rendering only on the client
+  if (!isClient || !i18n.isInitialized) return null;
+
   return (
     <>
-      <PageHeader title={`Welcome ${userName}`} />
+      <PageHeader title={`${t('welcomeUser', { name: `${userName}` })}`} />
 
       <div className="flex flex-col flex-1 gap-4">
         {/* Top row: left empty, right shows date */}
