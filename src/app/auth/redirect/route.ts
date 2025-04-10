@@ -24,8 +24,6 @@ export async function GET(request: NextRequest) {
       scopes: ['openid', 'profile'],
     });
 
-    console.log('Token successfully retrieved:', tokenResponse.accessToken);
-
     // Create redirect response
     const response = NextResponse.redirect(new URL('/', request.url));
 
@@ -35,7 +33,6 @@ export async function GET(request: NextRequest) {
       secure: true,
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60, // 1 hour
     });
 
     return response;
