@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { jwtDecode }from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 interface JwtPayload {
-  exp: number;
-  [key: string]: unknown;
+  // Token expiry timestamp (in seconds since Unix epoch)
+  exp: number; 
 }
 
 export function middleware(request: NextRequest) {
@@ -17,9 +17,9 @@ export function middleware(request: NextRequest) {
   try {
     const decoded = jwtDecode<JwtPayload>(token);
 
-    // Check expiration
-    if (decoded.exp * 1000 < Date.now()) {
-      console.warn('Token expired!');
+    // Check if token is expired
+    if (decoded.exp < Math.floor(Date.now() / 1000)) {
+      console.warn('Token expired:', decoded.exp);
       return NextResponse.redirect(new URL('/login?error=session_expired', request.url));
     }
 
