@@ -3,171 +3,71 @@
 import React, { useState } from 'react';
 import PageHeader from "@/components/PageHeader";
 import WIPSection from "@/components/WIPSection";
+import { Dialog } from '@headlessui/react';
+import ProfileSettings from './ProfileSettings';
 
-const availableModules = ['SWEN 2', 'Computertechnik 1', 'Computertechnik 2', 'Physics Engines', 
-'Betriebssysteme', 'Cloud Computing','Lineare Algebra','Theoretische Informatik','Datenbanken',
-'Programmieren 1', 'Programmieren 2'];
-const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+const settingsBlocks = [
+  { title: 'General', description: 'System, Language, Views' },
+  { title: 'Appearance', description: 'Theme, Chat Density, Layout' },
+  { title: 'Privacy', description: 'DnD, Camera, Privacy Password' },
+  { title: 'Notifications / Activity', description: 'Sound, Mute, Display Notif., Chat Notif.' },
+  { title: 'Account', description: 'Add/Delete Account' },
+  { title: 'Profile', description: 'Profile Picture, Bio, Name' },
+];
 
-type Availability = {
-  [day: string]: {
-    active: boolean;
-    from?: string;
-    to?: string;
-  };
-};
-
-export default function ProfilePage() {
-  const [name, setName] = useState('Max Mustermann');
-  const [avatarUrl, setAvatarUrl] = useState('https://i.pravatar.cc/150?img=3');
-  const [selectedModules, setSelectedModules] = useState<string[]>([]);
-  const [availability, setAvailability] = useState<Availability>({});
-  const [status, setStatus] = useState<'success' | 'error' | null>(null);
-
-  const toggleDay = (day: string) => {
-    setAvailability(prev => ({
-      ...prev,
-      [day]: {
-        active: !prev[day]?.active,
-        from: prev[day]?.from || '08:00',
-        to: prev[day]?.to || '17:00',
-      }
-    }));
-  };
-
-  const updateTime = (day: string, type: 'from' | 'to', value: string) => {
-    setAvailability(prev => ({
-      ...prev,
-      [day]: {
-        ...prev[day],
-        [type]: value,
-      }
-    }));
-  };
-
-  const handleSubmit = () => {
-    try {
-      console.log({
-        name,
-        avatarUrl,
-        selectedModules,
-        availability,
-      });
-
-      setStatus('success');
-      setTimeout(() => setStatus(null), 3000);
-    } catch {
-      setStatus('error');
-      setTimeout(() => setStatus(null), 3000);
-    }
-  };
+export default function SettingsPage() {
+  const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
 
   return (
     <main className="p-6">
-      <PageHeader title="Profil bearbeiten" />
+      <PageHeader title="Preferences" />
 
-      <div className="bg-white rounded-2xl shadow-md p-6 space-y-6 border border-gray-200 mt-4">
-        {/* Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            className="w-full border rounded-md px-4 py-2"
-          />
-        </div>
-
-        {/* Avatar */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Profilbild-URL</label>
-          <input
-            type="text"
-            value={avatarUrl}
-            onChange={e => setAvatarUrl(e.target.value)}
-            className="w-full border rounded-md px-4 py-2"
-          />
-          <img
-            src={avatarUrl}
-            alt="Vorschau"
-            className="mt-2 w-24 h-24 rounded-full border object-cover"
-          />
-        </div>
-
-        {/* Module */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Modulpräferenzen</label>
-          <select
-            multiple
-            value={selectedModules}
-            onChange={(e) => {
-              const selected = Array.from(e.target.selectedOptions).map(option => option.value);
-              setSelectedModules(selected);
-            }}
-            className="w-full border rounded-md px-4 py-2 h-40"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white border border-yellow-300 p-6 rounded-xl shadow mt-6">
+        {settingsBlocks.map((block) => (
+          <button
+            key={block.title}
+            onClick={() => setSelectedBlock(block.title)}
+            className="text-left border border-yellow-400 rounded-xl p-4 shadow hover:shadow-md transition bg-white"
           >
-            {availableModules.map((mod) => (
-              <option key={mod} value={mod}>
-                {mod}
-              </option>
-            ))}
-          </select>
-          <p className="text-sm text-gray-500 mt-1">
-            Halte <strong>Strg</strong> (Windows) oder <strong>Cmd</strong> (Mac), um mehrere Module auszuwählen.
-          </p>
-        </div>
-
-        {/* Availability */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Verfügbarkeit (Wochentage & Zeiten)</label>
-          <div className="space-y-2">
-            {weekdays.map(day => (
-              <div key={day} className="flex flex-wrap items-center gap-4">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={availability[day]?.active || false}
-                    onChange={() => toggleDay(day)}
-                  />
-                  <span>{day}</span>
-                </label>
-                {availability[day]?.active && (
-                  <>
-                    <input
-                      type="time"
-                      value={availability[day]?.from || ''}
-                      onChange={(e) => updateTime(day, 'from', e.target.value)}
-                      className="border rounded px-2 py-1"
-                    />
-                    <span>–</span>
-                    <input
-                      type="time"
-                      value={availability[day]?.to || ''}
-                      onChange={(e) => updateTime(day, 'to', e.target.value)}
-                      className="border rounded px-2 py-1"
-                    />
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Submit */}
-        <button
-          onClick={handleSubmit}
-          className="bg-green-500 text-white px-6 py-2 rounded-xl hover:bg-green-600 transition"
-        >
-          Speichern
-        </button>
-
-        {status === 'success' && (
-          <div className="text-green-600 mt-2">Änderungen erfolgreich gespeichert!</div>
-        )}
-        {status === 'error' && (
-          <div className="text-red-600 mt-2">Fehler beim Speichern. Bitte erneut versuchen.</div>
-        )}
+            <h3 className="text-xl font-semibold">{block.title}</h3>
+            <p className="text-gray-600 text-sm mt-1">{block.description}</p>
+          </button>
+        ))}
       </div>
+
+      <Dialog
+        open={!!selectedBlock}
+        onClose={() => setSelectedBlock(null)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto">
+          <Dialog.Panel className="bg-white rounded-2xl p-6 w-full max-w-3xl shadow-lg border border-gray-200">
+          <Dialog.Title className="text-xl font-bold mb-4">
+          {selectedBlock === 'Profile' ? 'Profile' : selectedBlock}
+          </Dialog.Title>
+
+
+            {selectedBlock === 'Profile' ? (
+              <ProfileSettings onClose={() => setSelectedBlock(null)} />
+            ) : (
+              <>
+                <p className="text-gray-700 mb-4">
+                  Hier kannst du die Einstellungen für <strong>{selectedBlock}</strong> bearbeiten.
+                </p>
+                <div className="flex justify-end mt-6">
+                  <button
+                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                    onClick={() => setSelectedBlock(null)}
+                  >
+                    Schließen
+                  </button>
+                </div>
+              </>
+            )}
+          </Dialog.Panel>
+        </div>
+      </Dialog>
 
       <WIPSection />
     </main>
