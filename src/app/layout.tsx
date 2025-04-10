@@ -1,9 +1,11 @@
-import React from "react";
-import {Geist, Geist_Mono} from "next/font/google";
+'use client';
+
+import React, { useMemo } from "react";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Sidebar from '@/components/Sidebar';
-import type {Metadata} from "next";
+import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -15,37 +17,43 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-    title: 'StudyConnect',
-    description: 'A platform for learn and project groups',
-    icons: {
-        icon: [
-            {url: '/favicon.ico'},
-            {url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png'},
-            {url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png'},
-            {url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png'},
-        ],
-    },
-    manifest: '/site.webmanifest',
-};
+// ✅ Valid routes
+const knownRoutes = [
+  '/',
+  '/profile',
+  '/groups',
+  '/chat',
+  '/calendar',
+  '/settings',
+  '/login',
+  '/forum',
+];
 
-export default function RootLayout({children}: { children: React.ReactNode }) {
-    return (
-        <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+// valid routes without a sidebar
+const hiddenRoutes = ['/login'];
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  const hideSidebar = useMemo(() => {
+    // hide if explicitly hidden or unknown route
+    return hiddenRoutes.includes(pathname) || !knownRoutes.includes(pathname);
+  }, [pathname]);
+
+  return (
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen flex flex-col">
-            <div className="flex flex-1">
-                <Sidebar/>
-                <main className="flex-1 p-4 pb-0 flex flex-col">
-                    {children}
-                </main>
-            </div>
+          <div className="flex flex-1">
+            {!hideSidebar && <Sidebar />}
+            <main className="flex-1 p-4 pb-0 flex flex-col">
+              {children}
+            </main>
+          </div>
 
-            <Footer/>
+          <Footer />
         </div>
-
-        </body>
-        </html>
-    );
+      </body>
+    </html>
+  );
 }
