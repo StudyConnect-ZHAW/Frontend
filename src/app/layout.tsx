@@ -26,6 +26,7 @@ const knownRoutes = [
   '/calendar',
   '/settings',
   '/login',
+  '/forum',
 ];
 
 // valid routes without a sidebar

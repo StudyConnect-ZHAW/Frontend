@@ -40,5 +40,6 @@ export const config = {
     '/chat/:path*',
     '/calendar/:path*',
     '/settings/:path*',
+    '/forum/:path*',
   ],
 };
