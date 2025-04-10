@@ -1,18 +1,21 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from "react-i18next";
 import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
+import '@/i18n';
+
 const HomePage = () => {
-    // Store the formatted date to display on the UI
+    const {t, i18n} = useTranslation('common');
     const [formattedDate, setFormattedDate] = useState<string | null>(null);
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        // TODO: Maybe make the locale selection dynamic depending on the user's navigator.language property
-        // Format the current date using a fixed Swiss German locale ('de-CH')
-        const userLocale = 'de-CH';
-        const date = new Intl.DateTimeFormat(userLocale, {
+        setIsClient(true);
+
+        const date = new Intl.DateTimeFormat(i18n.language, {
             weekday: 'long',
             day: '2-digit',
             month: '2-digit',
@@ -20,11 +23,15 @@ const HomePage = () => {
         }).format(new Date());
 
         setFormattedDate(date);
-    }, []);
+    }, [i18n.language]);
+
+    // Avoid hydration mismatch by rendering only on the client
+    if (!isClient || !i18n.isInitialized) return null;
 
     return (
         <>
-            <PageHeader title='Welcome Alex'/>
+
+            <PageHeader title={`${t('welcomeUser', { name: 'Alex' })}`} />
 
             <div className="flex flex-col flex-1 gap-4">
                 {/* Top row: left empty, right shows date */}
