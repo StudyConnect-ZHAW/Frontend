@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ToggleSwitch from "./ToggleSwitch";
+import ToggleSwitch from "./DarkToggle";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -46,7 +46,7 @@ export default function Sidebar() {
     }
   }, []);
 
-  // Klick-Handler, der zwischen Light/Dark toggelt
+  // Klick-Handler, that switches between dark and light mode
   const toggleTheme = () => {
     if (theme === "light") {
       setTheme("dark");
@@ -101,7 +101,7 @@ export default function Sidebar() {
         })}
       </div>
 
-      {/* TOGGLE-BUTTON UNTEN */}
+      {/* TOGGLE-BUTTON BELOW */}
       <div style={{ marginTop: "16px" }}>
         <ToggleSwitch theme={theme} toggleTheme={toggleTheme} />
       </div>

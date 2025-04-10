@@ -39,7 +39,7 @@ export default function ToggleSwitch({ theme, toggleTheme }: ToggleSwitchProps) 
         }}
       />
 
-      {/* Sonnensymbol (unten) */}
+      {/* Sun Symbol below */}
       <FiSun
         style={{
           position: "absolute",
@@ -50,7 +50,7 @@ export default function ToggleSwitch({ theme, toggleTheme }: ToggleSwitchProps) 
         }}
       />
 
-      {/* Der runde Handle in der Mitte */}
+      {/* The circle handler */}
       <span
         style={{
           position: "absolute",
