@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export const TENANT_SUBDOMAIN: string = 'studyconnectpm4';
+const TENANT_SUBDOMAIN = process.env.TENANT_SUBDOMAIN!;
 
 /**
  * Redirects the user to the Microsoft SSO logout page.
