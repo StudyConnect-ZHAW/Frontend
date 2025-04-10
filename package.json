@@ -14,6 +14,7 @@
     "sonar": "sonar-scanner"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.1",
     "@azure/msal-node": "^3.4.1",
     "axios": "^1.8.4",
     "cookie-parser": "^1.4.7",
@@ -57,3 +58,4 @@
     "node": ">=20.10.0"
   }
 }
+
