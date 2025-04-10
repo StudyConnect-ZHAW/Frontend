@@ -62,7 +62,7 @@ export default function ProfileSettings({ onClose }: Props) {
       setStatus('success');
       setTimeout(() => {
         setStatus(null);
-        onClose(); // Modal schließen
+        onClose(); // Modal schliessen
       }, 2000);
     } catch {
       setStatus('error');
@@ -164,7 +164,7 @@ export default function ProfileSettings({ onClose }: Props) {
           onClick={onClose}
           className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
         >
-          Schließen
+          Schliessen
         </button>
 
         <button
