@@ -1,16 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
 const HomePage = () => {
-    const formattedDate = new Intl.DateTimeFormat('de-CH', {
-        weekday: 'long',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    }).format(new Date());
+    // Store the formatted date to display on the UI
+    const [formattedDate, setFormattedDate] = useState<string | null>(null);
+
+    useEffect(() => {
+        // TODO: Maybe make the locale selection dynamic depending on the user's navigator.language property
+        // Format the current date using a fixed Swiss German locale ('de-CH')
+        const userLocale = 'de-CH';
+        const date = new Intl.DateTimeFormat(userLocale, {
+            weekday: 'long',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        }).format(new Date());
+
+        setFormattedDate(date);
+    }, []);
 
     return (
         <>
