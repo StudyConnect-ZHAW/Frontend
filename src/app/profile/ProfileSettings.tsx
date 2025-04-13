@@ -31,7 +31,7 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
   const [availability, setAvailability] = useState<Availability>({});
   const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
-  // Listen for external save trigger
+  // Save trigger from outside
   useEffect(() => {
     if (shouldSave) {
       handleSubmit();
@@ -59,14 +59,13 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
     }));
   };
 
-  // Handles saving and calls onSaved after
   const handleSubmit = () => {
     try {
       console.log({ name, avatarUrl, selectedModules, availability });
       setStatus('success');
       setTimeout(() => {
         setStatus(null);
-        onSaved(); // triggers close from outside
+        onSaved(); // tell parent to close
       }, 1000);
     } catch {
       setStatus('error');
@@ -89,7 +88,7 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
           />
         </div>
 
-        {/* Avatar URL input */}
+        {/* Avatar */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Profilbild-URL</label>
           <input
@@ -100,12 +99,12 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
           />
           <img
             src={avatarUrl}
-            alt="Preview"
+            alt="Vorschau"
             className="mt-2 w-24 h-24 rounded-full border object-cover"
           />
         </div>
 
-        {/* Module preferences */}
+        {/* Module Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Modulpräferenzen</label>
           <select
@@ -124,40 +123,43 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
             ))}
           </select>
           <p className="text-sm text-gray-500 mt-1">
-            Hold <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac) to select multiple.
+            Halte <strong>Strg</strong> (Windows) oder <strong>Cmd</strong> (Mac), um mehrere Module auszuwählen.
           </p>
         </div>
 
-        {/* Weekly availability */}
+        {/* Availability section with aligned time inputs */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Availability (Days & Times)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Verfügbarkeit (Wochentage & Zeiten)</label>
           <div className="space-y-2">
             {weekdays.map(day => (
-              <div key={day} className="flex flex-wrap items-center gap-4">
-                <label className="flex items-center gap-2">
+              <div key={day} className="flex items-center gap-4">
+                {/* Fixed width day column */}
+                <div className="w-[150px] flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={availability[day]?.active || false}
                     onChange={() => toggleDay(day)}
                   />
                   <span>{day}</span>
-                </label>
+                </div>
+
+                {/* Time inputs aligned in second column */}
                 {availability[day]?.active && (
-                  <>
+                  <div className="flex items-center gap-2">
                     <input
                       type="time"
                       value={availability[day]?.from || ''}
                       onChange={(e) => updateTime(day, 'from', e.target.value)}
-                      className="border rounded px-2 py-1"
+                      className="border rounded px-2 py-1 w-[100px]"
                     />
                     <span>–</span>
                     <input
                       type="time"
                       value={availability[day]?.to || ''}
                       onChange={(e) => updateTime(day, 'to', e.target.value)}
-                      className="border rounded px-2 py-1"
+                      className="border rounded px-2 py-1 w-[100px]"
                     />
-                  </>
+                  </div>
                 )}
               </div>
             ))}
@@ -165,7 +167,7 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
         </div>
       </div>
 
-      {/* Fixed button bar */}
+      {/* Bottom action buttons (sticky) */}
       <div className="border-t pt-4 mt-4 flex justify-between bg-white sticky bottom-0">
         <button
           onClick={onClose}
@@ -181,7 +183,7 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
         </button>
       </div>
 
-      {/* Status message */}
+      {/* Status messages */}
       {status === 'success' && (
         <div className="text-green-600 mt-2">Änderungen erfolgreich gespeichert!</div>
       )}
