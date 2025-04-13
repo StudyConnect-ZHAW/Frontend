@@ -59,7 +59,6 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
     }));
   };
 
-  // Handles saving and calls onSaved after
   const handleSubmit = () => {
     try {
       console.log({ name, avatarUrl, selectedModules, availability });
