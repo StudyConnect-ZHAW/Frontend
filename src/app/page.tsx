@@ -12,6 +12,11 @@ const HomePage = () => {
     const [formattedDate, setFormattedDate] = useState<string | null>(null);
     const [isClient, setIsClient] = useState(false);
 
+    const changeLanguage = (lang: 'en-US' | 'de-CH') => {
+        i18n.changeLanguage(lang);
+        localStorage.setItem('lang', lang);
+    };
+
     useEffect(() => {
         setIsClient(true);
 
@@ -30,8 +35,10 @@ const HomePage = () => {
 
     return (
         <>
+            <PageHeader title={`${t('welcomeUser', {name: 'Alex'})}`}/>
 
-            <PageHeader title={`${t('welcomeUser', { name: 'Alex' })}`} />
+            <button onClick={() => changeLanguage('en-US')}>🇺🇸 English</button>
+            <button onClick={() => changeLanguage('de-CH')}>🇨🇭 Deutsch</button>
 
             <div className="flex flex-col flex-1 gap-4">
                 {/* Top row: left empty, right shows date */}
