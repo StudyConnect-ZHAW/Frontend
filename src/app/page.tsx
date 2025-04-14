@@ -14,6 +14,11 @@ const HomePage = () => {
   const [userName, setUserName] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
 
+  const changeLanguage = (lang: 'en-US' | 'de-CH') => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem('lang', lang);
+  };
+
   useEffect(() => {
     setIsClient(true);
 
@@ -56,6 +61,7 @@ const HomePage = () => {
 
   return (
     <>
+
       <PageHeader title={`${t('welcomeUser', { name: `${userName}` })}`} />
 
       <div className="flex flex-col flex-1 gap-4">
