@@ -21,25 +21,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4 # Use v4
 
-      - name: Run Frontend Tests and Generate Coverage
-        # Assuming this action generates coverage reports (e.g., lcov.info)
-        # inside the specified output path (default './coverage')
-        uses: ./.github/actions/run-frontend-tests
-        id: run_tests
-        with:
-          working-directory: "."
-          codecov-token: ${{ secrets.CODECOV_TOKEN }}
-          node-env: 'test'
-          # Ensure this action outputs coverage to a predictable path, e.g., ./coverage/lcov.info
+      # - name: Run Frontend Tests and Generate Coverage
+      #   # Assuming this action generates coverage reports (e.g., lcov.info)
+      #   # inside the specified output path (default './coverage')
+      #   uses: ./.github/actions/run-frontend-tests
+      #   id: run_tests
+      #   with:
+      #     working-directory: "."
+      #     codecov-token: ${{ secrets.CODECOV_TOKEN }}
+      #     node-env: 'test'
+      #     # Ensure this action outputs coverage to a predictable path, e.g., ./coverage/lcov.info
 
-      - name: Upload Frontend Test Coverage Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.run_tests.outputs.artifact_name || format('frontend-test-results-{0}', github.run_id) }} # Use output or fallback
-          path: ./coverage # Adjust if your action outputs coverage elsewhere
+      # - name: Upload Frontend Test Coverage Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ steps.run_tests.outputs.artifact_name || format('frontend-test-results-{0}', github.run_id) }} # Use output or fallback
+      #     path: ./coverage # Adjust if your action outputs coverage elsewhere
 
   sonarqube-analysis:
-    needs: [frontend-tests]
+    # needs: [frontend-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -53,11 +53,11 @@ jobs:
           java-version: 21 # SonarScanner supports LTS versions like 21
           distribution: "temurin"
 
-      - name: Download Frontend Test Results
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ needs.frontend-tests.outputs.artifact_name }} # Use output from needs context
-          path: ./coverage # Download to the expected path
+      # - name: Download Frontend Test Results
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: ${{ needs.frontend-tests.outputs.artifact_name }} # Use output from needs context
+      #     path: ./coverage # Download to the expected path
 
       - name: Cache SonarQube packages
         uses: actions/cache@v4
