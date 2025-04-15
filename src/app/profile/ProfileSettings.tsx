@@ -66,10 +66,10 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
       setTimeout(() => {
         setStatus(null);
         onSaved(); // tell parent to close
-      }, 1000);
+      }, 800);
     } catch {
       setStatus('error');
-      setTimeout(() => setStatus(null), 3000);
+      setTimeout(() => setStatus(null), 500);
     }
   };
 
@@ -171,7 +171,7 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
       <div className="border-t pt-4 mt-4 flex justify-between bg-white sticky bottom-0">
         <button
           onClick={onClose}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="bg-gray-300 text-black px-6 py-2 rounded-xl hover:bg-gray-400 transition"
         >
           Schliessen
         </button>
