@@ -5,6 +5,12 @@ import PageHeader from "@/components/PageHeader";
 import WIPSection from "@/components/WIPSection";
 import { Dialog } from '@headlessui/react';
 import ProfileSettings from './ProfileSettings';
+import GeneralSettings from './generalSettings';
+import AppearanceSettings from './appearanceSettings';
+import AccountSettings from './accountSettings';
+import PrivacySettings from './privacySettings';
+import NotificationsSettings from './notificationSettings';
+
 
 const settingsBlocks = [
   { title: 'General', description: 'System, Language, Views' },
@@ -43,27 +49,40 @@ export default function SettingsPage() {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto">
           <Dialog.Panel className="bg-white rounded-2xl p-6 w-full max-w-3xl shadow-lg border border-gray-200">
-          <Dialog.Title className="text-xl font-bold mb-4">
-          {selectedBlock === 'Profile' ? 'Profile' : selectedBlock}
-          </Dialog.Title>
+            <Dialog.Title className="text-xl font-bold mb-4">
+              {selectedBlock}
+            </Dialog.Title>
 
+            {selectedBlock === 'Profile' && (
+              <ProfileSettings
+              onClose={() => setSelectedBlock(null)}
+              onSaved={() => setSelectedBlock(null)} // ✅ Modal schliessen nach Save
+              shouldSave={false}
+            />
+          )}
 
-            {selectedBlock === 'Profile' ? (
-              <ProfileSettings onClose={() => setSelectedBlock(null)} />
-            ) : (
-              <>
-                <p className="text-gray-700 mb-4">
-                  Hier kannst du die Einstellungen für <strong>{selectedBlock}</strong> bearbeiten.
-                </p>
-                <div className="flex justify-end mt-6">
-                  <button
-                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                    onClick={() => setSelectedBlock(null)}
-                  >
-                    Schliessen
-                  </button>
-                </div>
-              </>
+            {selectedBlock === 'General' && (
+              <GeneralSettings
+              onClose={() => setSelectedBlock(null)}
+              onSaved={() => setSelectedBlock(null)} // ✅ Modal schliessen nach Save
+              shouldSave={false}
+            />
+          )}
+
+            {selectedBlock === 'Appearance' && (
+              <AppearanceSettings onClose={() => setSelectedBlock(null)} />
+            )}
+
+            {selectedBlock === 'Account' && (
+              <AccountSettings onClose={() => setSelectedBlock(null)} />
+            )}
+
+            {selectedBlock === 'Privacy' && (
+              <PrivacySettings onClose={() => setSelectedBlock(null)} />
+            )}
+
+            {selectedBlock === 'Notifications / Activity' && (
+              <NotificationsSettings onClose={() => setSelectedBlock(null)} />
             )}
           </Dialog.Panel>
         </div>
