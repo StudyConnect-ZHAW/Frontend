@@ -11,6 +11,7 @@
     "sonar": "sonar-scanner"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.1",
     "lucide-react": "^0.484.0",
     "next": "^15.2.4",
     "react": "^19.0.0",
