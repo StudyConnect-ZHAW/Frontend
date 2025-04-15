@@ -77,17 +77,6 @@ export async function GET(request: NextRequest) {
       path: '/',
     });
 
-    // Set non-HttpOnly cookie with the user's name (for client-side use)
-    if (name) {
-      response.cookies.set('user_name', encodeURIComponent(name), {
-        httpOnly: false, // must be accessible from client
-        secure: true,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 60 * 60, // 1 hour
-      });
-    }
-
     return response;
   } catch (error: unknown) {
     if (error instanceof Error) {

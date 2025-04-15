@@ -1,6 +1,5 @@
 'use client';
 
-import { token } from 'morgan';
 import { redirect } from 'next/navigation';
 import React, {useEffect, useState} from 'react';
 import PageHeader from '@/components/PageHeader';
@@ -24,24 +23,28 @@ const HomePage = () => {
 
         setFormattedDate(date);
 
-        // Read user_name from cookie
-        const cookieValue = document.cookie
-          .split('; ')
-          .find(row => row.startsWith('user_name='))
-          ?.split('=')[1];
-    
-        if (cookieValue) {
-          setUserName(decodeURIComponent(cookieValue));
-        } else {
-          redirect('/login'); // Falls kein Benutzername vorhanden ist, zur Sicherheit redirect
-        }
+
+        const fetchUser = async () => {
+          try {
+            const res = await fetch('/api/me');
+            if (!res.ok) {
+              redirect('/login');
+              return;
+            }
+      
+            const user = await res.json();
+            setUserName(user.name);
+          } catch (err) {
+            console.error('Error fetching user:', err);
+            redirect('/login');
+          }
+        };
+      
+        fetchUser();
     }, []);
 
+    if (!userName) return null;
 
-  if (!token) {
-    redirect('/login');
-
-  } else {
     return (
       <>
                   <PageHeader title={`Welcome ${userName}`}/>
@@ -80,6 +83,5 @@ const HomePage = () => {
 
     );
   } 
-}
 
 export default HomePage;
