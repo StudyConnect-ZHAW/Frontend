@@ -13,6 +13,7 @@ export default function GeneralSettings({ onClose, shouldSave, onSaved }: Props)
   const [viewStyle, setViewStyle] = useState<'auto' | 'list' | 'grid' | 'compact' | 'detailed'>('auto');
   const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
+
   // Trigger external save
   useEffect(() => {
     if (shouldSave) {
@@ -57,7 +58,7 @@ export default function GeneralSettings({ onClose, shouldSave, onSaved }: Props)
           <label className="block text-sm font-medium text-gray-700 mb-1">Views</label>
           <select
             value={viewStyle}
-            onChange={(e) => setViewStyle(e.target.value as any)}
+            onChange={(e) => setViewStyle(e.target.value as 'auto' | 'list' | 'grid' | 'compact' | 'detailed')}
             className="w-full border rounded-md px-4 py-2"
           >
             <option value="auto">Automatisch</option>
