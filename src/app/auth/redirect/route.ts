@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
 
     // Check if user already exists in backend
     const userCheck = await fetch(`${apiUrl}v1/users/${oid}`);
-    
+
 
     if (userCheck.status === 404) {
       // User does not exist → create new user
@@ -76,6 +76,17 @@ export async function GET(request: NextRequest) {
       sameSite: 'lax',
       path: '/',
     });
+
+    // Set non-HttpOnly cookie with the user's name (for client-side use)
+    if (name) {
+      response.cookies.set('user_name', encodeURIComponent(name), {
+        httpOnly: false, // must be accessible from client
+        secure: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60, // 1 hour
+      });
+    }
 
     return response;
   } catch (error: unknown) {

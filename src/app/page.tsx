@@ -9,6 +9,7 @@ import WIPSection from "@/components/WIPSection";
 const HomePage = () => {
     // Store the formatted date to display on the UI
     const [formattedDate, setFormattedDate] = useState<string | null>(null);
+    const [userName, setUserName] = useState<string | null>(null);
 
     useEffect(() => {
         // TODO: Maybe make the locale selection dynamic depending on the user's navigator.language property
@@ -22,6 +23,18 @@ const HomePage = () => {
         }).format(new Date());
 
         setFormattedDate(date);
+
+        // Read user_name from cookie
+        const cookieValue = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('user_name='))
+          ?.split('=')[1];
+    
+        if (cookieValue) {
+          setUserName(decodeURIComponent(cookieValue));
+        } else {
+          redirect('/login'); // Falls kein Benutzername vorhanden ist, zur Sicherheit redirect
+        }
     }, []);
 
 
@@ -31,7 +44,7 @@ const HomePage = () => {
   } else {
     return (
       <>
-                  <PageHeader title='Welcome Alex'/>
+                  <PageHeader title={`Welcome ${userName}`}/>
       
                   <div className="flex flex-col flex-1 gap-4">
                       {/* Top row: left empty, right shows date */}
