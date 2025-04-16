@@ -1,13 +1,22 @@
+'use client';
+
 import React from 'react';
+import { useTranslation } from "react-i18next";
 import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
-export default function CalendarPage() {
+import '@/i18n';
+
+const CalendarPage = () => {
+  const { t } = useTranslation(['calendar', 'common']);
+
   return (
     <>
-      <PageHeader title='Calendar' />
+      <PageHeader title={`${t('title')}`} />
 
       <WIPSection />
     </>
   );
 }
+
+export default CalendarPage;

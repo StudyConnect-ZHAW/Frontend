@@ -15,7 +15,7 @@ import {
 // Navigation items for the sidebar
 const navItems = [
   { icon: FiHome, label: "Home", path: "/" },
-  { icon: FiUser, label: "Profile", path: "/preferences" },
+  { icon: FiUser, label: "Preferences", path: "/preferences" },
   { icon: FiUsers, label: "Groups", path: "/groups" },
   { icon: FiMessageSquare, label: "Chat", path: "/chat" },
   { icon: FiCalendar, label: "Calendar", path: "/calendar" },

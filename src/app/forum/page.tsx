@@ -1,13 +1,22 @@
-import PageHeader from '@/components/PageHeader';
+'use client';
+
 import React from 'react';
+import {useTranslation} from "react-i18next";
+import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
-export default function ForumPage() {
+import '@/i18n';
+
+const ForumPage = () => {
+    const {t} = useTranslation(['forum', 'common']);
+
     return (
         <>
-            <PageHeader title='Forum'/>
+            <PageHeader title={`${t('title')}`}/>
 
             <WIPSection/>
         </>
     );
 }
+
+export default ForumPage;

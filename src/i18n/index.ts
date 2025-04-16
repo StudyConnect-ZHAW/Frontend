@@ -7,19 +7,16 @@ i18n
     .use(initReactI18next)
     .init({
         fallbackLng: 'en-US',
-        lng:
-            typeof window !== 'undefined'
-                ? localStorage.getItem('lang') || 'en-US'
-                : 'en-US',
-        ns: ['common'],
+        ns: ['common', 'calendar', 'chat', 'forum', 'groups', 'preferences'],
         defaultNS: 'common',
-        load: 'all',
+        load: 'currentOnly',
         backend: {
             loadPath: '/locales/{{lng}}/{{ns}}.json',
         },
         interpolation: {
             escapeValue: false,
         },
+        initImmediate: false,
     });
 
 export default i18n;

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Dialog } from '@headlessui/react';
-
 import ProfileSettings from './ProfileSettings';
 import GeneralSettings from './GeneralSettings';
 import AppearanceSettings from './AppearanceSettings';

@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
@@ -12,27 +14,22 @@ const HomePage = () => {
   const { t, i18n } = useTranslation('common');
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
-  const [isClient, setIsClient] = useState(false);
-
-  const changeLanguage = (lang: 'en-US' | 'de-CH') => {
-    i18n.changeLanguage(lang);
-    localStorage.setItem('lang', lang);
-  };
+  const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    const lang = localStorage.getItem('lang') || 'en-US';
 
-    // TODO: Maybe make the locale selection dynamic depending on the user's navigator.language property
-    // Format the current date using a fixed Swiss German locale ('de-CH')
-    const userLocale = 'de-CH';
-    const date = new Intl.DateTimeFormat(i18n.language, {
-      weekday: 'long',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).format(new Date());
+    i18n.changeLanguage(lang).then(() => {
+      const date = new Intl.DateTimeFormat(lang, {
+        weekday: 'long',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(new Date());
 
-    setFormattedDate(date);
+      setFormattedDate(date);
+      setIsClientReady(true);
+    });
 
     const fetchUser = async () => {
       try {
@@ -50,14 +47,14 @@ const HomePage = () => {
     };
 
     fetchUser();
-  }, [i18n.language]);
+  }, [i18n]);
 
   if (!userName) {
     return null;
   }
 
   // Avoid hydration mismatch by rendering only on the client
-  if (!isClient || !i18n.isInitialized) return null;
+  if (!isClientReady || !i18n.isInitialized) return null;
 
   return (
     <>
