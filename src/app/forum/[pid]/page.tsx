@@ -5,21 +5,20 @@ import { useParams } from "next/navigation";
 
 export default function PostDetailPage() {
   const params = useParams();
-  const pid = params.pid; // "pid" -> Ordnername: [pid]
+  const pid = params.pid; // "pid" corresponds to the dynamic route folder name: [pid]
 
-  // Du kannst hier einen API-Call machen, um die Post-Daten vom Backend zu holen
-  // Für Demo: nur ein simpler Zustand
   const [post, setPost] = useState<any>(null);
 
+  // Simulate fetching post data (e.g., from an API)
   useEffect(() => {
-    // Beispiel: hole die Daten des Posts vom Backend:
+    // Example API call:
     // fetch(`http://localhost:5000/v1/forum/${pid}`)
     //   .then((res) => res.json())
     //   .then((data) => setPost(data));
-    
-    // Für Demo: einfach nur "pid" reinsetzen
+
+    // Demo placeholder content using pid
     setPost({
-      title: "Beispiel-Post " + pid,
+      title: "Example Post " + pid,
       content: "Lorem ipsum dolor sit amet...",
     });
   }, [pid]);
@@ -30,7 +29,10 @@ export default function PostDetailPage() {
 
   return (
     <div className="p-4">
+      {/* Post title */}
       <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
+
+      {/* Post content */}
       <p>{post.content}</p>
     </div>
   );
