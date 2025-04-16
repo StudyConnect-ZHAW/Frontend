@@ -34,7 +34,7 @@ export default function SortField({ value, onChange }: Props) {
       className="relative p-2"
       style={{
         border: `3px solid ${borderAndShadowColor}`,
-        boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
+        //boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
         borderRadius: "10px",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         background: "var(--sidebar-bg)",
