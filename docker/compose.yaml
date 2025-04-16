@@ -1,14 +1,17 @@
-version: "3.8"
-
+networks:
+  studyconnect-network:
+    external: true
 
 services:
   frontend:
     image: sc-frontend
+    networks:
+      - studyconnect-network
     build:
       context: ../
       dockerfile: docker/Dockerfile
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080  # This is the URL the frontend will use to communicate with the backend
+      - NEXT_PUBLIC_API_URL=http://backend:8080/api/
     ports:
       - "3000:3000"
     # Ensure the container runs and automatically removes after stopping
