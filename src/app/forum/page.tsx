@@ -14,17 +14,17 @@ interface Post {
   title: string;
   content: string;
   author: string;
-  date: string; // oder z.B. Date
+  date: string;
   likes: number;
   comments: number;
   shares: number;
 }
 
-// Nur zur Demo; später bekommst du diese Daten vom Backend
+// Temporary demo posts; will be replaced with data from backend
 const initialPosts: Post[] = [
   {
     id: 1,
-    title: "Erster Testpost",
+    title: "First test post",
     content: "Lorem ipsum ...",
     author: "Alice",
     date: "2025-04-05",
@@ -34,7 +34,7 @@ const initialPosts: Post[] = [
   },
   {
     id: 2,
-    title: "Zweiter Testpost",
+    title: "Second test post",
     content: "Lorem ipsum ...",
     author: "Bob",
     date: "2025-04-06",
@@ -47,26 +47,30 @@ const initialPosts: Post[] = [
 export default function ForumPage() {
   return (
     <div className="p-4">
+      {/* Page heading */}
       <PageHeader title="Forum" />
+
+      {/* Form to create a new post */}
       <NewPostForm
         onPostCreated={() => {
-          // Neuladen der Posts o.Ä., wenn ein Post erfolgreich erstellt wurde
-          // z.B. setPosts([...posts, neuErstellterPost]);
+          // Reload posts or fetch from backend once a post is successfully created
+          // e.g., setPosts([...posts, newPost]);
         }}
       />
 
+      {/* Search and sort controls */}
       <div className="mt-4 flex flex-row items-center gap-4">
         <SearchField placeholder="Search..." />
         <SortField />
       </div>
 
-      {/* Posts-Liste */}
+      {/* List of forum posts */}
       <div className="mt-4 flex flex-col gap-4">
         {initialPosts.map((post) => (
           <Link
             key={post.id}
-            href={`/forum/${post.id}`} // <-- /forum/1, /forum/2, etc.
-            className="hover:opacity-80" // Optionales Styling
+            href={`/forum/${post.id}`} // e.g., /forum/1, /forum/2, etc.
+            className="hover:opacity-80"
           >
             <ForumPost post={post} />
           </Link>

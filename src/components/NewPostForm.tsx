@@ -14,7 +14,7 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
-  // Beim Laden aus localStorage lesen, ob User "dark" oder "light" eingestellt hat:
+  // Load theme from localStorage on component mount
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
     if (storedTheme === "dark") {
@@ -26,8 +26,7 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
     }
   }, []);
 
-  // Dynamische Farbwerte analog zur Sidebar
-  const borderAndShadowColor = theme === "dark" ?  "#ec3349" : "#FDBA15";
+  const borderAndShadowColor = theme === "dark" ? "#ec3349" : "#FDBA15";
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -50,7 +49,7 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
       });
 
       if (!response.ok) {
-        throw new Error(`Fehler beim Erstellen des Posts: ${response.status}`);
+        throw new Error(`Failed to create post: ${response.status}`);
       }
 
       if (onPostCreated) {
@@ -60,75 +59,69 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
       setContent("");
       setImages(null);
     } catch (error: any) {
-      setErrorMsg(error.message || "Etwas ist schief gelaufen...");
+      setErrorMsg(error.message || "Something went wrong...");
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="mx ">
+    <div className="mx">
       <div
-        className={`
-          relative p-4 flex items-start 
-        `}
-        
+        className="relative p-4 flex items-start"
         style={{
           border: `3px solid ${borderAndShadowColor}`,
-          //boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
           borderRadius: "15px",
           transition: "border-color 0.3s ease, box-shadow 0.3s ease",
           background: theme === "dark" ? "var(--sidebar-bg)" : "#FFFFFF",
         }}
       >
-        {/* Profilbild (Beispiel) */}
+        {/* Avatar image */}
         <img
           src="/path/to/avatar.png"
           alt="Avatar"
           className="w-12 h-12 rounded-full mr-4 object-cover"
         />
 
-        {/* Formular */}
+        {/* Post form */}
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
           <textarea
-            className={`max-length-100
-              w-full mb-1 text-base
-              border-0 bg-transparent
-              focus:outline-none focus:ring-0
-              h-32 overflow-yauto resize-none
-            `}
+            className="w-full mb-1 text-base border-0 bg-transparent focus:outline-none focus:ring-0 h-32 overflow-y-auto resize-none"
             rows={3}
-            placeholder="Was gibt's Neues?"
+            placeholder="What's on your mind?"
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
 
-          {/* Bild-Upload-Icon (absolute Position) */}
-        <label
-          className="cursor-pointer absolute bottom-4 left-20"
-          title="Bild hochladen"
-        >
-          <FiImage
-            className="text-2xl text-gray-600
-                       transition-all duration-200
-                       hover:scale-125 hover:text-[#ec3349]"
-          />
-        </label>
+          {/* Image upload icon */}
+          <label
+            className="cursor-pointer absolute bottom-4 left-20"
+            title="Upload image"
+          >
+            <FiImage
+              className="text-2xl text-gray-600 transition-all duration-200 hover:scale-125 hover:text-[#ec3349]"
+            />
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => setImages(e.target.files)}
+              className="hidden"
+            />
+          </label>
 
-          {/* Fehlermeldung */}
+          {/* Error message */}
           {errorMsg && <p className="text-red-500 text-sm mb-2">{errorMsg}</p>}
 
-          {/* Post-Button */}
+          {/* Submit button */}
           <div className="text-right">
             <button
               type="submit"
               disabled={isLoading}
-              className="inline-flex items-center gap-1
-                         bg-[#ec3349] text-white px-2 py-1 rounded
-                         hover:bg-black transition-colors"
+              className="inline-flex items-center gap-1 bg-[#ec3349] text-white px-2 py-1 rounded hover:bg-black transition-colors"
             >
               {isLoading ? (
-                "Poste..."
+                "Posting..."
               ) : (
                 <>
                   <span>Post</span>
