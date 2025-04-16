@@ -1,5 +1,5 @@
 /**
- * Component that displays all the user information. Used in the profile page.
+ * Component that displays all the user information. Used in the preferences page.
  */
 export default function ProfileCard() {
     return (

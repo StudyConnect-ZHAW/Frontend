@@ -1,11 +1,18 @@
-import PageHeader from '@/components/PageHeader';
+'use client';
+
 import React from 'react';
+import {useTranslation} from "react-i18next";
+import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
+import '@/i18n';
+
 export default function GroupsPage() {
+    const {t} = useTranslation(['groups', 'common']);
+
     return (
         <>
-            <PageHeader title='Groups'/>
+            <PageHeader title={`${t('groups:title')}`}/>
 
             <WIPSection/>
         </>

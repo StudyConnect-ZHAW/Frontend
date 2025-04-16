@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from "react-i18next";
 import PageHeader from '@/components/PageHeader';
@@ -10,35 +12,30 @@ import '@/i18n';
 const HomePage = () => {
     const {t, i18n} = useTranslation('common');
     const [formattedDate, setFormattedDate] = useState<string | null>(null);
-    const [isClient, setIsClient] = useState(false);
-
-    const changeLanguage = (lang: 'en-US' | 'de-CH') => {
-        i18n.changeLanguage(lang);
-        localStorage.setItem('lang', lang);
-    };
+    const [isClientReady, setIsClientReady] = useState(false);
 
     useEffect(() => {
-        setIsClient(true);
+        const lang = localStorage.getItem('lang') || 'en-US';
 
-        const date = new Intl.DateTimeFormat(i18n.language, {
-            weekday: 'long',
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-        }).format(new Date());
+        i18n.changeLanguage(lang).then(() => {
+            const date = new Intl.DateTimeFormat(lang, {
+                weekday: 'long',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            }).format(new Date());
 
-        setFormattedDate(date);
-    }, [i18n.language]);
+            setFormattedDate(date);
+            setIsClientReady(true);
+        });
+    }, [i18n]);
 
     // Avoid hydration mismatch by rendering only on the client
-    if (!isClient || !i18n.isInitialized) return null;
+    if (!isClientReady || !i18n.isInitialized) return null;
 
     return (
         <>
             <PageHeader title={`${t('welcomeUser', {name: 'Alex'})}`}/>
-
-            <button onClick={() => changeLanguage('en-US')}>🇺🇸 English</button>
-            <button onClick={() => changeLanguage('de-CH')}>🇨🇭 Deutsch</button>
 
             <div className="flex flex-col flex-1 gap-4">
                 {/* Top row: left empty, right shows date */}

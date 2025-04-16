@@ -1,13 +1,22 @@
-import PageHeader from '@/components/PageHeader';
+'use client';
+
 import React from 'react';
+import {useTranslation} from "react-i18next";
+import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
-export default function ChatPage() {
+import '@/i18n';
+
+const ChatPage = () => {
+    const {t} = useTranslation(['chat', 'common']);
+
     return (
         <>
-            <PageHeader title='Chat'/>
+            <PageHeader title={`${t('chat:title')}`}/>
 
             <WIPSection/>
         </>
     );
 }
+
+export default ChatPage;

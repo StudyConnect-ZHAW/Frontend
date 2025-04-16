@@ -5,6 +5,8 @@ import {useTranslation} from 'react-i18next';
 import PageHeader from "@/components/PageHeader";
 import WIPSection from "@/components/WIPSection";
 
+import '@/i18n';
+
 const availableModules = ['SWEN 2', 'Computertechnik 1', 'Computertechnik 2', 'Physics Engines',
     'Betriebssysteme', 'Cloud Computing', 'Lineare Algebra', 'Theoretische Informatik', 'Datenbanken',
     'Programmieren 1', 'Programmieren 2'];
@@ -17,20 +19,26 @@ type Availability = {
     };
 };
 
-export default function ProfilePage() {
+export default function PreferencesPage() {
     const [name, setName] = useState('Max Mustermann');
     const [avatarUrl, setAvatarUrl] = useState('https://i.pravatar.cc/150?img=3');
     const [selectedModules, setSelectedModules] = useState<string[]>([]);
     const [availability, setAvailability] = useState<Availability>({});
     const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
-    const {t} = useTranslation('common');
+    const {t, i18n} = useTranslation(['preferences', 'common']);
 
     const weekdayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const weekdays = weekdayKeys.map((key) => ({
         key,
-        label: t(`weekdays.${key}`)
+        label: t(`common:weekdays.${key}`)
     }));
+
+    const changeLanguage = (lang: 'en-US' | 'de-CH') => {
+        i18n.changeLanguage(lang).then(() => {
+            localStorage.setItem('lang', lang);
+        });
+    };
 
     const toggleDay = (day: string) => {
         setAvailability(prev => ({
@@ -72,7 +80,10 @@ export default function ProfilePage() {
 
     return (
         <main className="p-6">
-            <PageHeader title="Profil bearbeiten"/>
+            <PageHeader title={`${t('preferences:title')}`}/>
+
+            <button onClick={() => changeLanguage('en-US')}>🇺🇸 English</button>
+            <button onClick={() => changeLanguage('de-CH')}>🇨🇭 Deutsch</button>
 
             <div className="bg-white rounded-2xl shadow-md p-6 space-y-6 border border-gray-200 mt-4">
                 {/* Name */}
