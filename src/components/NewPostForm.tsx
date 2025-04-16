@@ -67,7 +67,7 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
   }
 
   return (
-    <div className="mx">
+    <div className="mx ">
       <div
         className={`
           relative p-4 flex items-start 
@@ -75,9 +75,10 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
         
         style={{
           border: `3px solid ${borderAndShadowColor}`,
-          boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
+          //boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
           borderRadius: "15px",
           transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+          background: theme === "dark" ? "var(--sidebar-bg)" : "#FFFFFF",
         }}
       >
         {/* Profilbild (Beispiel) */}
@@ -90,10 +91,11 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
         {/* Formular */}
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
           <textarea
-            className={`
-              w-full mb-3 text-base
+            className={`max-length-100
+              w-full mb-1 text-base
               border-0 bg-transparent
               focus:outline-none focus:ring-0
+              h-32 overflow-yauto resize-none
             `}
             rows={3}
             placeholder="Was gibt's Neues?"
@@ -122,15 +124,15 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
               type="submit"
               disabled={isLoading}
               className="inline-flex items-center gap-1
-                         bg-blue-600 text-white px-4 py-2 rounded
-                         hover:bg-blue-700 transition-colors"
+                         bg-[#ec3349] text-white px-2 py-1 rounded
+                         hover:bg-black transition-colors"
             >
               {isLoading ? (
                 "Poste..."
               ) : (
                 <>
+                  <span>Post</span>
                   <FiSend className="text-white" />
-                  <span>Posten</span>
                 </>
               )}
             </button>

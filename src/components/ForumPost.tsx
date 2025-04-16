@@ -36,10 +36,10 @@ export default function ForumPost({ post }: Props) {
 
   return (
     <div
-      className="p-4 mb-4"
+      className="p-4 mb-0.5"
       style={{
         border: `3px solid ${borderAndShadowColor}`,
-        boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
+        //boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
         borderRadius: "15px",
         background: "var(--sidebar-bg)",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
