@@ -86,7 +86,7 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
         {/* Post form */}
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
           <textarea
-            className="w-full mb-1 text-base border-0 bg-transparent focus:outline-none focus:ring-0 h-32 overflow-y-auto resize-none"
+            className="w-full mb-1 text-sm border-0 bg-transparent focus:outline-none focus:ring-0 h-15 overflow-y-auto resize-none"
             rows={3}
             placeholder="What's on your mind?"
             value={content}
@@ -99,7 +99,7 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
             title="Upload image"
           >
             <FiImage
-              className="text-2xl text-gray-600 transition-all duration-200 hover:scale-125 hover:text-[#ec3349]"
+              className="text-2l text-gray-600 transition-all duration-200 hover:scale-125 hover:text-[#ec3349]"
             />
             <input
               type="file"
@@ -118,7 +118,7 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
             <button
               type="submit"
               disabled={isLoading}
-              className="inline-flex items-center gap-1 bg-[#ec3349] text-white px-2 py-1 rounded hover:bg-black transition-colors"
+              className="font-bold text-sm inline-flex items-center transition-all duration-150 gap-1 bg-[#ec3349] text-white px-2 py-1 rounded hover:scale-105 hover:bg-black"
             >
               {isLoading ? (
                 "Posting..."
