@@ -20,7 +20,7 @@ runs:
       uses: actions/checkout@v4.2.2
 
     - name: Set up Node.js
-      uses: actions/setup-node@v4.3.0
+      uses: actions/setup-node@v4.4.0
       with:
         node-version: '20.x'
 
@@ -43,7 +43,7 @@ runs:
       shell: bash
 
     - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v5.4.0
+      uses: codecov/codecov-action@v5.4.2
       with:
         token: ${{ inputs.codecov-token }}
         directory: ${{ inputs.working-directory }}/coverage
