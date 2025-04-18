@@ -2,7 +2,7 @@ name: Build and Analyze
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch: # enables manual trigger
 
 permissions:
@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   frontend-tests:
+    if: github.event.pull_request.state == 'open' && github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     outputs: # Define output for artifact name
       artifact_name: frontend-test-results-${{ github.run_id }}
@@ -21,25 +22,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4 # Use v4
 
-      # - name: Run Frontend Tests and Generate Coverage
-      #   # Assuming this action generates coverage reports (e.g., lcov.info)
-      #   # inside the specified output path (default './coverage')
-      #   uses: ./.github/actions/run-frontend-tests
-      #   id: run_tests
-      #   with:
-      #     working-directory: "."
-      #     codecov-token: ${{ secrets.CODECOV_TOKEN }}
-      #     node-env: 'test'
-      #     # Ensure this action outputs coverage to a predictable path, e.g., ./coverage/lcov.info
+      - name: Run Frontend Tests and Generate Coverage
+       # Assuming this action generates coverage reports (e.g., lcov.info)
+       # inside the specified output path (default './coverage')
+        uses: ./.github/actions/run-frontend-tests
+        id: run_tests
+        with:
+         working-directory: "."
+         codecov-token: ${{ secrets.CODECOV_TOKEN }}
+         node-env: 'test'
+         # Ensure this action outputs coverage to a predictable path, e.g., ./coverage/lcov.info
 
-      # - name: Upload Frontend Test Coverage Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ steps.run_tests.outputs.artifact_name || format('frontend-test-results-{0}', github.run_id) }} # Use output or fallback
-      #     path: ./coverage # Adjust if your action outputs coverage elsewhere
+      - name: Upload Frontend Test Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+         name: ${{ steps.run_tests.outputs.artifact_name || format('frontend-test-results-{0}', github.run_id) }} # Use output or fallback
+         path: ./coverage # Adjust if your action outputs coverage elsewhere
 
   sonarqube-analysis:
-    # needs: [frontend-tests]
+    if: github.event.pull_request.state == 'open' && github.event.pull_request.draft == false
+    needs: [frontend-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
