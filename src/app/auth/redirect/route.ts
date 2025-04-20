@@ -3,11 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
 
 interface MicrosoftToken {
-  oid: string;
+  userGuid: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
-  name?: string;
-  family_name?: string;
-  given_name?: string;
 }
 
 /**
@@ -38,15 +37,15 @@ export async function GET(request: NextRequest) {
     const idToken = tokenResponse.idToken!;
     const decoded = jwtDecode<MicrosoftToken>(idToken);
 
-    const { oid, email, name, family_name, given_name } = decoded;
+    const { userGuid, firstName, lastName, email } = decoded;
 
-    if (!oid) {
+    if (!userGuid) {
       console.error('OID not found in ID token');
       return NextResponse.redirect(new URL('/?error=invalid_token', request.url));
     }
 
     // Check if user already exists in backend
-    const userCheck = await fetch(`${apiUrl}v1/users/${oid}`);
+    const userCheck = await fetch(`${apiUrl}v1/users/${userGuid}`);
 
 
     if (userCheck.status === 404) {
@@ -57,11 +56,10 @@ export async function GET(request: NextRequest) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: oid,
+          id: userGuid,
           email,
-          name,
-          family_name,
-          given_name,
+          firstName,
+          lastName,
         }),
       });
     }
