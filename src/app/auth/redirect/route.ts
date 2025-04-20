@@ -39,13 +39,12 @@ export async function GET(request: NextRequest) {
     const idToken = tokenResponse.idToken!;
     const decoded = jwtDecode<MicrosoftToken>(idToken);
 
-    const { oid: userGuid, given_name: firstName, family_name: lastName, email, upn, preferred_username } = decoded;
+    const { oid: userGuid, name, given_name: firstName, family_name: lastName, email, upn, preferred_username } = decoded;
 
     if (!userGuid) {
       console.error('OID not found in ID token');
       return NextResponse.redirect(new URL('/?error=invalid_token', request.url));
     }
-
 
     // Check if user has email or username
     const userEmail = email ?? upn ?? preferred_username;
@@ -55,6 +54,24 @@ export async function GET(request: NextRequest) {
 
 
     if (userCheck.status === 404) {
+      // Check if first name and last name are provided
+      // If not, use the name from the token
+      // and split it into first and last name
+      let finalFirstName = firstName?.trim();
+      let finalLastName = lastName?.trim();
+
+      if (!finalFirstName || !finalLastName) {
+        const fullName = name?.trim();
+        if (fullName) {
+          const parts = fullName.split(/\s+/);
+          finalFirstName = parts[0];
+          finalLastName = parts.slice(1).join(' ') ?? 'Unknown';
+        } else {
+          finalFirstName = finalFirstName ?? 'Unknown';
+          finalLastName = finalLastName ?? 'User';
+        }
+      }
+
       const createUserRes = await fetch(`${apiUrl}v1/users`, {
         method: 'POST',
         headers: {
@@ -62,8 +79,8 @@ export async function GET(request: NextRequest) {
         },
         body: JSON.stringify({
           userGuid,
-          firstName : firstName ?? 'Unknown',
-          lastName : lastName ?? 'User',
+          firstName: finalFirstName,
+          lastName : finalLastName,
           email: userEmail ?? 'no-email@example.com',
         }),
       });
