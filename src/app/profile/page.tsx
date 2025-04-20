@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import PageHeader from "@/components/PageHeader";
 import WIPSection from "@/components/WIPSection";
 import { Dialog } from '@headlessui/react';
-import ProfileSettings from './ProfileSettings';
+import ProfileSettings from './profileSettings';
 import GeneralSettings from './generalSettings';
 import AppearanceSettings from './appearanceSettings';
 import AccountSettings from './accountSettings';
