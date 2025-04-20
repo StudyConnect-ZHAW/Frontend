@@ -3,10 +3,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
 
 interface MicrosoftToken {
-  userGuid: string;
-  firstName?: string;
-  lastName?: string;
+  oid: string;
+  given_name?: string;
+  family_name?: string;
   email?: string;
+  upn?: string;
+  preferred_username?: string;
 }
 
 /**
@@ -37,31 +39,45 @@ export async function GET(request: NextRequest) {
     const idToken = tokenResponse.idToken!;
     const decoded = jwtDecode<MicrosoftToken>(idToken);
 
-    const { userGuid, firstName, lastName, email } = decoded;
+    const { oid: userGuid, given_name: firstName, family_name: lastName, email, upn, preferred_username } = decoded;
 
     if (!userGuid) {
       console.error('OID not found in ID token');
       return NextResponse.redirect(new URL('/?error=invalid_token', request.url));
     }
 
+
+    // Check if user has email or username
+    const userEmail = email ?? upn ?? preferred_username;
+
     // Check if user already exists in backend
     const userCheck = await fetch(`${apiUrl}v1/users/${userGuid}`);
 
 
     if (userCheck.status === 404) {
-      // User does not exist → create new user
-      await fetch(`${apiUrl}v1/users`, {
+      const createUserRes = await fetch(`${apiUrl}v1/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: userGuid,
-          email,
-          firstName,
-          lastName,
+          userGuid,
+          firstName : firstName ?? 'Unknown',
+          lastName : lastName ?? 'User',
+          email: userEmail ?? 'no-email@example.com',
         }),
       });
+
+      if (!createUserRes.ok) {
+        return NextResponse.redirect(
+          new URL(`/?error=creation_failed_${createUserRes.status}`, request.url)
+        );
+      }
+
+
+    } else if (!userCheck.ok) {
+      console.error(`User check failed: ${userCheck.status}`);
+      return NextResponse.redirect(new URL('/?error=user_check_failed', request.url));
     }
 
     // Create redirect response

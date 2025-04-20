@@ -5,6 +5,7 @@ import {jwtDecode } from 'jwt-decode';
 export async function GET() {
   const cookieStore = await cookies();
   const token = cookieStore.get('access_token')?.value;
+  
 
   if (!token) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
