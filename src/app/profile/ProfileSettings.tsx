@@ -5,10 +5,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 const availableModules = [
   'SWEN 2', 'Computertechnik 1', 'Computertechnik 2', 'Physics Engines',
   'Betriebssysteme', 'Cloud Computing', 'Lineare Algebra', 'Theoretische Informatik',
-  'Datenbanken', 'Programmieren 1', 'Programmieren 2'
+  'Datenbanken', 'Programmieren 1', 'Programmieren 2',
 ];
 
-const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+const weekdays = [
+  'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag',
+  'Freitag', 'Samstag', 'Sonntag',
+];
 
 type Availability = {
   [day: string]: {
@@ -24,21 +27,25 @@ type Props = {
   onSaved: () => void;
 };
 
-export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props) {
+export default function ProfileSettings({
+  onClose,
+  shouldSave,
+  onSaved,
+}: Props) {
   const [name, setName] = useState('Max Mustermann');
   const [avatarUrl, setAvatarUrl] = useState('https://i.pravatar.cc/150?img=3');
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [availability, setAvailability] = useState<Availability>({});
   const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
-  // Memoized submit handler to avoid ESLint warning
+  /* ---------- Speichern ---------- */
   const handleSubmit = useCallback(() => {
     try {
       console.log({ name, avatarUrl, selectedModules, availability });
       setStatus('success');
       setTimeout(() => {
         setStatus(null);
-        onSaved(); // closes parent modal
+        onSaved(); // schliesst Parent‑Modal
       }, 800);
     } catch {
       setStatus('error');
@@ -47,55 +54,54 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
   }, [name, avatarUrl, selectedModules, availability, onSaved]);
 
   useEffect(() => {
-    if (shouldSave) {
-      handleSubmit();
-    }
+    if (shouldSave) handleSubmit();
   }, [shouldSave, handleSubmit]);
 
-  const toggleDay = (day: string) => {
+  /* ---------- Availability Helpers ---------- */
+  const toggleDay = (day: string) =>
     setAvailability(prev => ({
       ...prev,
       [day]: {
         active: !prev[day]?.active,
         from: prev[day]?.from || '08:00',
         to: prev[day]?.to || '17:00',
-      }
+      },
     }));
-  };
 
-  const updateTime = (day: string, type: 'from' | 'to', value: string) => {
+  const updateTime = (
+    day: string,
+    type: 'from' | 'to',
+    value: string,
+  ) =>
     setAvailability(prev => ({
       ...prev,
-      [day]: {
-        ...prev[day],
-        [type]: value,
-      }
+      [day]: { ...prev[day], [type]: value },
     }));
-  };
 
+  /* ---------- UI ---------- */
   return (
     <div className="flex flex-col max-h-[70vh] bg-background text-foreground">
       {/* Scrollable content */}
       <div className="overflow-y-auto pr-2 space-y-6 flex-1">
-        {/* Name input */}
+        {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1">Name</label>
+          <label className="block text-sm font-medium mb-1">Name</label>
           <input
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
-            className="w-full border rounded-md px-4 py-2 bg-background text-foreground"
+            className="w-full border rounded-md px-4 py-2 bg-background"
           />
         </div>
 
-        {/* Avatar input and preview */}
+        {/* Avatar */}
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1">Profilbild-URL</label>
+          <label className="block text-sm font-medium mb-1">Profilbild‑URL</label>
           <input
             type="text"
             value={avatarUrl}
             onChange={e => setAvatarUrl(e.target.value)}
-            className="w-full border rounded-md px-4 py-2 bg-background text-foreground"
+            className="w-full border rounded-md px-4 py-2 bg-background"
           />
           <img
             src={avatarUrl}
@@ -104,36 +110,42 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
           />
         </div>
 
-        {/* Module selection */}
+        {/* Module */}
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">Modulpräferenzen</label>
+          <label className="block text-sm font-medium mb-2">
+            Modulpräferenzen
+          </label>
           <select
             multiple
             value={selectedModules}
-            onChange={(e) => {
-              const selected = Array.from(e.target.selectedOptions).map(option => option.value);
-              setSelectedModules(selected);
-            }}
-            className="w-full border rounded-md px-4 py-2 h-40 bg-background text-foreground"
+            onChange={e =>
+              setSelectedModules(
+                Array.from(e.target.selectedOptions).map(o => o.value),
+              )
+            }
+            className="w-full border rounded-md px-4 py-2 h-40 bg-background"
           >
-            {availableModules.map((mod) => (
+            {availableModules.map(mod => (
               <option key={mod} value={mod}>
                 {mod}
               </option>
             ))}
           </select>
           <p className="text-sm text-muted mt-1">
-            Halte <strong>Strg</strong> (Windows) oder <strong>Cmd</strong> (Mac), um mehrere Module auszuwählen.
+            Halte <strong>Strg</strong> (Windows) oder <strong>Cmd</strong>{' '}
+            (Mac), um mehrere Module auszuwählen.
           </p>
         </div>
 
-        {/* Availability inputs */}
+        {/* Availability */}
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">Verfügbarkeit (Wochentage & Zeiten)</label>
+          <label className="block text-sm font-medium mb-2">
+            Verfügbarkeit (Wochentage & Zeiten)
+          </label>
           <div className="space-y-2">
             {weekdays.map(day => (
               <div key={day} className="flex items-center gap-4">
-                {/* Day name and checkbox */}
+                {/* Checkbox */}
                 <div className="w-[150px] flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -143,21 +155,21 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
                   <span>{day}</span>
                 </div>
 
-                {/* Time input fields */}
+                {/* Time fields */}
                 {availability[day]?.active && (
                   <div className="flex items-center gap-2">
                     <input
                       type="time"
                       value={availability[day]?.from || ''}
-                      onChange={(e) => updateTime(day, 'from', e.target.value)}
-                      className="border rounded px-2 py-1 w-[100px] bg-background text-foreground"
+                      onChange={e => updateTime(day, 'from', e.target.value)}
+                      className="border rounded px-2 py-1 w-[100px] bg-background"
                     />
                     <span>–</span>
                     <input
                       type="time"
                       value={availability[day]?.to || ''}
-                      onChange={(e) => updateTime(day, 'to', e.target.value)}
-                      className="border rounded px-2 py-1 w-[100px] bg-background text-foreground"
+                      onChange={e => updateTime(day, 'to', e.target.value)}
+                      className="border rounded px-2 py-1 w-[100px] bg-background"
                     />
                   </div>
                 )}
@@ -167,28 +179,34 @@ export default function ProfileSettings({ onClose, shouldSave, onSaved }: Props)
         </div>
       </div>
 
-      {/* Sticky action buttons */}
-      <div className="border-t pt-4 mt-4 flex justify-between bg-background sticky bottom-0">
-        <button
-          onClick={onClose}
-          className="bg-gray-300 text-foreground px-6 py-2 rounded-xl hover:bg-gray-400 transition"
-        >
-          Schliessen
-        </button>
-        <button
-          onClick={handleSubmit}
-          className="btn btn-save"
-        >
-          Speichern
-        </button>
-      </div>
+      {/* Aktionen */}
+<div className="border-t pt-4 mt-4 flex justify-between bg-background sticky bottom-0">
+  <button
+    onClick={onClose}
+    className="btn btn-secondary"   // <‑‑ vorher bg‑gray‑300 …
+  >
+    Schliessen
+  </button>
 
-      {/* Status feedback */}
+  <button
+    onClick={handleSubmit}
+    className="btn btn-save"       // <‑‑ unverändert bzw. sicherstellen, dass .btn dabei ist
+  >
+    Speichern
+  </button>
+</div>
+
+
+      {/* Status */}
       {status === 'success' && (
-        <div className="text-green-600 mt-2">Änderungen erfolgreich gespeichert!</div>
+        <div className="text-green-600 mt-2">
+          Änderungen erfolgreich gespeichert!
+        </div>
       )}
       {status === 'error' && (
-        <div className="text-red-600 mt-2">Fehler beim Speichern. Bitte erneut versuchen.</div>
+        <div className="text-red-600 mt-2">
+          Fehler beim Speichern. Bitte erneut versuchen.
+        </div>
       )}
     </div>
   );
