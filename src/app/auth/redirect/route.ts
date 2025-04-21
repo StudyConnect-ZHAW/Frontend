@@ -98,7 +98,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Create redirect response
-    const response = NextResponse.redirect(new URL('/', request.url));
+    const baseUrl = process.env.BASE_URL ?? 'http://localhost:3000';
+    const response = NextResponse.redirect(`${baseUrl}/`);
 
     // Set HttpOnly cookie on response
     response.cookies.set('access_token', tokenResponse.accessToken, {
