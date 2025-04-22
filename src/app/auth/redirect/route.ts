@@ -64,8 +64,13 @@ export async function GET(request: NextRequest) {
         const fullName = name?.trim();
         if (fullName) {
           const parts = fullName.split(/\s+/);
-          finalFirstName = parts[0];
-          finalLastName = parts.slice(1).join(' ') ?? 'Unknown';
+          if (parts.length === 1) {
+            finalFirstName = parts[0];
+            finalLastName = 'Unknown';
+          } else {
+            finalFirstName = parts[0];
+            finalLastName = parts.slice(1).join(' ');
+          }
         } else {
           finalFirstName = finalFirstName ?? 'Unknown';
           finalLastName = finalLastName ?? 'User';
