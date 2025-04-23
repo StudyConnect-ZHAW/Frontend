@@ -36,10 +36,13 @@ export async function GET(request: NextRequest) {
     });
 
     const idToken = tokenResponse.idToken;
-    const decoded = jwtDecode<MicrosoftToken>(idToken);
 
-    console.log('ID token', idToken);
-    console.log('Decoded ID Token: ', decoded);
+    if (!idToken) {
+      console.error('ID token is missing from the token response');
+      return NextResponse.redirect(new URL('/?error=missing_id_token', request.url));
+    }
+
+    const decoded = jwtDecode<MicrosoftToken>(idToken);
 
     const { oid: userGuid, name, email, upn, preferred_username } = decoded;
 
