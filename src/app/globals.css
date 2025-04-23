@@ -1,26 +1,38 @@
 @import "tailwindcss";
 
-
-
+/* ----- Light Theme ----- */
 :root {
-  --background: #F5F3F0;
-  --foreground: #171717;
-  --sidebar-bg: #fafafa;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --background:        #F5F3F0;
+  --foreground:        #171717;
+  --sidebar-bg:        #fafafa;
+
+  --success:           #22c55e;
+  --success-hover:     #16a34a;
+  --secondary:         #e5e7eb;
+  --secondary-hover:   #d1d5db;
+
+  /* Aliase */
+  --color-background:  var(--background);
+  --color-foreground:  var(--foreground);
+  --font-sans:         var(--font-geist-sans);
+  --font-mono:         var(--font-geist-mono);
 }
 
-:root.dark {
-  --background: #211F2A;  /* dunkler Hintergrund */
-  --foreground: #E4E3B6;  /* helle Schrift */
-  --sidebar-bg: #1A1821; /* dunkler Sidebar-Hintergrund */
+/* ----- Dark Theme (aktiver Link: <html class="dark">) ----- */
+html.dark {
+  --background:        #211F2A;
+  --foreground:        #E4E3B6;
+  --sidebar-bg:        #1A1821;
+
+  --success:           #22c55e;
+  --success-hover:     #16a34a;
+  --secondary:         #334155;
+  --secondary-hover:   #475569;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
