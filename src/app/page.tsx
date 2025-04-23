@@ -33,7 +33,7 @@ const HomePage = () => {
             }
       
             const user = await res.json();
-            setUserName(user.name);
+            setUserName(user.firstName + ' ' + user.lastName);
           } catch (err) {
             console.error('Error fetching user:', err);
             redirect('/login');

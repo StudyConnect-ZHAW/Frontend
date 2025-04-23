@@ -4,8 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 
 interface MicrosoftToken {
   oid: string;
-  given_name?: string;
-  family_name?: string;
+  name?: string;
   email?: string;
   upn?: string;
   preferred_username?: string;
@@ -36,10 +35,13 @@ export async function GET(request: NextRequest) {
       scopes: ['openid', 'profile', 'email'],
     });
 
-    const idToken = tokenResponse.idToken!;
+    const idToken = tokenResponse.idToken;
     const decoded = jwtDecode<MicrosoftToken>(idToken);
 
-    const { oid: userGuid, name, given_name: firstName, family_name: lastName, email, upn, preferred_username } = decoded;
+    console.log('ID token', idToken);
+    console.log('Decoded ID Token: ', decoded);
+
+    const { oid: userGuid, name, email, upn, preferred_username } = decoded;
 
     if (!userGuid) {
       console.error('OID not found in ID token');
@@ -52,30 +54,15 @@ export async function GET(request: NextRequest) {
     // Check if user already exists in backend
     const userCheck = await fetch(`${apiUrl}v1/users/${userGuid}`);
 
-
     if (userCheck.status === 404) {
-      // Check if first name and last name are provided
-      // If not, use the name from the token
-      // and split it into first and last name
-      let finalFirstName = firstName?.trim();
-      let finalLastName = lastName?.trim();
+      // User does not exist, create a new user
 
-      if (!finalFirstName || !finalLastName) {
-        const fullName = name?.trim();
-        if (fullName) {
-          const parts = fullName.split(/\s+/);
-          if (parts.length === 1) {
-            finalFirstName = parts[0];
-            finalLastName = 'Unknown';
-          } else {
-            finalFirstName = parts[0];
-            finalLastName = parts.slice(1).join(' ');
-          }
-        } else {
-          finalFirstName = finalFirstName ?? 'Unknown';
-          finalLastName = finalLastName ?? 'User';
-        }
-      }
+      // Default values for first and last names
+      let firstName = 'Unknown';
+      let lastName = 'User';
+
+      // Extract first and last names from the full name or use default values
+      ({ firstName, lastName } = extractNames(name, firstName, lastName));
 
       const createUserRes = await fetch(`${apiUrl}v1/users`, {
         method: 'POST',
@@ -84,8 +71,8 @@ export async function GET(request: NextRequest) {
         },
         body: JSON.stringify({
           userGuid,
-          firstName: finalFirstName,
-          lastName : finalLastName,
+          firstName,
+          lastName,
           email: userEmail ?? 'no-email@example.com',
         }),
       });
@@ -123,5 +110,21 @@ export async function GET(request: NextRequest) {
 
     console.error('Unknown error acquiring token:', error);
     return NextResponse.redirect(new URL('/?error=unknown_error', request.url));
+  }
+
+  // Helper function to extract first and last names from a full name
+  // If the name is not provided, use default values
+  function extractNames(name: string | undefined, firstName: string, lastName: string) {
+    const fullName = name?.trim();
+    if (fullName) {
+      const parts = fullName.split(/\s+/);
+      if (parts.length === 1) {
+        firstName = parts[0];
+      } else {
+        firstName = parts[0];
+        lastName = parts.slice(1).join(' ');
+      }
+    }
+    return { firstName, lastName };
   }
 }
