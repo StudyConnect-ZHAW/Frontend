@@ -6,19 +6,16 @@
   --background: #F5F3F0;
   --foreground: #171717;
   --sidebar-bg: #fafafa;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 :root.dark {
   --background: #211F2A;  /* dunkler Hintergrund */
   --foreground: #E4E3B6;  /* helle Schrift */
   --sidebar-bg: #1A1821; /* dunkler Sidebar-Hintergrund */
-}
-
-:root {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 body {
