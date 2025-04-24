@@ -13,7 +13,7 @@ type PageHeaderProps = {
 export default function PageHeader({title}: PageHeaderProps) {
     return (
         <header className="flex items-center justify-between">
-            {title && <h1 className="text-4xl font-bold text-[#171717]">{title}</h1>}
+            {title && <h1 className="text-4xl font-bold text-foreground">{title}</h1>}
             <Logo/>
         </header>
     );

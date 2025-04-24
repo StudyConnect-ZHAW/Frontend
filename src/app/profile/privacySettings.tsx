@@ -71,7 +71,7 @@ export default function PrivacySettings({ onClose }: Props) {
       <div className="border-t pt-4 mt-4 flex justify-between bg-white sticky bottom-0">
         <button
           onClick={onClose}
-          className="bg-gray-300 text-black px-6 py-2 rounded-xl hover:bg-gray-400 transition"
+          className="bg-gray-300 text-foreground px-6 py-2 rounded-xl hover:bg-gray-400 transition"
         >
           Schliessen
         </button>
