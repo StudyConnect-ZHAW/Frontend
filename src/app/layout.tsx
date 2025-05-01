@@ -17,6 +17,8 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
+const getRootPath = (path: string) => `/${path.split("/")[1]}`;
+
 // ✅ Valid routes
 const knownRoutes = [
   '/',
@@ -34,10 +36,10 @@ const hiddenRoutes = ['/login'];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-
   const hideSidebar = useMemo(() => {
+    const rootPath = getRootPath(pathname);
     // hide if explicitly hidden or unknown route
-    return hiddenRoutes.includes(pathname) || !knownRoutes.includes(pathname);
+    return hiddenRoutes.includes(rootPath) || !knownRoutes.includes(rootPath);
   }, [pathname]);
 
   return (

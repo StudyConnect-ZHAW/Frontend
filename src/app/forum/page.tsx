@@ -2,7 +2,6 @@
 
 import React from "react";
 import PageHeader from "@/components/PageHeader";
-import WIPSection from "@/components/WIPSection";
 import ForumPost from "@/components/ForumPost";
 import SearchField from "@/components/SearchField";
 import SortField from "@/components/SortField";
