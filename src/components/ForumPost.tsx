@@ -36,24 +36,22 @@ export default function ForumPost({ post }: Props) {
 
   return (
     <div
-      className="p-4 mb-0.5"
+      className="p-4 mb-0.5 rounded-[15px] bg-[var(--sidebar-bg)] border-2"
       style={{
-        border: `3px solid ${borderAndShadowColor}`,
-        borderRadius: "15px",
-        background: "var(--sidebar-bg)",
+        borderColor: borderAndShadowColor,
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
       }}
     >
       {/* Post title */}
-      <h2 className="text-xl font-bold mb-1">{post.title}</h2>
-
-      {/* Author and date */}
-      <p className="text-sm text-gray-500 mb-2">
-        {post.author} • {post.date}
-      </p>
+      <div className="flex items-start justify-between mb-1">
+        <h2 className="text-xl font-bold">{post.title}</h2>
+        <span className="text-sm text-gray-500 whitespace-nowrap">
+          {post.date} • {post.author}
+        </span>
+      </div>
 
       {/* Post content */}
-      <p className="mb-2">{post.content}</p>
+      <p className="mb-3">{post.content}</p>
 
       {/* Post interaction bar */}
       <div className="flex gap-4 text-sm text-gray-600">

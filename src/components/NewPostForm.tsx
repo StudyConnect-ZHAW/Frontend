@@ -68,9 +68,9 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
   return (
     <div className="mx">
       <div
-        className="relative p-4 flex items-start"
+        className="relative p-3 flex items-start max-h-[100px]"
         style={{
-          border: `3px solid ${borderAndShadowColor}`,
+          border: `2px solid ${borderAndShadowColor}`,
           borderRadius: "15px",
           transition: "border-color 0.3s ease, box-shadow 0.3s ease",
           background: theme === "dark" ? "var(--sidebar-bg)" : "#FFFFFF",
@@ -80,22 +80,23 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
         <img
           src="/path/to/avatar.png"
           alt="Avatar"
-          className="w-12 h-12 rounded-full mr-4 object-cover"
+          className="w-10 h-10 rounded-full mr-6 object-cover mt-4"
         />
 
         {/* Post form */}
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
+        <form onSubmit={handleSubmit} className="flex-1 relative">
           <textarea
             className="w-full mb-1 text-sm border-0 bg-transparent focus:outline-none focus:ring-0 h-15 overflow-y-auto resize-none"
-            rows={3}
+            rows={2}
             placeholder="What's on your mind?"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            style={{ lineHeight: "1.2rem" }}
           />
 
           {/* Image upload icon */}
           <label
-            className="cursor-pointer absolute bottom-4 left-20"
+            className="cursor-pointer absolute bottom-0 left-0"
             title="Upload image"
           >
             <FiImage
@@ -110,15 +111,20 @@ export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
             />
           </label>
 
-          {/* Error message */}
-          {errorMsg && <p className="text-red-500 text-sm mb-2">{errorMsg}</p>}
-
           {/* Submit button */}
           <div className="text-right">
             <button
               type="submit"
               disabled={isLoading}
-              className="font-bold text-sm inline-flex items-center transition-all duration-150 gap-1 bg-[#ec3349] text-white px-2 py-1 rounded hover:scale-105 hover:bg-black"
+              className="absolute bottom-0 right-0
+               font-bold text-sm inline-flex items-center gap-1
+               bg-[#ec3349] text-white px-2 py-1 rounded 
+               transition hover:scale-105 hover:bg-black
+               disabled:opacity-60"
+              style={{ 
+                borderRadius: "7px"
+              }}
+
             >
               {isLoading ? (
                 "Posting..."
