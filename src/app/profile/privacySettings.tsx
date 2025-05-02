@@ -29,7 +29,7 @@ export default function PrivacySettings({ onClose }: Props) {
   };
 
   return (
-    <div className="flex flex-col space-y-6 max-h-[70vh] overflow-y-auto">
+    <div className="flex flex-col space-y-6 max-h-[70vh] bg-background text-foreground">
       {/* Camera access toggle */}
       <div>
         <label className="flex items-center space-x-3">
@@ -68,16 +68,16 @@ export default function PrivacySettings({ onClose }: Props) {
       </div>
 
       {/* Bottom button bar: Schliessen left, Speichern right */}
-      <div className="border-t pt-4 mt-4 flex justify-between bg-white sticky bottom-0">
+      <div className="border-t pt-4 mt-4 flex justify-between bg-background sticky bottom-0">
         <button
           onClick={onClose}
-          className="bg-gray-300 text-foreground px-6 py-2 rounded-xl hover:bg-gray-400 transition"
+          className="button-close"
         >
           Schliessen
         </button>
         <button
           onClick={handleSave}
-          className="bg-green-500 text-white px-6 py-2 rounded-xl hover:bg-green-600 transition"
+          className="button-save"
         >
           Speichern
         </button>

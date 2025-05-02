@@ -28,18 +28,18 @@ export default function AppearanceSettings({ onClose }: Props) {
   };
 
   return (
-    <div className="flex flex-col space-y-6 max-h-[70vh] overflow-y-auto">
+    <div className="flex flex-col space-y-6 max-h-[70vh] bg-background text-foreground">
       {/* Theme selection */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Theme</label>
         <select
           value={theme}
           onChange={e => setTheme(e.target.value)}
-          className="w-full border rounded-md px-4 py-2"
+          className="w-full border rounded-md px-4 py-2 bg-background text-foreground"
         >
           <option value="light">Light</option>
           <option value="dark">Dark</option>
-          <option value="system">System</option>
+
         </select>
       </div>
 
@@ -49,7 +49,7 @@ export default function AppearanceSettings({ onClose }: Props) {
         <select
           value={density}
           onChange={e => setDensity(e.target.value)}
-          className="w-full border rounded-md px-4 py-2"
+          className="w-full border rounded-md px-4 py-2 bg-background text-foreground"
         >
           <option value="comfortable">Bequem</option>
           <option value="normal">Normal</option>
@@ -63,7 +63,7 @@ export default function AppearanceSettings({ onClose }: Props) {
         <select
           value={layout}
           onChange={e => setLayout(e.target.value)}
-          className="w-full border rounded-md px-4 py-2"
+          className="w-full border rounded-md px-4 py-2 bg-background text-foreground"
         >
           <option value="grid">Grid</option>
           <option value="list">List</option>
@@ -71,16 +71,16 @@ export default function AppearanceSettings({ onClose }: Props) {
       </div>
 
       {/* Action buttons */}
-      <div className="border-t pt-4 mt-4 flex justify-between bg-white sticky bottom-0">
+      <div className="border-t pt-4 mt-4 flex justify-between bg-background sticky bottom-0">
         <button
           onClick={onClose}
-          className="bg-gray-300 text-foreground px-6 py-2 rounded-xl hover:bg-gray-400 transition"
+          className="button-close"
         >
           Schliessen
         </button>
         <button
           onClick={handleSave}
-          className="bg-green-500 text-white px-6 py-2 rounded-xl hover:bg-green-600 transition"
+          className="button-save"
         >
           Speichern
         </button>

@@ -179,18 +179,18 @@ export default function ProfileSettings({
         </div>
       </div>
 
-      {/* Aktionen */}
+      {/* Actions */}
 <div className="border-t pt-4 mt-4 flex justify-between bg-background sticky bottom-0">
   <button
     onClick={onClose}
-    className="btn btn-secondary"   // <‑‑ vorher bg‑gray‑300 …
+    className="button-close"
   >
     Schliessen
   </button>
 
   <button
     onClick={handleSubmit}
-    className="btn btn-save"       // <‑‑ unverändert bzw. sicherstellen, dass .btn dabei ist
+    className="button-save" 
   >
     Speichern
   </button>

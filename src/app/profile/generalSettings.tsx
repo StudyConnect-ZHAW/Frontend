@@ -37,7 +37,7 @@ export default function GeneralSettings({ onClose, shouldSave, onSaved }: Props)
   };
 
   return (
-    <div className="flex flex-col max-h-[70vh]">
+    <div className="flex flex-col max-h-[70vh] bg-background text-foreground">
       <div className="overflow-y-auto pr-2 space-y-6 flex-1">
         {/* Language Selector */}
         <div>
@@ -45,7 +45,7 @@ export default function GeneralSettings({ onClose, shouldSave, onSaved }: Props)
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="w-full border rounded-md px-4 py-2"
+            className="w-full border rounded-md px-4 py-2 bg-background text-foreground"
           >
             <option value="de">Deutsch</option>
             <option value="en">Englisch</option>
@@ -59,7 +59,7 @@ export default function GeneralSettings({ onClose, shouldSave, onSaved }: Props)
           <select
             value={viewStyle}
             onChange={(e) => setViewStyle(e.target.value as 'auto' | 'list' | 'grid' | 'compact' | 'detailed')}
-            className="w-full border rounded-md px-4 py-2"
+            className="w-full border rounded-md px-4 py-2 bg-background text-foreground"
           >
             <option value="auto">Automatisch</option>
             <option value="list">Liste</option>
@@ -71,16 +71,16 @@ export default function GeneralSettings({ onClose, shouldSave, onSaved }: Props)
       </div>
 
       {/* Footer Buttons */}
-      <div className="border-t pt-4 mt-4 flex justify-between bg-white sticky bottom-0">
+      <div className="border-t pt-4 mt-4 flex justify-between bg-background sticky bottom-0">
         <button
           onClick={onClose}
-          className="bg-gray-300 text-foreground px-6 py-2 rounded-xl hover:bg-gray-400 transition"
+          className="button-close"
         >
           Schliessen
         </button>
         <button
           onClick={handleSave}
-          className="bg-green-500 text-white px-6 py-2 rounded-xl hover:bg-green-600 transition"
+          className="button-save"
         >
           Speichern
         </button>

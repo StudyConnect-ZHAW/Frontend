@@ -7,18 +7,8 @@ type Props = {
 };
 
 export default function AccountSettings({ onClose }: Props) {
-  const [email, setEmail] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [status, setStatus] = useState<'success' | 'error' | null>(null);
-
-  const handleAddAccount = () => {
-    console.log('Account hinzugefügt mit Email:', email);
-    setStatus('success');
-    setTimeout(() => {
-      setStatus(null);
-      onClose();
-    }, 1000);
-  };
 
   const handleDelete = () => {
     if (confirmDelete) {
@@ -30,32 +20,14 @@ export default function AccountSettings({ onClose }: Props) {
       }, 1000);
     } else {
       setStatus('error');
-      setTimeout(() => setStatus(null), 500);
+      setTimeout(() => setStatus(null), 1000);
     }
   };
 
   return (
-    <div className="flex flex-col space-y-6 max-h-[70vh] overflow-y-auto">
-      {/* Add Account */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Neuer Account (E-Mail)</label>
-        <input
-          type="email"
-          placeholder="name@example.com"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="w-full border rounded-md px-4 py-2"
-        />
-        <button
-          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={handleAddAccount}
-        >
-          Account hinzufügen
-        </button>
-      </div>
-
+    <div className="flex flex-col max-h-[70vh] bg-background text-foreground">
       {/* Delete Account */}
-      <div className="border-t pt-4">
+        <div>
         <label className="flex items-center space-x-3">
           <input
             type="checkbox"
@@ -70,13 +42,13 @@ export default function AccountSettings({ onClose }: Props) {
         >
           Account löschen
         </button>
-      </div>
+    </div>
 
       {/* Footer Buttons */}
-      <div className="border-t pt-4 mt-4 flex justify-end bg-white sticky bottom-0">
+      <div className="border-t pt-4 mt-4 flex justify-start bg-background sticky bottom-0">
         <button
           onClick={onClose}
-          className="bg-gray-300 text-foreground px-6 py-2 rounded-xl hover:bg-gray-400 transition"
+          className="button-close"
         >
           Schliessen
         </button>
