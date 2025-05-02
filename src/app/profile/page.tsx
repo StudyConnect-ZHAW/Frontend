@@ -1,25 +1,23 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-import WIPSection       from '@/components/WIPSection';
-import { Dialog }       from '@headlessui/react';
+import { Dialog } from '@headlessui/react';
 
-import ProfileSettings       from './profileSettings';
-import GeneralSettings       from './generalSettings';
-import AppearanceSettings    from './appearanceSettings';
-import AccountSettings       from './accountSettings';
-import PrivacySettings       from './privacySettings';
+import ProfileSettings from './profileSettings';
+import GeneralSettings from './generalSettings';
+import AppearanceSettings from './appearanceSettings';
+import AccountSettings from './accountSettings';
+import PrivacySettings from './privacySettings';
 import NotificationsSettings from './notificationSettings';
 import PageHeader from "@/components/PageHeader";
 
-
 const settingsBlocks = [
-  { title: 'General',               description: 'System, Language, Views' },
-  { title: 'Appearance',            description: 'Theme, Chat Density, Layout' },
-  { title: 'Privacy',               description: 'DnD, Camera, Privacy Password' },
+  { title: 'General', description: 'System, Language, Views' },
+  { title: 'Appearance', description: 'Theme, Chat Density, Layout' },
+  { title: 'Privacy', description: 'DnD, Camera, Privacy Password' },
   { title: 'Notifications / Activity', description: 'Sound, Mute, Display Notif., Chat Notif.' },
-  { title: 'Account',               description: 'Add/Delete Account' },
-  { title: 'Profile',               description: 'Profile Picture, Bio, Name' },
+  { title: 'Account', description: 'Add/Delete Account' },
+  { title: 'Profile', description: 'Profile Picture, Bio, Name' },
 ];
 
 export default function SettingsPage() {
@@ -36,21 +34,19 @@ export default function SettingsPage() {
       setTheme("light");
       document.documentElement.classList.remove("dark");
     }
-}, []);
+  }, []);
 
   /* modal state */
   const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
 
   return (
-    <main>
+    <main className="min-h-screen flex flex-col">
       {/* header: title left, logo + switch right */}
-      
-      {/* set color for darkmode */}
-      <PageHeader title='Preferences'/>
-        <div>class= </div>
+      <PageHeader title="Preferences" />
 
       {/* setting tiles */}
-      <div className="bg-background grid grid-cols-1 md:grid-cols-2 gap-6 border-thick p-6 rounded-xl shadow mt-6">
+      <div className="bg-background grid grid-cols-1 md:grid-cols-2 gap-6 border-thick p-6 
+      rounded-xl shadow mt-6 flex-grow">
         {settingsBlocks.map((block) => (
           <button
             key={block.title}
@@ -60,7 +56,7 @@ export default function SettingsPage() {
               bg-card-bg hover:bg-card-hover
               focus:outline-none focus:ring-2 focus:ring-success/50
               active:bg-card-hover
-            "
+              "
           >
             <h3 className="text-xl font-semibold">{block.title}</h3>
             <p className="text-foreground/70 text-sm mt-1">{block.description}</p>
@@ -77,8 +73,9 @@ export default function SettingsPage() {
         {/* overlay */}
         <div className="fixed inset-0 bg-black/20 dark:bg-black/40" aria-hidden="true" />
 
-        <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto">
-          <Dialog.Panel className="bg-background rounded-2xl p-6 w-full max-w-3xl shadow-lg border-thick">
+        <div className="fixed inset-0 flex items-center justify-center p-4 overflow-hidden">
+          <Dialog.Panel className="bg-background rounded-2xl p-6 w-full max-w-4xl shadow-lg 
+          border-thick h-auto">
             <Dialog.Title className="text-xl font-bold mb-4">{selectedBlock}</Dialog.Title>
 
             {selectedBlock === 'Profile' && (
@@ -115,8 +112,6 @@ export default function SettingsPage() {
           </Dialog.Panel>
         </div>
       </Dialog>
-
-      <WIPSection />
     </main>
   );
 }
