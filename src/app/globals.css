@@ -8,8 +8,8 @@
 
   --success:           #22c55e;
   --success-hover:     #16a34a;
-  --secondary:         #e5e7eb;
-  --secondary-hover:   #d1d5db;
+  --close:             #e5e7eb;
+  --close-hover:       #d1d5db;
 
   /* Aliase */
   --color-background:  var(--background);
@@ -18,7 +18,7 @@
   --font-mono:         var(--font-geist-mono);
 }
 
-/* ----- Dark Theme (aktiver Link: <html class="dark">) ----- */
+/* ----- Dark Theme (aktive link: <html class="dark">) ----- */
 html.dark {
   --background:        #211F2A;
   --foreground:        #E4E3B6;
@@ -26,8 +26,14 @@ html.dark {
 
   --success:           #22c55e;
   --success-hover:     #16a34a;
-  --secondary:         #334155;
-  --secondary-hover:   #475569;
+  --close:             #334155;
+  --close-hover:       #475569;
+
+  --border-color:      #2b2a30;  /* colour for Dark Mode */
+}
+
+.border-thick {
+    border: 2px solid var(--border-color);
 }
 
 body {
@@ -35,4 +41,38 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bg-background {
+    background: var(--background);
+}
+
+.bg-background-dark {
+    background: var(--background);
+}
+
+.button-save {
+    background: var(--success);
+    color: var(--foreground);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    transition: background-color 150ms ease;
+}
+
+.button-save:hover {
+    background: var(--success-hover);
+}
+
+.button-close {
+    background: var(--close);
+    color: var(--foreground);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    transition: background-color 150ms ease;
+}
+
+.button-close:hover {
+    background: var(--close-hover);
 }
