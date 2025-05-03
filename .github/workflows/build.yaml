@@ -14,7 +14,6 @@ permissions:
 
 jobs:
   frontend-tests:
-    if: github.event.pull_request.state == 'open' && github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     outputs: # Define output for artifact name
       artifact_name: frontend-test-results-${{ github.run_id }}
@@ -26,12 +25,15 @@ jobs:
        # Assuming this action generates coverage reports (e.g., lcov.info)
        # inside the specified output path (default './coverage')
         uses: ./.github/actions/run-frontend-tests
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         id: run_tests
         with:
-         working-directory: "."
-         codecov-token: ${{ secrets.CODECOV_TOKEN }}
-         node-env: 'test'
-         # Ensure this action outputs coverage to a predictable path, e.g., ./coverage/lcov.info
+          working-directory: "."
+          codecov-token: ${{ secrets.CODECOV_TOKEN }}
+          node-env: 'test'
+          # Ensure this action outputs coverage to a predictable path, e.g., ./coverage/lcov.info
 
       - name: Upload Frontend Test Coverage Artifact
         uses: actions/upload-artifact@v4
