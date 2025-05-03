@@ -248,7 +248,7 @@ jobs:
             *   **Conditions:**
                 ${{ env.conditions }}
 
-            [View Full Report on SonarQube](${{ secrets.SONAR_HOST_URL }}/dashboard?id=StudyConnect-frontend&pullRequest=${{ github.event.pull_request.number }})
+            [View Full Report on SonarQube](${{ secrets.SONAR_HOST_URL }}/dashboard?id=StudyConnect-frontend)
 
       # Not failing the job for now, but you can uncomment this to enforce Quality Gate
       #- name: Check Quality Gate Status
