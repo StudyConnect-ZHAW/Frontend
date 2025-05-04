@@ -5,6 +5,8 @@
   --background:        #F5F3F0;
   --foreground:        #171717;
   --sidebar-bg:        #fafafa;
+  --sidebar-border:    #ff0000;   
+  --sidebar-glow:      #ff0000;
 
   --success:           #22c55e;
   --success-hover:     #16a34a;
@@ -23,6 +25,8 @@ html.dark {
   --background:        #211F2A;
   --foreground:        #E4E3B6;
   --sidebar-bg:        #1A1821;
+  --sidebar-border:    #ffcc00;
+  --sidebar-glow:      #ffcc00;
 
   --success:           #22c55e;
   --success-hover:     #16a34a;
