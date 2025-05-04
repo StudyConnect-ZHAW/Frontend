@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from '@headlessui/react';
 
-import ProfileSettings from './profileSettings';
+import ProfileSettings from './ProfileSettings';
 import GeneralSettings from './generalSettings';
 import AppearanceSettings from './appearanceSettings';
 import AccountSettings from './accountSettings';
