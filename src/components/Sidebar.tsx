@@ -100,11 +100,6 @@ export default function Sidebar() {
           );
         })}
       </div>
-
-      {/* TOGGLE-BUTTON BELOW */}
-      <div style={{ marginTop: "16px" }}>
-        <ToggleSwitch theme={theme} toggleTheme={toggleTheme} />
-      </div>
     </div>
   );
 }
