@@ -23,6 +23,7 @@ const settingsBlocks = [
 export default function SettingsPage() {
   /* theme handling */
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const borderAndShadowColor = theme === "dark" ?  "#EC3349" : "#FDBA15";
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -40,23 +41,24 @@ export default function SettingsPage() {
   const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="min-h-full flex flex-col">
       {/* header: title left, logo + switch right */}
       <PageHeader title="Preferences" />
 
       {/* setting tiles */}
       <div className="bg-background grid grid-cols-1 md:grid-cols-2 gap-6 border-thick p-6 
-      rounded-xl shadow mt-6 flex-grow">
+      rounded-xl mt-6 flex-grow border-2" style={{ borderColor: borderAndShadowColor }}>
         {settingsBlocks.map((block) => (
           <button
             key={block.title}
             onClick={() => setSelectedBlock(block.title)}
             className="
-              text-left p-4 rounded-xl border-thick shadow transition-colors
+              text-left p-4 rounded-xl border-2 border-color- transition-colors
               bg-card-bg hover:bg-card-hover
               focus:outline-none focus:ring-2 focus:ring-success/50
               active:bg-card-hover
               "
+            style={{ borderColor: borderAndShadowColor }}
           >
             <h3 className="text-xl font-semibold">{block.title}</h3>
             <p className="text-foreground/70 text-sm mt-1">{block.description}</p>

@@ -41,7 +41,7 @@ export default function GeneralSettings({ onClose, shouldSave, onSaved }: Props)
       <div className="overflow-y-auto pr-2 space-y-6 flex-1">
         {/* Language Selector */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Sprache</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Sprache</label>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
@@ -55,7 +55,7 @@ export default function GeneralSettings({ onClose, shouldSave, onSaved }: Props)
 
         {/* Views (Layout Style) Selector */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Views</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Views</label>
           <select
             value={viewStyle}
             onChange={(e) => setViewStyle(e.target.value as 'auto' | 'list' | 'grid' | 'compact' | 'detailed')}

@@ -56,7 +56,7 @@ export default function PrivacySettings({ onClose }: Props) {
 
       {/* Privacy password input */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1">
           Privatsphäre-Passwort
         </label>
         <input
