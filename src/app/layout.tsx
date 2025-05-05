@@ -17,43 +17,42 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
-// ✅ Valid routes
+// Valid routes
 const knownRoutes = [
-  '/',
-  '/profile',
-  '/groups',
-  '/chat',
-  '/calendar',
-  '/settings',
-  '/login',
-  '/forum',
+    '/',
+    '/preferences',
+    '/groups',
+    '/chat',
+    '/calendar',
+    '/forum',
+    '/login',
 ];
 
-// valid routes without a sidebar
+// Valid routes without a sidebar
 const hiddenRoutes = ['/login'];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+    const pathname = usePathname();
 
-  const hideSidebar = useMemo(() => {
-    // hide if explicitly hidden or unknown route
-    return hiddenRoutes.includes(pathname) || !knownRoutes.includes(pathname);
-  }, [pathname]);
+    const hideSidebar = useMemo(() => {
+        // Hide if explicitly hidden or unknown route
+        return hiddenRoutes.includes(pathname) || !knownRoutes.includes(pathname);
+    }, [pathname]);
 
-  return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen flex flex-col">
-          <div className="flex flex-1">
-            {!hideSidebar && <Sidebar />}
-            <main className="flex-1 p-4 pb-0 flex flex-col">
-              {children}
-            </main>
-          </div>
+    return (
+        <html lang="en">
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+                <div className="min-h-screen flex flex-col">
+                    <div className="flex flex-1">
+                        {!hideSidebar && <Sidebar />}
+                        <main className="flex-1 p-4 pb-0 flex flex-col">
+                            {children}
+                        </main>
+                    </div>
 
-          <Footer />
-        </div>
-      </body>
-    </html>
-  );
+                    <Footer />
+                </div>
+            </body>
+        </html>
+    );
 }

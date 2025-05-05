@@ -35,11 +35,10 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
-    '/profile/:path*',
+    '/preferences/:path*',
     '/groups/:path*',
     '/chat/:path*',
     '/calendar/:path*',
-    '/settings/:path*',
     '/forum/:path*',
   ],
 };
