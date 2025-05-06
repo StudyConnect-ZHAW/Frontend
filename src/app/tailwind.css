@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light mode (default) */
+@theme {
+    /* Background colors */
+    --color-primary-bg: #F5F3F0;
+    --color-secondary-bg: #FAFAFA;
+    --color-sidebar-bg: #FAFAFA;
+
+    /* Text colors */
+    --color-primary: #171717;
+    --color-secondary: #202020; /* Footer */
+
+    /* Border colors */
+    --color-sidebar-border: #ff0000;
+    --color-main-border: #ffcc00;
+
+    /* Icon colors */
+    --color-icon: #ec3349;
+
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+}
+
+/* Dark mode */
+@layer base {
+    @variant dark {
+        /* Background colors */
+        --color-primary-bg: #211F2A;
+        --color-secondary-bg: #FAFAFA;
+        --color-sidebar-bg: #1A1821;
+
+        /* Text colors */
+        --color-primary: #E4E3B6;
+        --color-secondary: #e8e695; /* Footer */
+
+        /* Border colors */
+        --color-sidebar-border: #ffcc00;
+        --color-main-border: #ff0000;
+
+        /* Icon colors */
+        --color-icon: #FDBA15;
+    }
+}
+
+body {
+    /** TODO Leftover from old globals.css */
+    font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.border-sidebar {
+    border: 3px solid var(--color-sidebar-border);
+}
+
+.border-main {
+    border: 3px solid var(--color-main-border);
+}
+
+.border-wip {
+    border: 4px dashed var(--color-main-border);
+}
+
+.button-save {
+    background: var(--success);
+    color: var(--foreground);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    transition: background-color 150ms ease;
+}
+
+.button-save:hover {
+    background: var(--success-hover);
+}
+
+.button-close {
+    background: var(--close);
+    color: var(--foreground);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    transition: background-color 150ms ease;
+}
+
+.button-close:hover {
+    background: var(--close-hover);
+}

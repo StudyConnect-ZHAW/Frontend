@@ -37,28 +37,23 @@ export default function AppearanceSettings({ onClose }: Props) {
                 document.documentElement.classList.remove('dark');
             }
             setStatus('success');
-            setTimeout(() => {
-                setStatus(null);
-                onClose();
-            }, 800);
         } catch {
             setStatus('error');
-            setTimeout(() => setStatus(null), 500);
         }
     };
 
     return (
-        <div className="flex flex-col space-y-6 max-h-[70vh] bg-background text-foreground">
+        <div className="flex flex-col space-y-6 max-h-[70vh] bg-primary-bg text-primary">
             {/* scrollable content */}
             <div className="overflow-y-auto pr-2 space-y-6 flex-1">
 
                 {/* Theme selection */}
                 <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">Theme</label>
+                    <label className="block text-sm font-medium text-primary mb-1">Theme</label>
                     <select
                         value={theme}
                         onChange={e => setTheme(e.target.value as 'light' | 'dark')}
-                        className="w-full border rounded-md px-4 py-2 bg-background text-foreground"
+                        className="w-full border rounded-md px-4 py-2 bg-primary-bg text-primary"
                     >
                         <option value="light">Light</option>
                         <option value="dark">Dark</option>

@@ -6,8 +6,8 @@ import React from "react";
 export default function WIPSection() {
     return (
         <div
-            className={"flex-grow flex items-center justify-center border-4 border-dashed border-yellow-400 rounded-xl p-6"}>
-            <h1 className="text-4xl font-bold text-foreground">WIP</h1>
+            className={"flex-grow flex items-center justify-center border-wip rounded-xl p-6"}>
+            <h1 className="text-4xl font-bold text-primary">WIP</h1>
         </div>
     )
 }

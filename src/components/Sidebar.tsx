@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -29,41 +29,9 @@ const navItems = [
 export default function Sidebar() {
     const pathname = usePathname();
 
-    const [theme, setTheme] = useState<"light" | "dark">("light");
-
-    useEffect(() => {
-        const storedTheme = localStorage.getItem("theme");
-        if (storedTheme === "dark") {
-            setTheme("dark");
-            document.documentElement.classList.add("dark");
-        } else {
-            // standard = light
-            setTheme("light");
-            document.documentElement.classList.remove("dark");
-        }
-    }, []);
-
-    // Klick-Handler, that switches between dark and light mode
-    const toggleTheme = () => {
-        if (theme === "light") {
-            setTheme("dark");
-            document.documentElement.classList.add("dark");
-            localStorage.setItem("theme", "dark");
-        } else {
-            setTheme("light");
-            document.documentElement.classList.remove("dark");
-            localStorage.setItem("theme", "light");
-        }
-    };
-
-    const borderAndShadowColor = theme === "dark" ? "#FDBA15" : "#ec3349";
-    const iconColorClass = theme === "dark" ? "text-[#FDBA15]" : "text-[#ec3349]";
-
     return (
         <div
             style={{
-                border: `3px solid ${borderAndShadowColor}`,
-                boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
                 transition: "border-color 0.3s ease, box-shadow 0.3s ease",
             }}
             className={`
@@ -74,7 +42,8 @@ export default function Sidebar() {
         rounded-xl 
         p-4 gap-4 
         items-center
-        bg-[var(--sidebar-bg)]
+        bg-sidebar-bg
+        border-sidebar
       `}
         >
             <div className="flex flex-col items-center gap-8">
@@ -87,8 +56,8 @@ export default function Sidebar() {
                             key={label}
                             aria-label={label}
                             className={`text-[35px] transition-all duration-200 cursor-pointer ${isActive
-                                ? `${iconColorClass} scale-125`
-                                : `hover:scale-125 hover:${iconColorClass}`
+                                ? `text-icon scale-125`
+                                : `hover:scale-125 hover:text-icon`
                                 }`}
                         >
                             <Icon />
