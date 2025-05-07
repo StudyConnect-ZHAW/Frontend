@@ -1,5 +1,6 @@
 'use client';
 
+import { showToast, ToastType } from '@/components/Toast';
 import React, { useState } from 'react';
 
 type Props = {
@@ -10,26 +11,13 @@ export default function NotificationSettings({ onClose }: Props) {
     const [soundEnabled, setSoundEnabled] = useState(true);
     const [chatNotifications, setChatNotifications] = useState(true);
     const [displayPopups, setDisplayPopups] = useState(false);
-    const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
-    // Save handler with confirmation message
     const handleSave = () => {
-        try {
-            console.log({ soundEnabled, chatNotifications, displayPopups });
-            setStatus('success');
-            // Delay close so user can see the success message
-            setTimeout(() => {
-                setStatus(null);
-                onClose();
-            }, 800);
-        } catch {
-            setStatus('error');
-            setTimeout(() => setStatus(null), 500);
-        }
+        showToast(ToastType.Success, "Success", "Successfully saved the changes.");
     };
 
     return (
-        <div className="flex flex-col space-y-6 max-h-[70vh] bg-background text-foreground">
+        <div className="flex flex-col space-y-6 max-h-[70vh] bg-primary-bg text-primary">
             {/* Sound toggle */}
             <div>
                 <label className="flex items-center space-x-3">
@@ -67,28 +55,14 @@ export default function NotificationSettings({ onClose }: Props) {
             </div>
 
             {/* Bottom button bar */}
-            <div className="border-t pt-4 mt-4 flex justify-between bg-background sticky bottom-0">
-                <button
-                    onClick={onClose}
-                    className="button-close"
-                >
+            <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
+                <button onClick={onClose} className="button-close">
                     Schliessen
                 </button>
-                <button
-                    onClick={handleSave}
-                    className="button-save"
-                >
+                <button onClick={handleSave} className="button-save">
                     Speichern
                 </button>
             </div>
-
-            {/* Status messages */}
-            {status === 'success' && (
-                <div className="text-green-600 mt-2">Änderungen erfolgreich gespeichert!</div>
-            )}
-            {status === 'error' && (
-                <div className="text-red-600 mt-2">Fehler beim Speichern. Bitte erneut versuchen.</div>
-            )}
         </div>
     );
 }

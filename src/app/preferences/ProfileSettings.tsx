@@ -1,7 +1,9 @@
 'use client';
 
+import { showToast, ToastType } from '@/components/Toast';
 import React, { useState, useEffect, useCallback } from 'react';
 
+// TODO: Fetch modules (categories) from the API
 const availableModules = [
     'SWEN 2', 'Computertechnik 1', 'Computertechnik 2', 'Physics Engines',
     'Betriebssysteme', 'Cloud Computing', 'Lineare Algebra', 'Theoretische Informatik',
@@ -23,41 +25,20 @@ type Availability = {
 
 type Props = {
     onClose: () => void;
-    shouldSave: boolean;
-    onSaved: () => void;
+    onSave: () => void;
 };
 
-export default function ProfileSettings({
-    onClose,
-    shouldSave,
-    onSaved,
-}: Props) {
+export default function ProfileSettings({ onClose, onSave }: Props) {
     const [name, setName] = useState('Max Mustermann');
     const [avatarUrl, setAvatarUrl] = useState('https://i.pravatar.cc/150?img=3');
     const [selectedModules, setSelectedModules] = useState<string[]>([]);
     const [availability, setAvailability] = useState<Availability>({});
-    const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
-    /* ---------- Speichern ---------- */
-    const handleSubmit = useCallback(() => {
-        try {
-            console.log({ name, avatarUrl, selectedModules, availability });
-            setStatus('success');
-            setTimeout(() => {
-                setStatus(null);
-                onSaved(); // schliesst Parent‑Modal
-            }, 800);
-        } catch {
-            setStatus('error');
-            setTimeout(() => setStatus(null), 500);
-        }
-    }, [name, avatarUrl, selectedModules, availability, onSaved]);
+    // TODO: Either define the save behavior here, or trigger the onSave callback - not both!
+    const handleSave = () => {
+        showToast(ToastType.Success, "Success", "Successfully saved the changes.");
+    };
 
-    useEffect(() => {
-        if (shouldSave) handleSubmit();
-    }, [shouldSave, handleSubmit]);
-
-    /* ---------- Availability Helpers ---------- */
     const toggleDay = (day: string) =>
         setAvailability(prev => ({
             ...prev,
@@ -78,9 +59,8 @@ export default function ProfileSettings({
             [day]: { ...prev[day], [type]: value },
         }));
 
-    /* ---------- UI ---------- */
     return (
-        <div className="flex flex-col max-h-[70vh] bg-background text-foreground">
+        <div className="flex flex-col max-h-[70vh] bg-primary-bg text-primary">
             {/* Scrollable content */}
             <div className="overflow-y-auto pr-2 space-y-6 flex-1">
                 {/* Name */}
@@ -90,7 +70,7 @@ export default function ProfileSettings({
                         type="text"
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        className="w-full border rounded-md px-4 py-2 bg-background"
+                        className="w-full border rounded-md px-4 py-2 bg-primary-bg"
                     />
                 </div>
 
@@ -101,7 +81,7 @@ export default function ProfileSettings({
                         type="text"
                         value={avatarUrl}
                         onChange={e => setAvatarUrl(e.target.value)}
-                        className="w-full border rounded-md px-4 py-2 bg-background"
+                        className="w-full border rounded-md px-4 py-2 bg-primary-bg"
                     />
                     <img
                         src={avatarUrl}
@@ -123,7 +103,7 @@ export default function ProfileSettings({
                                 Array.from(e.target.selectedOptions).map(o => o.value),
                             )
                         }
-                        className="w-full border rounded-md px-4 py-2 h-40 bg-background"
+                        className="w-full border rounded-md px-4 py-2 h-40 bg-primary-bg"
                     >
                         {availableModules.map(mod => (
                             <option key={mod} value={mod}>
@@ -162,14 +142,14 @@ export default function ProfileSettings({
                                             type="time"
                                             value={availability[day]?.from || ''}
                                             onChange={e => updateTime(day, 'from', e.target.value)}
-                                            className="border rounded px-2 py-1 w-[100px] bg-background"
+                                            className="border rounded px-2 py-1 w-[100px] bg-primary-bg"
                                         />
                                         <span>–</span>
                                         <input
                                             type="time"
                                             value={availability[day]?.to || ''}
                                             onChange={e => updateTime(day, 'to', e.target.value)}
-                                            className="border rounded px-2 py-1 w-[100px] bg-background"
+                                            className="border rounded px-2 py-1 w-[100px] bg-primary-bg"
                                         />
                                     </div>
                                 )}
@@ -179,35 +159,14 @@ export default function ProfileSettings({
                 </div>
             </div>
 
-            {/* Actions */}
-            <div className="border-t pt-4 mt-4 flex justify-between bg-background sticky bottom-0">
-                <button
-                    onClick={onClose}
-                    className="button-close"
-                >
+            <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
+                <button onClick={onClose} className="button-close">
                     Schliessen
                 </button>
-
-                <button
-                    onClick={handleSubmit}
-                    className="button-save"
-                >
+                <button onClick={handleSave} className="button-save">
                     Speichern
                 </button>
             </div>
-
-
-            {/* Status */}
-            {status === 'success' && (
-                <div className="text-green-600 mt-2">
-                    Änderungen erfolgreich gespeichert!
-                </div>
-            )}
-            {status === 'error' && (
-                <div className="text-red-600 mt-2">
-                    Fehler beim Speichern. Bitte erneut versuchen.
-                </div>
-            )}
         </div>
     );
 }

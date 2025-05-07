@@ -50,7 +50,7 @@ export function showToast(
     type: ToastType,
     title: string,
     message: string,
-    duration = 500000
+    duration = 5000
 ) {
     if (addToastExternal) {
         addToastExternal({ type, title, message, duration });

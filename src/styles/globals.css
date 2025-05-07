@@ -11,7 +11,7 @@
 
     /* Text colors */
     --color-primary: #171717;
-    --color-secondary: #202020; /* Footer */
+    --color-secondary: #202020;
 
     /* Border colors */
     --color-sidebar-border: #ff0000;
@@ -19,6 +19,14 @@
 
     /* Icon colors */
     --color-icon: #ec3349;
+
+    /* Button colors */
+    --btn-success: #22c55e;
+    --btn-success-hover: #16a34a;
+    --btn-close: #c5c7cb;
+    --btn-close-hover: #b1b5bb;
+    --btn-destructive: #ff0000;
+    --btn-destructive-hover: #ff1100;
 
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
@@ -34,11 +42,19 @@
 
         /* Text colors */
         --color-primary: #E4E3B6;
-        --color-secondary: #e8e695; /* Footer */
+        --color-secondary: #e8e695;
 
         /* Border colors */
         --color-sidebar-border: #ffcc00;
         --color-main-border: #ff0000;
+
+        /* Button colors */
+        --btn-success: #22c55e;
+        --btn-success-hover: #16a34a;
+        --btn-close: #334155;
+        --btn-close-hover: #475569;
+        --btn-destructive: #ff0000;
+        --btn-destructive-hover: #ff1100;
 
         /* Icon colors */
         --color-icon: #FDBA15;
@@ -48,7 +64,10 @@
 body {
     /** TODO Leftover from old globals.css */
     font-family: var(--font-sans, Arial, Helvetica, sans-serif);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: var(--color-primary-bg) 0.3s ease, color 0.3s ease;
+
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
 }
 
 .border-sidebar {
@@ -64,27 +83,31 @@ body {
 }
 
 .button-save {
-    background: var(--success);
-    color: var(--foreground);
+    cursor: pointer;
+    background: var(--btn-success);
+    color: var(--color-primary);
     padding: 0.5rem 1.5rem;
     border-radius: 0.75rem;
     font-weight: 500;
-    transition: background-color 150ms ease;
+    transition: var(--color-primary-bg) 150ms ease;
 }
 
 .button-save:hover {
-    background: var(--success-hover);
+    cursor: pointer;
+    background: var(--btn-success-hover);
 }
 
 .button-close {
-    background: var(--close);
-    color: var(--foreground);
+    cursor: pointer;
+    background: var(--btn-close);
+    color: var(--color-primary);
     padding: 0.5rem 1.5rem;
     border-radius: 0.75rem;
     font-weight: 500;
-    transition: background-color 150ms ease;
+    transition: var(--color-primary-bg) 150ms ease;
 }
 
 .button-close:hover {
-    background: var(--close-hover);
+    cursor: pointer;
+    background: var(--btn-close-hover);
 }

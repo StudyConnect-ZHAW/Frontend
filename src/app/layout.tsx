@@ -2,11 +2,12 @@
 
 import React, { useMemo } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import "./tailwind.css";
+import { usePathname } from "next/navigation";
+import "@/styles/globals.css";
+import "@/styles/toast.css";
 import Footer from "@/components/Footer";
 import Sidebar from '@/components/Sidebar';
-import { usePathname } from "next/navigation";
+import ToastManager from "@/components/ToastManager";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -48,6 +49,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         {!hideSidebar && <Sidebar />}
                         <main className="flex-1 p-4 pb-0 flex flex-col">
                             {children}
+
+                            {/* Toast container for displaying feedback for the user */}
+                            <div id="toast-container"></div>
+                            <ToastManager />
                         </main>
                     </div>
 
