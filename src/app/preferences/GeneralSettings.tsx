@@ -1,5 +1,6 @@
 'use client';
 
+import Button, { ButtonType } from '@/components/Button';
 import { showToast, ToastType } from '@/components/Toast';
 import React, { useState, useEffect } from 'react';
 
@@ -34,12 +35,8 @@ export default function GeneralSettings({ onClose, onSave }: Props) {
             </div>
 
             <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-                <button onClick={onClose} className="button-close">
-                    Schliessen
-                </button>
-                <button onClick={handleSave} className="button-save">
-                    Speichern
-                </button>
+                <Button text={"Schliessen"} type={ButtonType.Cancel} onClick={onClose} />
+                <Button text={"Speichern"} type={ButtonType.Save} onClick={handleSave} />
             </div>
         </div>
     );

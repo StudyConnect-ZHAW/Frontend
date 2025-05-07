@@ -1,23 +1,35 @@
-import { FC } from "react";
-
+/**
+ * Enum defining available button types.
+ * Determines the visual style applied to the button.
+ */
 export enum ButtonType {
+    /** Save button style, typically used for confirming actions. */
     Save = "save",
+    /** Cancel button style, typically used for dismissing dialogs or reverting. */
     Cancel = "cancel",
 }
 
-interface ButtonProps {
+type ButtonProps = {
+    /** The text to display inside the button. */
     text: string;
+    /** The type of button (determines styling). */
     type: ButtonType;
+    /** Function to be called when the button is clicked. */
     onClick: () => void;
 }
 
-const Button: FC<ButtonProps> = ({ text, type, onClick }) => {
+/**
+ * A reusable Button component that supports different visual types.
+ *
+ * @param {ButtonProps} props - The props for the Button component.
+ */
+const Button = ({ text, type, onClick }: ButtonProps) => {
     const baseStyles =
-        "px-4 py-2 rounded-md font-semibold text-white focus:outline-none transition";
+        "px-4 py-2 rounded-md font-semibold transition";
 
     const variantStyles = {
-        [ButtonType.Save]: "bg-green-600 hover:bg-green-700",
-        [ButtonType.Cancel]: "bg-gray-500 hover:bg-gray-600",
+        [ButtonType.Save]: "button-save",
+        [ButtonType.Cancel]: "button-close"
     };
 
     return (

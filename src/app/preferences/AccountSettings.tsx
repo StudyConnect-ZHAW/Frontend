@@ -1,5 +1,6 @@
 'use client';
 
+import Button, { ButtonType } from '@/components/Button';
 import WIPSection from '@/components/WIPSection';
 import React from 'react';
 
@@ -13,9 +14,7 @@ export default function AccountSettings({ onClose }: Props) {
             <WIPSection />
 
             <div className="border-t pt-4 mt-4 flex justify-start bg-primary-bg sticky bottom-0">
-                <button onClick={onClose} className="button-close">
-                    Schliessen
-                </button>
+                <Button text={"Schliessen"} type={ButtonType.Cancel} onClick={onClose} />
             </div>
         </div>
     );
