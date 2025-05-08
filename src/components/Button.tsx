@@ -1,23 +1,24 @@
 /**
- * Enum defining available button types.
- * Determines the visual style applied to the button.
+ * Enum defining available button visual variants.
  */
-export enum ButtonType {
-    /** Save button style, typically used for confirming actions. */
-    Save = "save",
-    /** Cancel button style, typically used for dismissing dialogs or reverting. */
-    Cancel = "cancel",
-    /** Red button, typically used for destructive actions such as deleting. */
-    Destructive = "destructive"
+export enum ButtonVariant {
+  /** Used for primary actions like submitting or saving. */
+  Primary = "primary",
+  /** Used for secondary actions or neutral alternatives. */
+  Secondary = "secondary",
+  /** Used for cancel/close actions. */
+  Ghost = "ghost",
+  /** Used for dangerous actions like deletion. */
+  Danger = "danger"
 }
 
 type ButtonProps = {
-    /** The text to display inside the button. */
-    text: string;
-    /** The type of button (determines styling). */
-    type: ButtonType;
-    /** Function to be called when the button is clicked. */
-    onClick: () => void;
+  /** The text to display inside the button. */
+  text: string;
+  /** The type of button (determines styling). */
+  type: ButtonVariant;
+  /** Function to be called when the button is clicked. */
+  onClick: () => void;
 }
 
 /**
@@ -26,20 +27,21 @@ type ButtonProps = {
  * @param {ButtonProps} props - The props for the Button component.
  */
 const Button = ({ text, type, onClick }: ButtonProps) => {
-    const baseStyles =
-        "px-4 py-2 rounded-md font-semibold transition button";
+  const baseStyles = "px-4 py-2 rounded-md font-semibold transition button";
 
-    const variantStyles = {
-        [ButtonType.Save]: "button-save",
-        [ButtonType.Cancel]: "button-close",
-        [ButtonType.Destructive]: "button-destructive"
-    };
+  /** Apply CSS for each button variant from globals.css */
+  const variantStyles = {
+    [ButtonVariant.Primary]: "button-primary",
+    [ButtonVariant.Secondary]: "button-secondary",
+    [ButtonVariant.Ghost]: "button-ghost",
+    [ButtonVariant.Danger]: "button-danger",
+  };
 
-    return (
-        <button onClick={onClick} className={`${baseStyles} ${variantStyles[type]}`}>
-            {text}
-        </button>
-    );
+  return (
+    <button onClick={onClick} className={`${baseStyles} ${variantStyles[type]}`}>
+      {text}
+    </button>
+  );
 };
 
 export default Button;
