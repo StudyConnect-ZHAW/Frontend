@@ -2,7 +2,8 @@
 
 import Button, { ButtonVariant } from '@/components/Button';
 import { showToast, ToastType } from '@/components/Toast';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
+import Image from "next/image";
 
 // TODO: Fetch modules (categories) from the API
 const availableModules = [
@@ -26,16 +27,14 @@ type Availability = {
 
 type Props = {
   onClose: () => void;
-  onSave: () => void;
 };
 
-export default function ProfileSettings({ onClose, onSave }: Props) {
+export default function ProfileSettings({ onClose }: Props) {
   const [name, setName] = useState('Max Mustermann');
   const [avatarUrl, setAvatarUrl] = useState('https://i.pravatar.cc/150?img=3');
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [availability, setAvailability] = useState<Availability>({});
 
-  // TODO: Either define the save behavior here, or trigger the onSave callback - not both!
   const handleSave = () => {
     showToast(ToastType.Success, "Success", "Successfully saved the changes.");
   };
@@ -84,9 +83,11 @@ export default function ProfileSettings({ onClose, onSave }: Props) {
             onChange={e => setAvatarUrl(e.target.value)}
             className="w-full border rounded-md px-4 py-2 bg-primary-bg"
           />
-          <img
+          <Image
             src={avatarUrl}
             alt="Vorschau"
+            width={96}
+            height={96}
             className="mt-2 w-24 h-24 rounded-full border object-cover"
           />
         </div>
@@ -121,7 +122,7 @@ export default function ProfileSettings({ onClose, onSave }: Props) {
         {/* Availability */}
         <div>
           <label className="block text-sm font-medium mb-2">
-            Verfügbarkeit (Wochentage & Zeiten)
+            Verfügbarkeit (Wochentage & Zeiten)
           </label>
           <div className="space-y-2">
             {weekdays.map(day => (
