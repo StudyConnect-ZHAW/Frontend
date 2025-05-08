@@ -25,8 +25,8 @@
     --btn-success-hover: #16a34a;
     --btn-close: #c5c7cb;
     --btn-close-hover: #b1b5bb;
-    --btn-destructive: #ff0000;
-    --btn-destructive-hover: #ff1100;
+    --btn-destructive: #f87171;
+    --btn-destructive-hover: #ef4444;
 
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
@@ -53,8 +53,8 @@
         --btn-success-hover: #16a34a;
         --btn-close: #334155;
         --btn-close-hover: #475569;
-        --btn-destructive: #ff0000;
-        --btn-destructive-hover: #ff1100;
+        --btn-destructive: #ef4444;
+        --btn-destructive-hover: #f87171;
 
         /* Icon colors */
         --color-icon: #FDBA15;
@@ -82,32 +82,37 @@ body {
     border: 4px dashed var(--color-main-border);
 }
 
-.button-save {
+.button {
     cursor: pointer;
-    background: var(--btn-success);
-    color: var(--color-primary);
     padding: 0.5rem 1.5rem;
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     font-weight: 500;
     transition: var(--color-primary-bg) 150ms ease;
 }
 
+.button-save {
+    background: var(--btn-success);
+    color: var(--color-primary);
+}
+
 .button-save:hover {
-    cursor: pointer;
     background: var(--btn-success-hover);
 }
 
 .button-close {
-    cursor: pointer;
     background: var(--btn-close);
     color: var(--color-primary);
-    padding: 0.5rem 1.5rem;
-    border-radius: 0.75rem;
-    font-weight: 500;
-    transition: var(--color-primary-bg) 150ms ease;
 }
 
 .button-close:hover {
-    cursor: pointer;
     background: var(--btn-close-hover);
+}
+
+.button-destructive {
+    background: var(--btn-destructive);
+    color: var(--color-primary);
+}
+
+.button-destructive:hover {
+    background: var(--btn-destructive-hover);
 }

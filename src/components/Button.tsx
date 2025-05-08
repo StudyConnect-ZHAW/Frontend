@@ -7,6 +7,8 @@ export enum ButtonType {
     Save = "save",
     /** Cancel button style, typically used for dismissing dialogs or reverting. */
     Cancel = "cancel",
+    /** Red button, typically used for destructive actions such as deleting. */
+    Destructive = "destructive"
 }
 
 type ButtonProps = {
@@ -25,11 +27,12 @@ type ButtonProps = {
  */
 const Button = ({ text, type, onClick }: ButtonProps) => {
     const baseStyles =
-        "px-4 py-2 rounded-md font-semibold transition";
+        "px-4 py-2 rounded-md font-semibold transition button";
 
     const variantStyles = {
         [ButtonType.Save]: "button-save",
-        [ButtonType.Cancel]: "button-close"
+        [ButtonType.Cancel]: "button-close",
+        [ButtonType.Destructive]: "button-destructive"
     };
 
     return (
