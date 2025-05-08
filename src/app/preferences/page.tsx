@@ -28,7 +28,7 @@ export default function SettingsPage() {
       <PageHeader title="Preferences" />
 
       {/* Setting tiles */}
-      <div className="bg-primary-bg grid grid-cols-1 md:grid-cols-2 gap-6 border-main p-6 rounded-xl flex-grow border-2">
+      <div className="bg-primary-bg grid grid-cols-2 gap-6 border-main p-6 rounded-xl flex-grow border-2">
         {settingsBlocks.map((block) => (
           <button
             key={block.title}
@@ -52,17 +52,11 @@ export default function SettingsPage() {
             <Dialog.Title className="text-xl font-bold mb-4">{selectedBlock}</Dialog.Title>
 
             {selectedBlock === 'Profile' && (
-              <ProfileSettings
-                onClose={() => setSelectedBlock(null)}
-                onSave={() => setSelectedBlock(null)}
-              />
+              <ProfileSettings onClose={() => setSelectedBlock(null)} />
             )}
 
             {selectedBlock === 'General' && (
-              <GeneralSettings
-                onClose={() => setSelectedBlock(null)}
-                onSave={() => setSelectedBlock(null)}
-              />
+              <GeneralSettings onClose={() => setSelectedBlock(null)} />
             )}
 
             {selectedBlock === 'Appearance' && (

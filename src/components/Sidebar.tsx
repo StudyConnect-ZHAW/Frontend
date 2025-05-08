@@ -4,22 +4,22 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-    FiHome,
-    FiUser,
-    FiUsers,
-    FiMessageSquare,
-    FiCalendar,
-    FiStar,
+  FiHome,
+  FiUser,
+  FiUsers,
+  FiMessageSquare,
+  FiCalendar,
+  FiStar,
 } from "react-icons/fi";
 
 // Navigation items for the sidebar
 const navItems = [
-    { icon: FiHome, label: "Home", path: "/" },
-    { icon: FiUser, label: "Profile", path: "/preferences" },
-    { icon: FiUsers, label: "Groups", path: "/groups" },
-    { icon: FiMessageSquare, label: "Chat", path: "/chat" },
-    { icon: FiCalendar, label: "Calendar", path: "/calendar" },
-    { icon: FiStar, label: "Forum", path: "/forum" },
+  { icon: FiHome, label: "Home", path: "/" },
+  { icon: FiUser, label: "Profile", path: "/preferences" },
+  { icon: FiUsers, label: "Groups", path: "/groups" },
+  { icon: FiMessageSquare, label: "Chat", path: "/chat" },
+  { icon: FiCalendar, label: "Calendar", path: "/calendar" },
+  { icon: FiStar, label: "Forum", path: "/forum" },
 ];
 
 /**
@@ -27,14 +27,14 @@ const navItems = [
  * and jumping to the respective page.
  */
 export default function Sidebar() {
-    const pathname = usePathname();
+  const pathname = usePathname();
 
-    return (
-        <div
-            style={{
-                transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-            }}
-            className={`
+  return (
+    <div
+      style={{
+        transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+      }}
+      className={`
         flex
         flex-col
         justify-between
@@ -45,26 +45,26 @@ export default function Sidebar() {
         bg-sidebar-bg
         border-sidebar
       `}
-        >
-            <div className="flex flex-col items-center gap-8">
-                {navItems.map(({ icon: Icon, label, path }) => {
-                    const isActive = pathname === path;
+    >
+      <div className="flex flex-col items-center gap-8">
+        {navItems.map(({ icon: Icon, label, path }) => {
+          const isActive = pathname === path;
 
-                    return (
-                        <Link
-                            href={path}
-                            key={label}
-                            aria-label={label}
-                            className={`text-[35px] transition-all duration-200 cursor-pointer ${isActive
-                                ? `text-icon scale-125`
-                                : `hover:scale-125 hover:text-icon`
-                                }`}
-                        >
-                            <Icon />
-                        </Link>
-                    );
-                })}
-            </div>
-        </div>
-    );
+          return (
+            <Link
+              href={path}
+              key={label}
+              aria-label={label}
+              className={`text-[35px] transition-all duration-200 cursor-pointer ${isActive
+                ? `text-icon scale-125`
+                : `hover:scale-125 hover:text-icon`
+                }`}
+            >
+              <Icon />
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
 }

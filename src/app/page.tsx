@@ -23,13 +23,11 @@ const HomePage = () => {
 
     setFormattedDate(date);
 
-
     const fetchUser = async () => {
       try {
         const res = await fetch('/api/me');
         if (!res.ok) {
           redirect('/login');
-          return;
         }
 
         const user = await res.json();
@@ -43,7 +41,9 @@ const HomePage = () => {
     fetchUser();
   }, []);
 
-  if (!userName) return null;
+  if (!userName) {
+    return null;
+  }
 
   return (
     <>
@@ -82,6 +82,6 @@ const HomePage = () => {
     </>
 
   );
-}
+};
 
 export default HomePage;

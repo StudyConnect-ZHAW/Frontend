@@ -29,7 +29,7 @@ export default function AppearanceSettings({ onClose }: Props) {
   const handleSave = () => {
     applyTheme(theme);
     showToast(ToastType.Success, "Success", "Successfully saved the changes.");
-  }
+  };
 
   return (
     <div className="flex flex-col space-y-6 max-h-[70vh] bg-primary-bg text-primary">

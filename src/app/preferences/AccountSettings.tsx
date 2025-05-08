@@ -11,7 +11,7 @@ type Props = {
 export default function AccountSettings({ onClose }: Props) {
   const handleLogout = () => {
     redirect('/auth/logout');
-  }
+  };
 
   return (
     <div className="flex flex-col max-h-[70vh] bg-primary-bg text-primary">

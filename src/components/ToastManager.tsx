@@ -3,5 +3,5 @@
 import { ToastContainer } from '@/components/Toast';
 
 export default function ToastManager() {
-    return <ToastContainer />;
+  return <ToastContainer />;
 }

@@ -2,17 +2,16 @@
 
 import Button, { ButtonVariant } from '@/components/Button';
 import { showToast, ToastType } from '@/components/Toast';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 type Props = {
   onClose: () => void;
-  onSave: () => void;
 };
 
-export default function GeneralSettings({ onClose, onSave }: Props) {
-  const [language, setLanguage] = useState('de'); // TODO: Don't reset to hardcoded state, use localStorage
+export default function GeneralSettings({ onClose }: Props) {
+  // TODO: Don't reset to hardcoded state, use localStorage
+  const [language, setLanguage] = useState('de');
 
-  // TODO: Either define the save behavior here, or trigger the onSave callback - not both!
   const handleSave = () => {
     showToast(ToastType.Success, "Success", "Successfully saved the changes.");
   };
