@@ -1,8 +1,8 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
 import Button, { ButtonVariant } from '@/components/Button';
 import { showToast, ToastType } from '@/components/Toast';
-import React, { useState } from 'react';
 
 type Props = {
   onClose: () => void;
@@ -15,15 +15,11 @@ export default function AppearanceSettings({ onClose }: Props) {
   const [density, setDensity] = useState('normal');
   const [layout, setLayout] = useState('grid');
 
-  // Load and apply stored theme on mount
-  /*
-          useEffect(() => {
-          const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-          const initialTheme = storedTheme ?? (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-          setTheme(initialTheme);
-          applyTheme(initialTheme);
-      }, []);
-  */
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const initialTheme = storedTheme ?? (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    setTheme(initialTheme);
+  }, []);
 
   const applyTheme = (mode: 'light' | 'dark') => {
     document.documentElement.classList.toggle('dark', mode === 'dark');
