@@ -15,6 +15,9 @@
   },
   "dependencies": {
     "@azure/msal-node": "^3.4.1",
+    "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/react": "^6.1.17",
+    "@fullcalendar/timegrid": "^6.1.17",
     "@headlessui/react": "^2.2.2",
     "axios": "^1.8.4",
     "cookie-parser": "^1.4.7",
