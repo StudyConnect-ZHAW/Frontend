@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+/**
+ * Define a custom variant called `dark`, which applies styles
+ * whenever an element or its ancestor has the `.dark` class.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light mode (default) */
+@theme {
+  /* Background colors */
+  --color-primary-bg: #f5f3f0;
+  --color-secondary-bg: #fafafa;
+  --color-sidebar-bg: #fafafa;
+
+  /* Text colors */
+  --color-primary: #171717;
+  --color-secondary: #202020;
+
+  /* Border colors */
+  --color-sidebar-border: #ff0000;
+  --color-main-border: #ffcc00;
+
+  /* Icon colors */
+  --color-icon: #ec3349;
+
+  /* Button colors */
+  --btn-primary: #22c55e;
+  --btn-primary-hover: #16a34a;
+  --btn-secondary: #22c55e;
+  --btn-secondary-hover: #16a34a;
+  --btn-ghost: #c5c7cb;
+  --btn-ghost-hover: #b1b5bb;
+  --btn-danger: #f87171;
+  --btn-danger-hover: #ef4444;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/**
+ * Dark mode overrides using the `dark` custom variant. Any variable 
+ * not redefined here will inherit the value from light mode.
+ */
+@layer base {
+  @variant dark {
+    /* Background colors */
+    --color-primary-bg: #211f2a;
+    --color-secondary-bg: #fafafa;
+    --color-sidebar-bg: #1a1821;
+
+    /* Text colors */
+    --color-primary: #e4e3b6;
+    --color-secondary: #e8e695;
+
+    /* Border colors */
+    --color-sidebar-border: #ffcc00;
+    --color-main-border: #ff0000;
+
+    /* Button colors */
+    --btn-primary: #22c55e;
+    --btn-primary-hover: #16a34a;
+    --btn-secondary: #22c55e;
+    --btn-secondary-hover: #16a34a;
+    --btn-ghost: #334155;
+    --btn-ghost-hover: #475569;
+    --btn-danger: #ef4444;
+    --btn-danger-hover: #f87171;
+
+    /* Icon colors */
+    --color-icon: #fdba15;
+  }
+}
+
+body {
+  /** TODO Leftover from old globals.css */
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  transition: var(--color-primary-bg) 0.3s ease, color 0.3s ease;
+
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+}
+
+.border-sidebar {
+  border: 3px solid var(--color-sidebar-border);
+}
+
+.border-main {
+  border: 3px solid var(--color-main-border);
+}
+
+.border-wip {
+  border: 4px dashed var(--color-main-border);
+}
+
+.button {
+  cursor: pointer;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: var(--color-primary-bg) 150ms ease;
+}
+
+.button-primary {
+  background: var(--btn-primary);
+  color: var(--color-primary);
+}
+
+.button-primary:hover {
+  background: var(--btn-primary-hover);
+}
+
+.button-secondary {
+  background: var(--btn-secondary);
+  color: var(--color-primary);
+}
+
+.button-secondary:hover {
+  background: var(--btn-secondary-hover);
+}
+
+.button-ghost {
+  background: var(--btn-ghost);
+  color: var(--color-primary);
+}
+
+.button-ghost:hover {
+  background: var(--btn-ghost-hover);
+}
+
+.button-danger {
+  background: var(--btn-danger);
+  color: var(--color-primary);
+}
+
+.button-danger:hover {
+  background: var(--btn-danger-hover);
+}

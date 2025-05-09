@@ -2,41 +2,42 @@
 
 import React, { useMemo } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { usePathname } from "next/navigation";
+import "@/styles/globals.css";
+import "@/styles/toast.css";
 import Footer from "@/components/Footer";
 import Sidebar from '@/components/Sidebar';
-import { usePathname } from "next/navigation";
+import ToastManager from "@/components/ToastManager";
 
 const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
-// ✅ Valid routes
+// Valid routes
 const knownRoutes = [
   '/',
-  '/profile',
+  '/preferences',
   '/groups',
   '/chat',
   '/calendar',
-  '/settings',
-  '/login',
   '/forum',
+  '/login',
 ];
 
-// valid routes without a sidebar
+// Valid routes without a sidebar
 const hiddenRoutes = ['/login'];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const hideSidebar = useMemo(() => {
-    // hide if explicitly hidden or unknown route
+    // Hide if explicitly hidden or unknown route
     return hiddenRoutes.includes(pathname) || !knownRoutes.includes(pathname);
   }, [pathname]);
 
@@ -48,6 +49,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {!hideSidebar && <Sidebar />}
             <main className="flex-1 p-4 pb-0 flex flex-col">
               {children}
+
+              {/* Toast container for displaying feedback for the user */}
+              <div id="toast-container"></div>
+              <ToastManager />
             </main>
           </div>
 
