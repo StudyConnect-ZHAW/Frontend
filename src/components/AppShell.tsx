@@ -5,10 +5,22 @@ import { usePathname } from "next/navigation";
 import Footer from "@/components/Footer";
 import Sidebar from '@/components/Sidebar';
 import ToastManager from "@/components/ToastManager";
+import { normalizeLanguage } from "@/i18n/config";
+
 import i18n from "@/i18n";
 
-const knownRoutes = ['/', '/preferences', '/groups', '/chat', '/calendar', '/forum', '/login'];
-const hiddenRoutes = ['/login'];
+const knownRoutes = [
+  '/',
+  '/preferences',
+  '/groups',
+  '/chat',
+  '/calendar',
+  '/forum',
+  '/login'
+];
+const hiddenRoutes = [
+  '/login'
+];
 
 /**
  * AppShell is the main client-side wrapper for all pages.
@@ -27,19 +39,27 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   useEffect(() => {
-    const storedLang = localStorage.getItem('lang') || 'de-CH';
-    const theme = localStorage.getItem('theme') || 'light';
+    // Theme selection
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark').matches;
+    const theme = storedTheme ?? (prefersDark ? 'dark' : 'light');
 
-    // Apply dark theme
+    // Apply theme across entire website
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
 
-    // Apply preferred language
-    if (i18n.language !== storedLang) {
-      i18n.changeLanguage(storedLang).finally(() => setIsReady(true));
+    // Language selection
+    const storedLang = localStorage.getItem('lang');
+    const browserLang = navigator.language;
+
+    const normalizedLang = normalizeLanguage(storedLang ?? browserLang);
+
+    // Apply language to i18next
+    if (i18n.language !== normalizedLang) {
+      i18n.changeLanguage(normalizedLang).finally(() => setIsReady(true));
     } else {
       setIsReady(true);
     }

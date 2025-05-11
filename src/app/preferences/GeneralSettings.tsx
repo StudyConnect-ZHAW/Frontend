@@ -1,6 +1,7 @@
 'use client';
 
 import Button, { ButtonVariant } from '@/components/Button';
+import { languageOptions } from '@/i18n/config';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -8,15 +9,9 @@ type Props = {
   onClose: () => void;
 };
 
-// Currently supported languages, needs locales files
-const supportedLanguages = [
-  { code: 'de-CH', label: 'Deutsch' },
-  { code: 'en-GB', label: 'English' },
-];
-
 export default function GeneralSettings({ onClose }: Props) {
   const { t, i18n } = useTranslation(['preferences', 'common']);
-  const [language, setLanguage] = useState(i18n.language || 'de-CH');
+  const [language, setLanguage] = useState(i18n.language);
 
   const handleLanguageChange = async (lang: string) => {
     setLanguage(lang);
@@ -35,7 +30,7 @@ export default function GeneralSettings({ onClose }: Props) {
             onChange={(e) => handleLanguageChange(e.target.value)}
             className="w-full border rounded-md px-4 py-2 bg-primary-bg text-primary"
           >
-            {supportedLanguages.map(({ code, label }) => (
+            {languageOptions.map(({ code, label }) => (
               <option key={code} value={code}>
                 {label}
               </option>

@@ -12,9 +12,7 @@ const HomePage = () => {
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    const lang = localStorage.getItem('lang') || 'de-CH';
-
-    const date = new Intl.DateTimeFormat(lang, {
+    const date = new Intl.DateTimeFormat(i18n.language, {
       weekday: 'long',
       day: '2-digit',
       month: '2-digit',
