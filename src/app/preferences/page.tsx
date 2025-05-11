@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog } from '@headlessui/react';
 
 import ProfileSettings from './ProfileSettings';
@@ -10,6 +10,9 @@ import AccountSettings from './AccountSettings';
 import PrivacySettings from './PrivacySettings';
 import NotificationsSettings from './NotificationSettings';
 import PageHeader from "@/components/PageHeader";
+import { useTranslation } from "react-i18next";
+
+import '@/i18n';
 
 const settingsBlocks = [
   { title: 'General', description: 'System, Language, Views' },
@@ -21,11 +24,21 @@ const settingsBlocks = [
 ];
 
 export default function SettingsPage() {
+  const [isClientReady, setIsClientReady] = useState(false);
+
   const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
+  const { t } = useTranslation(['preferences', 'common']);
+
+  useEffect(() => {
+    setIsClientReady(true);
+  }, []);
+
+  // Avoid hydration mismatch by rendering only on the client
+  if (!isClientReady) return null;
 
   return (
     <main className="min-h-full flex flex-col">
-      <PageHeader title="Preferences" />
+      <PageHeader title={`${t('title')}`} />
 
       {/* Setting tiles */}
       <div className="bg-primary-bg grid grid-cols-2 gap-6 border-main p-6 rounded-xl flex-grow border-2">

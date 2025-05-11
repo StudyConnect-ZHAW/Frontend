@@ -1,20 +1,28 @@
 'use client';
 
 import Button, { ButtonVariant } from '@/components/Button';
-import { showToast, ToastType } from '@/components/Toast';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
 };
 
-export default function GeneralSettings({ onClose }: Props) {
-  // TODO: Don't reset to hardcoded state, use localStorage
-  const [language, setLanguage] = useState('de');
+// Currently supported languages, needs locales files
+const supportedLanguages = [
+  { code: 'de-CH', label: 'Deutsch' },
+  { code: 'en-GB', label: 'English' },
+];
 
-  const handleSave = () => {
-    showToast(ToastType.Success, "Success", "Successfully saved the changes.");
-  };
+export default function GeneralSettings({ onClose }: Props) {
+  const { t, i18n } = useTranslation(['preferences', 'common']);
+  const [language, setLanguage] = useState(i18n.language || 'de-CH');
+
+  const handleLanguageChange = async (lang: string) => {
+    setLanguage(lang);
+    localStorage.setItem('lang', lang);
+    await i18n.changeLanguage(lang);
+  }
 
   return (
     <div className="flex flex-col max-h-[70vh] bg-primary-bg text-primary">
@@ -24,18 +32,20 @@ export default function GeneralSettings({ onClose }: Props) {
           <label className="block text-primary mb-1">Sprache</label>
           <select
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={(e) => handleLanguageChange(e.target.value)}
             className="w-full border rounded-md px-4 py-2 bg-primary-bg text-primary"
           >
-            <option value="de">Deutsch</option>
-            <option value="en">Englisch</option>
+            {supportedLanguages.map(({ code, label }) => (
+              <option key={code} value={code}>
+                {label}
+              </option>
+            ))}
           </select>
         </div>
       </div>
 
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-        <Button text={"Schliessen"} type={ButtonVariant.Ghost} onClick={onClose} />
-        <Button text={"Speichern"} type={ButtonVariant.Primary} onClick={handleSave} />
+        <Button text={`${t('common:button.cancel')}`} type={ButtonVariant.Ghost} onClick={onClose} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 {
   "welcomeUser": "Welcome, {{name}}",
-  "weekdays":{
+  "weekday": {
     "monday": "Monday",
     "tuesday": "Tuesday",
     "wednesday": "Wednesday",
@@ -9,7 +9,7 @@
     "saturday": "Saturday",
     "sunday": "Sunday"
   },
-  "buttons": {
+  "button": {
     "cancel": "Cancel",
     "create": "Create",
     "save": "Save"
