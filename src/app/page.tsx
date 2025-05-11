@@ -17,7 +17,7 @@ const HomePage = () => {
   const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
-    const lang = localStorage.getItem('lang') || 'en-US';
+    const lang = localStorage.getItem('lang') || 'de-CH';
 
     i18n.changeLanguage(lang).then(() => {
       const date = new Intl.DateTimeFormat(lang, {
@@ -58,7 +58,6 @@ const HomePage = () => {
 
   return (
     <>
-
       <PageHeader title={`${t('welcomeUser', { name: `${userName}` })}`} />
 
       <div className="flex flex-col flex-1 gap-4">

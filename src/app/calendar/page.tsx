@@ -7,7 +7,7 @@ import WIPSection from "@/components/WIPSection";
 
 import '@/i18n';
 
-const CalendarPage = () => {
+export default function CalendarPage() {
   const { t } = useTranslation(['calendar', 'common']);
 
   return (
@@ -18,5 +18,3 @@ const CalendarPage = () => {
     </>
   );
 }
-
-export default CalendarPage;
