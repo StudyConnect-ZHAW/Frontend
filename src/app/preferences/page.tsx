@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Dialog } from '@headlessui/react';
 
 import ProfileSettings from './ProfileSettings';
@@ -12,8 +12,6 @@ import NotificationsSettings from './NotificationSettings';
 import PageHeader from "@/components/PageHeader";
 import { useTranslation } from "react-i18next";
 
-import '@/i18n';
-
 const settingsBlocks = [
   { title: 'General', description: 'System, Language, Views' },
   { title: 'Appearance', description: 'Theme, Chat Density, Layout' },
@@ -24,17 +22,8 @@ const settingsBlocks = [
 ];
 
 export default function SettingsPage() {
-  const [isClientReady, setIsClientReady] = useState(false);
-
   const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
   const { t } = useTranslation(['preferences', 'common']);
-
-  useEffect(() => {
-    setIsClientReady(true);
-  }, []);
-
-  // Avoid hydration mismatch by rendering only on the client
-  if (!isClientReady) return null;
 
   return (
     <main className="min-h-full flex flex-col">

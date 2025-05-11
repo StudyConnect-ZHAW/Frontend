@@ -5,8 +5,6 @@ import React from 'react';
 import { useTranslation } from "react-i18next";
 import WIPSection from "@/components/WIPSection";
 
-import '@/i18n';
-
 export default function ChatPage() {
   const { t } = useTranslation(['chat', 'common']);
 

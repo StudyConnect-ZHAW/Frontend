@@ -1,35 +1,26 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
 import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
-import '@/i18n';
-
 const HomePage = () => {
   const { t, i18n } = useTranslation('common');
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
-  const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
     const lang = localStorage.getItem('lang') || 'de-CH';
 
-    i18n.changeLanguage(lang).then(() => {
-      const date = new Intl.DateTimeFormat(lang, {
-        weekday: 'long',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      }).format(new Date());
-
-      setFormattedDate(date);
-      setIsClientReady(true);
-    });
+    const date = new Intl.DateTimeFormat(lang, {
+      weekday: 'long',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(new Date());
+    setFormattedDate(date);
 
     const fetchUser = async () => {
       try {
@@ -47,14 +38,11 @@ const HomePage = () => {
     };
 
     fetchUser();
-  }, [i18n]);
+  }, [i18n.language]);
 
-  if (!userName) {
+  if (!userName || !formattedDate) {
     return null;
   }
-
-  // Avoid hydration mismatch by rendering only on the client
-  if (!isClientReady || !i18n.isInitialized) return null;
 
   return (
     <>
