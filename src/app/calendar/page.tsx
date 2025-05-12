@@ -11,5 +11,5 @@ export default function CalendarPage() {
       <PageHeader title='Calendar' />
       <Calendar/>
     </>
-    );
+  );
 }
