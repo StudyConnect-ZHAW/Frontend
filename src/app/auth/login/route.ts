@@ -8,9 +8,10 @@ import { msalInstance } from '@/lib/msal';
  */
 export async function GET() {
   const redirectUri = process.env.REDIRECT_URI!;
+  const clientId = process.env.CLIENT_ID!;
 
   const authCodeUrl = await msalInstance.getAuthCodeUrl({
-    scopes: ['openid', 'profile'],
+    scopes: ['openid', 'profile',`api://${clientId}/StudyConnectAPI`],
     redirectUri,
     responseMode: 'query',
   });
