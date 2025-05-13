@@ -8,7 +8,7 @@ import enLocale from '@fullcalendar/core/locales/en-gb';
  
 interface CalendarEvent {
     title: string;
-    start: string; // ISO string
+    start: string;
     end: string;
   }
  
