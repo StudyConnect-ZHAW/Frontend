@@ -2,9 +2,10 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
+    // change user
     const res = await fetch('https://api.apps.engineering.zhaw.ch/v1/schedules/students/mohatsum', {
       headers: {
-        'User-Agent': 'StudyConnect (mohatsum@students.zhaw.ch)',
+        'User-Agent': 'StudyConnect (https://github.com/StudyConnect-ZHAW)',
         'Accept': 'application/json'
       }
     });

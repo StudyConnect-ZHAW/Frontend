@@ -7,9 +7,10 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import enLocale from '@fullcalendar/core/locales/en-gb';
  
 interface CalendarEvent {
-  title: string;
-  date: string;
-}
+    title: string;
+    start: string; // ISO string
+    end: string;
+  }
  
 export default function Calendar() {
  
@@ -18,15 +19,26 @@ export default function Calendar() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('/api/calendar'); 
+        const response = await fetch('/api/calendar');
         const data = await response.json();
   
-        // todo: fix data 
-        const mapped = data.map((entry: any) => ({
-          title: `${entry.courseTitle ?? 'Vorlesung'}`,
-          date: entry.startTime.split('T')[0],
-        }));
-
+        const mapped: CalendarEvent[] = data.days.flatMap((day: any) => {
+          if (!day.events) return [];
+  
+          return day.events.map((event: any) => {
+            const title = event.description || event.name || 'Event';
+            const start = event.startTime;
+            const end = event.endTime;
+  
+            return {
+              title,
+              start,
+              end,
+              color: '#EC3349',
+            };
+          });
+        });
+  
         setEvents(mapped);
       } catch (err) {
         console.error('Failed to load schedule:', err);
