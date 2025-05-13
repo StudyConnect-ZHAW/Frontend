@@ -1,8 +1,8 @@
 'use client';
 
 import Button, { ButtonVariant } from '@/components/Button';
-import { showToast, ToastType } from '@/components/Toast';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
@@ -13,9 +13,7 @@ export default function NotificationSettings({ onClose }: Props) {
   const [chatNotifications, setChatNotifications] = useState(true);
   const [displayPopups, setDisplayPopups] = useState(false);
 
-  const handleSave = () => {
-    showToast(ToastType.Success, "Success", "Successfully saved the changes.");
-  };
+  const { t } = useTranslation(['preferences', 'common']);
 
   return (
     <div className="flex flex-col space-y-6 max-h-[70vh] bg-primary-bg text-primary">
@@ -27,7 +25,7 @@ export default function NotificationSettings({ onClose }: Props) {
             checked={soundEnabled}
             onChange={() => setSoundEnabled(!soundEnabled)}
           />
-          <span>Sounds aktivieren</span>
+          <span>{t('notifications.activateSoundsLabel')}</span>
         </label>
       </div>
 
@@ -39,7 +37,7 @@ export default function NotificationSettings({ onClose }: Props) {
             checked={chatNotifications}
             onChange={() => setChatNotifications(!chatNotifications)}
           />
-          <span>Benachrichtigungen für Chats</span>
+          <span>{t('notifications.notificationsForChats')}</span>
         </label>
       </div>
 
@@ -51,14 +49,13 @@ export default function NotificationSettings({ onClose }: Props) {
             checked={displayPopups}
             onChange={() => setDisplayPopups(!displayPopups)}
           />
-          <span>Pop-up Hinweise anzeigen</span>
+          <span>{t('notifications.showPopupNotifications')}</span>
         </label>
       </div>
 
-      {/* Bottom button bar */}
+      {/* Cancel button */}
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-        <Button text={"Schliessen"} type={ButtonVariant.Ghost} onClick={onClose} />
-        <Button text={"Speichern"} type={ButtonVariant.Primary} onClick={handleSave} />
+        <Button text={`${t('common:button.cancel')}`} type={ButtonVariant.Ghost} onClick={onClose} />
       </div>
     </div>
   );

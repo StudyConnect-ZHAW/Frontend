@@ -1,8 +1,8 @@
 'use client';
 
 import Button, { ButtonVariant } from '@/components/Button';
-import { showToast, ToastType } from '@/components/Toast';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
@@ -13,9 +13,7 @@ export default function PrivacySettings({ onClose }: Props) {
   const [cameraAccess, setCameraAccess] = useState(true);
   const [doNotDisturb, setDoNotDisturb] = useState(false);
 
-  const handleSave = () => {
-    showToast(ToastType.Success, "Success", "Successfully saved the changes.");
-  };
+  const { t } = useTranslation(['preferences', 'common']);
 
   return (
     <div className="flex flex-col space-y-6 max-h-[70vh] bg-primary-bg text-primary">
@@ -27,7 +25,7 @@ export default function PrivacySettings({ onClose }: Props) {
             checked={cameraAccess}
             onChange={() => setCameraAccess(!cameraAccess)}
           />
-          <span>Kamerazugriff erlauben</span>
+          <span>{t('privacy.allowCameraLabel')}</span>
         </label>
       </div>
 
@@ -39,13 +37,12 @@ export default function PrivacySettings({ onClose }: Props) {
             checked={doNotDisturb}
             onChange={() => setDoNotDisturb(!doNotDisturb)}
           />
-          <span>Bitte nicht stören (Do Not Disturb)</span>
+          <span>{t('privacy.doNotDisturbLabel')}</span>
         </label>
       </div>
 
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-        <Button text={"Schliessen"} type={ButtonVariant.Ghost} onClick={onClose} />
-        <Button text={"Speichern"} type={ButtonVariant.Primary} onClick={handleSave} />
+        <Button text={`${t('common:button.cancel')}`} type={ButtonVariant.Ghost} onClick={onClose} />
       </div>
     </div>
   );

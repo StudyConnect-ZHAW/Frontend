@@ -12,6 +12,12 @@
   "button": {
     "cancel": "Cancel",
     "create": "Create",
+    "logout": "Logout",
     "save": "Save"
+  },
+  "copyright": "All Rights Reserved",
+  "toast": {
+    "titleSuccess": "Success",
+    "saveSuccess": "Successfully saved the changes."
   }
 }

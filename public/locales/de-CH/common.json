@@ -12,6 +12,12 @@
   "button": {
     "cancel": "Abbrechen",
     "create": "Erstellen",
+    "logout": "Abmelden",
     "save": "Speichern"
+  },
+  "copyright": "Alle Rechte vorbehalten",
+  "toast": {
+    "titleSuccess": "Erfolgreich",
+    "saveSuccess": "Änderungen wurden erfolgreich gespeichert."
   }
 }

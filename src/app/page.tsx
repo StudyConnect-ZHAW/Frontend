@@ -7,9 +7,10 @@ import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 
 const HomePage = () => {
-  const { t, i18n } = useTranslation('common');
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
+
+  const { t, i18n } = useTranslation('common');
 
   useEffect(() => {
     const date = new Intl.DateTimeFormat(i18n.language, {

@@ -12,18 +12,19 @@ import NotificationsSettings from './NotificationSettings';
 import PageHeader from "@/components/PageHeader";
 import { useTranslation } from "react-i18next";
 
-const settingsBlocks = [
-  { title: 'General', description: 'System, Language, Views' },
-  { title: 'Appearance', description: 'Theme, Chat Density, Layout' },
-  { title: 'Privacy', description: 'DnD, Camera' },
-  { title: 'Notifications / Activity', description: 'Sound, Mute, Chat Notifications' },
-  { title: 'Account', description: 'Account Settings' },
-  { title: 'Profile', description: 'Profile Picture, Bio, Name' },
-];
-
 export default function SettingsPage() {
   const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
+
   const { t } = useTranslation(['preferences', 'common']);
+
+  const settingsBlocks = [
+    { id: 'general', title: t('general.title'), description: t('general.subtitle') },
+    { id: 'appearance', title: t('appearance.title'), description: t('appearance.subtitle') },
+    { id: 'privacy', title: t('privacy.title'), description: t('privacy.subtitle') },
+    { id: 'notifications', title: t('notifications.title'), description: t('notifications.subtitle') },
+    { id: 'account', title: t('account.title'), description: t('account.subtitle') },
+    { id: 'profile', title: t('profile.title'), description: t('profile.subtitle') },
+  ];
 
   return (
     <main className="min-h-full flex flex-col">
@@ -33,8 +34,8 @@ export default function SettingsPage() {
       <div className="bg-primary-bg grid grid-cols-2 gap-6 border-main p-6 rounded-xl flex-grow border-2">
         {settingsBlocks.map((block) => (
           <button
-            key={block.title}
-            onClick={() => setSelectedBlock(block.title)}
+            key={block.id}
+            onClick={() => setSelectedBlock(block.id)}
             className="text-left p-4 rounded-xl border-2 transition-colors bg-primary-bg border-main cursor-pointer"
           >
             <h3 className="text-xl font-semibold">{block.title}</h3>
@@ -51,31 +52,29 @@ export default function SettingsPage() {
       >
         <div className="fixed inset-0 flex items-center justify-center p-4 overflow-hidden">
           <Dialog.Panel className="bg-primary-bg rounded-2xl p-6 w-full max-w-4xl shadow-lg border-main h-auto">
-            <Dialog.Title className="text-xl font-bold mb-4">{selectedBlock}</Dialog.Title>
+            <Dialog.Title className="text-xl font-bold mb-4">
+              {settingsBlocks.find(b => b.id === selectedBlock)?.title}
+            </Dialog.Title>
 
-            {selectedBlock === 'Profile' && (
+            {selectedBlock === 'profile' && (
               <ProfileSettings onClose={() => setSelectedBlock(null)} />
             )}
-
-            {selectedBlock === 'General' && (
+            {selectedBlock === 'general' && (
               <GeneralSettings onClose={() => setSelectedBlock(null)} />
             )}
-
-            {selectedBlock === 'Appearance' && (
+            {selectedBlock === 'appearance' && (
               <AppearanceSettings onClose={() => setSelectedBlock(null)} />
             )}
-
-            {selectedBlock === 'Account' && (
+            {selectedBlock === 'account' && (
               <AccountSettings onClose={() => setSelectedBlock(null)} />
             )}
-
-            {selectedBlock === 'Privacy' && (
+            {selectedBlock === 'privacy' && (
               <PrivacySettings onClose={() => setSelectedBlock(null)} />
             )}
-
-            {selectedBlock === 'Notifications / Activity' && (
+            {selectedBlock === 'notifications' && (
               <NotificationsSettings onClose={() => setSelectedBlock(null)} />
             )}
+
           </Dialog.Panel>
         </div>
       </Dialog>
