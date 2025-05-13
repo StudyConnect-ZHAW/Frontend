@@ -17,7 +17,7 @@ export default function GeneralSettings({ onClose }: Props) {
     setLanguage(lang);
     localStorage.setItem('lang', lang);
     await i18n.changeLanguage(lang);
-  }
+  };
 
   return (
     <div className="flex flex-col max-h-[70vh] bg-primary-bg text-primary">

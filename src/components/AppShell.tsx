@@ -66,7 +66,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Prevent hydration error
-  if (!isReady) return null;
+  if (!isReady) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

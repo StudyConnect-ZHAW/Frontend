@@ -31,7 +31,7 @@ export default function AppearanceSettings({ onClose }: Props) {
   const handleThemeChange = (mode: 'light' | 'dark') => {
     setTheme(mode);
     applyTheme(mode);
-  }
+  };
 
   return (
     <div className="flex flex-col space-y-6 max-h-[70vh] bg-primary-bg text-primary">

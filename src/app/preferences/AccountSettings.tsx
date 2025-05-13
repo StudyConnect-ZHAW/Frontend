@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function AccountSettings({ onClose }: Props) {
-  const { t } = useTranslation(['preferences', 'common'])
+  const { t } = useTranslation(['preferences', 'common']);
 
   const handleLogout = () => {
     redirect('/auth/logout');
