@@ -4,17 +4,13 @@ import Button, { ButtonVariant } from '@/components/Button';
 import { showToast, ToastType } from '@/components/Toast';
 import React, { useState } from 'react';
 import Image from "next/image";
+import { useTranslation } from 'react-i18next';
 
 // TODO: Fetch modules (categories) from the API
 const availableModules = [
   'SWEN 2', 'Computertechnik 1', 'Computertechnik 2', 'Physics Engines',
   'Betriebssysteme', 'Cloud Computing', 'Lineare Algebra', 'Theoretische Informatik',
   'Datenbanken', 'Programmieren 1', 'Programmieren 2',
-];
-
-const weekdays = [
-  'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag',
-  'Freitag', 'Samstag', 'Sonntag',
 ];
 
 type Availability = {
@@ -35,8 +31,20 @@ export default function ProfileSettings({ onClose }: Props) {
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [availability, setAvailability] = useState<Availability>({});
 
+  const { t } = useTranslation(['preferences', 'common']);
+
+  const weekdays = [
+    `${t('common:weekday.monday')}`,
+    `${t('common:weekday.tuesday')}`,
+    `${t('common:weekday.wednesday')}`,
+    `${t('common:weekday.thursday')}`,
+    `${t('common:weekday.friday')}`,
+    `${t('common:weekday.saturday')}`,
+    `${t('common:weekday.sunday')}`,
+  ];
+
   const handleSave = () => {
-    showToast(ToastType.Success, "Success", "Successfully saved the changes.");
+    showToast(ToastType.Success, t('common:toast.titleSuccess'), t('common:toast.saveSuccess'));
   };
 
   const toggleDay = (day: string) =>
@@ -65,7 +73,7 @@ export default function ProfileSettings({ onClose }: Props) {
       <div className="overflow-y-auto pr-2 space-y-6 flex-1">
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium mb-1">Name</label>
+          <label className="block text-sm font-medium mb-1">{t('profile.nameLabel')}</label>
           <input
             type="text"
             value={name}
@@ -76,7 +84,7 @@ export default function ProfileSettings({ onClose }: Props) {
 
         {/* Avatar */}
         <div>
-          <label className="block text-sm font-medium mb-1">Profilbild‑URL</label>
+          <label className="block text-sm font-medium mb-1">{t('profile.profilePictureLabel')}</label>
           <input
             type="text"
             value={avatarUrl}
@@ -95,7 +103,7 @@ export default function ProfileSettings({ onClose }: Props) {
         {/* Module */}
         <div>
           <label className="block text-sm font-medium mb-2">
-            Modulpräferenzen
+            {t('profile.modulePreferencesLabel')}
           </label>
           <select
             multiple
@@ -114,15 +122,14 @@ export default function ProfileSettings({ onClose }: Props) {
             ))}
           </select>
           <p className="text-sm text-muted mt-1">
-            Halte <strong>Strg</strong> (Windows) oder <strong>Cmd</strong>{' '}
-            (Mac), um mehrere Module auszuwählen.
+            {t('profile.modulePreferencesInfo')}
           </p>
         </div>
 
         {/* Availability */}
         <div>
           <label className="block text-sm font-medium mb-2">
-            Verfügbarkeit (Wochentage & Zeiten)
+            {t('profile.availabilityLabel')}
           </label>
           <div className="space-y-2">
             {weekdays.map(day => (
@@ -162,8 +169,8 @@ export default function ProfileSettings({ onClose }: Props) {
       </div>
 
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-        <Button text={"Schliessen"} type={ButtonVariant.Ghost} onClick={onClose} />
-        <Button text={"Speichern"} type={ButtonVariant.Primary} onClick={handleSave} />
+        <Button text={t('common:button.cancel')} type={ButtonVariant.Ghost} onClick={onClose} />
+        <Button text={t('common:button.save')} type={ButtonVariant.Primary} onClick={handleSave} />
       </div>
     </div>
   );

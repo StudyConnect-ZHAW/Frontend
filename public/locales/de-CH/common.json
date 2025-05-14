@@ -1,0 +1,23 @@
+{
+  "welcomeUser": "Willkommen, {{name}}",
+  "weekday": {
+    "monday": "Montag",
+    "tuesday": "Dienstag",
+    "wednesday": "Mittwoch",
+    "thursday": "Donnerstag",
+    "friday": "Freitag",
+    "saturday": "Samstag",
+    "sunday": "Sonntag"
+  },
+  "button": {
+    "cancel": "Abbrechen",
+    "create": "Erstellen",
+    "logout": "Abmelden",
+    "save": "Speichern"
+  },
+  "copyright": "Alle Rechte vorbehalten",
+  "toast": {
+    "titleSuccess": "Erfolgreich",
+    "saveSuccess": "Änderungen wurden erfolgreich gespeichert."
+  }
+}

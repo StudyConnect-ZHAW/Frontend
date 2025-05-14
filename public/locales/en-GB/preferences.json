@@ -1,0 +1,54 @@
+{
+  "title": "Preferences",
+  "general": {
+    "title": "General",
+    "subtitle": "System, Language, Views",
+    "languageLabel": "Language"
+  },
+  "appearance": {
+    "title": "Appearance",
+    "subtitle": "Theme, Density, Layout",
+    "themeLabel": "Theme",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "densityLabel": "Density",
+    "density": {
+      "normal": "Normal",
+      "spacious": "Spacious",
+      "compact": "Compact"
+    },
+    "layoutLabel": "Layout",
+    "layout": {
+      "grid": "Grid",
+      "list": "List"
+    }
+  },
+  "privacy": {
+    "title": "Privacy",
+    "subtitle": "DnD, Camera",
+    "allowCameraLabel": "Allow Camera Access",
+    "doNotDisturbLabel": "Do Not Disturb"
+  },
+  "notifications": {
+    "title": "Notifications and Activity",
+    "subtitle": "Sound, Mute, Chat Notifications",
+    "activateSoundsLabel": "Activate Sounds",
+    "notificationsForChats": "Show Notifications for Chats",
+    "showPopupNotifications": "Show Pop-Up Notifications"
+  },
+  "account": {
+    "title": "Account",
+    "subtitle": "Account Settings"
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Profile Picture, Bio, Name",
+    "nameLabel": "Name",
+    "profilePictureLabel": "Profile Picture",
+    "modulePreferencesLabel": "Module Preferences",
+    "modulePreferencesInfo": "Hold Ctrl (Windows) or Cmd (Mac) to select multiple modules.",
+    "availabilityLabel": "Availability (Weekdays and Time)"
+  }
+}

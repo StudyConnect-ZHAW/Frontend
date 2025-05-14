@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Button, { ButtonVariant } from '@/components/Button';
-import { showToast, ToastType } from '@/components/Toast';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
@@ -15,6 +15,8 @@ export default function AppearanceSettings({ onClose }: Props) {
   const [density, setDensity] = useState('normal');
   const [layout, setLayout] = useState('grid');
 
+  const { t } = useTranslation(['preferences', 'common']);
+
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
     const initialTheme = storedTheme ?? (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -26,9 +28,9 @@ export default function AppearanceSettings({ onClose }: Props) {
     localStorage.setItem('theme', mode);
   };
 
-  const handleSave = () => {
-    applyTheme(theme);
-    showToast(ToastType.Success, "Success", "Successfully saved the changes.");
+  const handleThemeChange = (mode: 'light' | 'dark') => {
+    setTheme(mode);
+    applyTheme(mode);
   };
 
   return (
@@ -38,48 +40,47 @@ export default function AppearanceSettings({ onClose }: Props) {
 
         {/* Theme selection */}
         <div>
-          <label className="block text-primary mb-1">Theme</label>
+          <label className="block text-primary mb-1">{t('appearance.themeLabel')}</label>
           <select
             value={theme}
-            onChange={e => setTheme(e.target.value as 'light' | 'dark')}
+            onChange={e => handleThemeChange(e.target.value as 'light' | 'dark')}
             className="w-full border rounded-md px-4 py-2 bg-primary-bg text-primary"
           >
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
+            <option value="light">{t('appearance.theme.light')}</option>
+            <option value="dark">{t('appearance.theme.dark')}</option>
           </select>
         </div>
 
         {/* Chat density selection */}
         <div>
-          <label className="block text-primary mb-1">Chat-Dichte</label>
+          <label className="block text-primary mb-1">{t('appearance.densityLabel')}</label>
           <select
             value={density}
             onChange={e => setDensity(e.target.value)}
             className="w-full border rounded-md px-4 py-2 bg-primary-bg text-primary"
           >
-            <option value="comfortable">Bequem</option>
-            <option value="normal">Normal</option>
-            <option value="compact">Kompakt</option>
+            <option value="spacious">{t('appearance.density.spacious')}</option>
+            <option value="normal">{t('appearance.density.normal')}</option>
+            <option value="compact">{t('appearance.density.compact')}</option>
           </select>
         </div>
 
         {/* Layout selection */}
         <div>
-          <label className="block text-primary mb-1">Layout</label>
+          <label className="block text-primary mb-1">{t('appearance.layoutLabel')}</label>
           <select
             value={layout}
             onChange={e => setLayout(e.target.value)}
             className="w-full border rounded-md px-4 py-2 bg-primary-bg text-primary"
           >
-            <option value="grid">Grid</option>
-            <option value="list">List</option>
+            <option value="grid">{t('appearance.layout.grid')}</option>
+            <option value="list">{t('appearance.layout.list')}</option>
           </select>
         </div>
       </div>
 
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-        <Button text={"Schliessen"} type={ButtonVariant.Ghost} onClick={onClose} />
-        <Button text={"Speichern"} type={ButtonVariant.Primary} onClick={handleSave} />
+        <Button text={t('common:button.cancel')} type={ButtonVariant.Ghost} onClick={onClose} />
       </div>
     </div>
   );

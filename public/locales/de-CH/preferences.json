@@ -1,0 +1,54 @@
+{
+  "title": "Benutzereinstellungen",
+  "general": {
+    "title": "Allgemein",
+    "subtitle": "System, Sprache, Ansicht",
+    "languageLabel": "Sprache"
+  },
+  "appearance": {
+    "title": "Erscheinungsbild",
+    "subtitle": "Thema, Dichte, Layout",
+    "themeLabel": "Thema",
+    "theme": {
+      "light": "Hell",
+      "dark": "Dunkel"
+    },
+    "densityLabel": "Dichte",
+    "density": {
+      "normal": "Normal",
+      "spacious": "Geräumig",
+      "compact": "Kompakt"
+    },
+    "layoutLabel": "Layout",
+    "layout": {
+      "grid": "Raster",
+      "list": "Liste"
+    }
+  },
+  "privacy": {
+    "title": "Privatsphäre",
+    "subtitle": "DnD, Kamera",
+    "allowCameraLabel": "Kamerazugriff erlauben",
+    "doNotDisturbLabel": "Bitte nicht stören"
+  },
+  "notifications": {
+    "title": "Benachrichtigung und Aktivität",
+    "subtitle": "Sounds, Stummschalten, Chat-Benachrichtigungen",
+    "activateSoundsLabel": "Sounds aktivieren",
+    "notificationsForChats": "Benachrichtigungen für Chats",
+    "showPopupNotifications": "Pop-up Hinweise anzeigen"
+  },
+  "account": {
+    "title": "Konto",
+    "subtitle": "Konto-Einstellungen"
+  },
+  "profile": {
+    "title": "Profil",
+    "subtitle": "Profilbild, Bio, Name",
+    "nameLabel": "Name",
+    "profilePictureLabel": "Profilbild",
+    "modulePreferencesLabel": "Modulpräferenzen",
+    "modulePreferencesInfo": "Halte Strg (Windows) oder Cmd (Mac), um mehrere Module auszuwählen.",
+    "availabilityLabel": "Verfügbarkeit (Wochentage & Zeiten)"
+  }
+}
