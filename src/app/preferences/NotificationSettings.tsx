@@ -55,7 +55,7 @@ export default function NotificationSettings({ onClose }: Props) {
 
       {/* Cancel button */}
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-        <Button text={`${t('common:button.cancel')}`} type={ButtonVariant.Ghost} onClick={onClose} />
+        <Button text={t('common:button.cancel')} type={ButtonVariant.Ghost} onClick={onClose} />
       </div>
     </div>
   );

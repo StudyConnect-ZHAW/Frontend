@@ -28,7 +28,7 @@ export default function SettingsPage() {
 
   return (
     <main className="min-h-full flex flex-col">
-      <PageHeader title={`${t('title')}`} />
+      <PageHeader title={t('title')} />
 
       {/* Setting tiles */}
       <div className="bg-primary-bg grid grid-cols-2 gap-6 border-main p-6 rounded-xl flex-grow border-2">

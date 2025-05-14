@@ -10,7 +10,7 @@ export default function GroupsPage() {
 
   return (
     <>
-      <PageHeader title={`${t('groups:title')}`} />
+      <PageHeader title={t('title')} />
 
       <WIPSection />
     </>

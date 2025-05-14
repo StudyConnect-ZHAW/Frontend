@@ -10,7 +10,7 @@ export default function ChatPage() {
 
   return (
     <>
-      <PageHeader title={`${t('chat:title')}`} />
+      <PageHeader title={t('title')} />
 
       <WIPSection />
     </>

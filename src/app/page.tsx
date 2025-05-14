@@ -45,7 +45,7 @@ const HomePage = () => {
 
   return (
     <>
-      <PageHeader title={`${t('welcomeUser', { name: `${userName}` })}`} />
+      <PageHeader title={t('welcomeUser', { name: `${userName}` })} />
 
       <div className="flex flex-col flex-1 gap-4">
         {/* Top row: left empty, right shows date */}

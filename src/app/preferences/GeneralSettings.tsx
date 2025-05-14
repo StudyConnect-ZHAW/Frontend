@@ -24,7 +24,7 @@ export default function GeneralSettings({ onClose }: Props) {
       <div className="overflow-y-auto pr-2 space-y-6 flex-1">
         {/* Language Selector */}
         <div>
-          <label className="block text-primary mb-1">{`${t('general.languageLabel')}`}</label>
+          <label className="block text-primary mb-1">{t('general.languageLabel')}</label>
           <select
             value={language}
             onChange={(e) => handleLanguageChange(e.target.value)}
@@ -40,7 +40,7 @@ export default function GeneralSettings({ onClose }: Props) {
       </div>
 
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-        <Button text={`${t('common:button.cancel')}`} type={ButtonVariant.Ghost} onClick={onClose} />
+        <Button text={t('common:button.cancel')} type={ButtonVariant.Ghost} onClick={onClose} />
       </div>
     </div>
   );

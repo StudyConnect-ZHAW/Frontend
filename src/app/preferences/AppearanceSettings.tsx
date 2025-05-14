@@ -80,7 +80,7 @@ export default function AppearanceSettings({ onClose }: Props) {
       </div>
 
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
-        <Button text={`${t('common:button.cancel')}`} type={ButtonVariant.Ghost} onClick={onClose} />
+        <Button text={t('common:button.cancel')} type={ButtonVariant.Ghost} onClick={onClose} />
       </div>
     </div>
   );
