@@ -13,9 +13,6 @@ import SearchField from "@/components/SearchField";
 import SortField from "@/components/SortField";
 import { FiPlus, FiX } from "react-icons/fi";
 
-// -----------------------------------------------------------------------------
-//   💾  Dummy‑Seed‑Daten  –  später einfach durch API‑Calls oder Server‑Actions
-// -----------------------------------------------------------------------------
 const initialGroups: Group[] = [
   {
     id: "1",
@@ -32,16 +29,12 @@ const initialGroups: Group[] = [
     createdAt: new Date("2024-04-01"),
   },
 ];
-// -----------------------------------------------------------------------------
 
 type SortOption = "newest" | "oldest" | "mostLiked" | "alphabet";
 
 export default function GroupsPage() {
   const { t } = useTranslation(['groups', 'common']);
 
-  // ────────────────────────────────────────────────────────────────────────────
-  // THEME
-  // ────────────────────────────────────────────────────────────────────────────
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
@@ -57,9 +50,6 @@ export default function GroupsPage() {
 
   const borderAndShadowColor = theme === "dark" ? "#ec3349" : "#FDBA15";
 
-  // ────────────────────────────────────────────────────────────────────────────
-  // STATE
-  // ────────────────────────────────────────────────────────────────────────────
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [allGroups, setAllGroups] = useState<Group[]>(initialGroups);
   const [search, setSearch] = useState("");
@@ -68,9 +58,6 @@ export default function GroupsPage() {
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  // ────────────────────────────────────────────────────────────────────────────
-  // HELPERS
-  // ────────────────────────────────────────────────────────────────────────────
   const filteredMyGroups = useMemo(() => {
     const text = search.toLowerCase();
 
@@ -85,16 +72,13 @@ export default function GroupsPage() {
         case "oldest":
           return a.createdAt.getTime() - b.createdAt.getTime();
         case "mostLiked":
-          return b.members - a.members; // ⚠️  ersetze „members“ durch echte Likes, wenn vorhanden
+          return b.members - a.members;
         default:
           return 0;
       }
     });
   }, [search, sort, myGroups]);
 
-  // ────────────────────────────────────────────────────────────────────────────
-  // ACTIONS
-  // ────────────────────────────────────────────────────────────────────────────
   const handleJoin = useCallback(
     (id: string) => {
       const grp = allGroups.find((g) => g.id === id);
@@ -120,14 +104,10 @@ export default function GroupsPage() {
     setMyGroups((prev) => [...prev, newGroup]);
   }, []);
 
-  // ────────────────────────────────────────────────────────────────────────────
-  // RENDER
-  // ────────────────────────────────────────────────────────────────────────────
   return (
     <>
       <PageHeader title={t('title')} />
 
-      {/* ————————————————— Action‑Bar ————————————————— */}
       <div className="flex flex-wrap gap-4 mb-6 px-4 sm:px-8">
         <button
           onClick={() => setShowJoinModal(true)}
@@ -147,13 +127,11 @@ export default function GroupsPage() {
 
         <div className="flex-grow" />
 
-        {/* Sortierung */}
         <div className="w-40 min-w-[8rem]">
           <SortField value={sort} onChange={(val) => setSort(val as SortOption)} />
         </div>
       </div>
 
-      {/* Suche */}
       <div className="mb-8 px-4 sm:px-8 max-w-sm">
         <SearchField
           placeholder="Search my groups…"
@@ -162,7 +140,6 @@ export default function GroupsPage() {
         />
       </div>
 
-      {/* My Groups Grid */}
       <div className="px-4 sm:px-8">
         {filteredMyGroups.length === 0 ? (
           <p className="text-gray-600">You haven’t joined any groups yet.</p>
@@ -181,7 +158,6 @@ export default function GroupsPage() {
         )}
       </div>
 
-      {/* Join‑Modal */}
       {showJoinModal && (
         <Modal onClose={() => setShowJoinModal(false)}>
           <h3 className="text-lg font-semibold mb-4">Available Groups</h3>
@@ -202,7 +178,6 @@ export default function GroupsPage() {
         </Modal>
       )}
 
-      {/* Create‑Modal */}
       {showCreateModal && (
         <CreateGroupModal
           onClose={() => setShowCreateModal(false)}
@@ -213,9 +188,6 @@ export default function GroupsPage() {
   );
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
-// GENERIC MODAL WRAPPER
-// ═════════════════════════════════════════════════════════════════════════════
 function Modal({
   children,
   onClose,
@@ -244,9 +216,6 @@ function Modal({
   );
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
-// CREATE GROUP MODAL
-// ═════════════════════════════════════════════════════════════════════════════
 function CreateGroupModal({
   onClose,
   onCreate,
