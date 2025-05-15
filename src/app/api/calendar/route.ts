@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
       }
     );
 
+    // when fetching a week that is during semester break api returns a 404
     if (scheduleRes.status === 404) {
       console.warn(`🟡 No schedule found for ${startingAt} → likely semester break`);
       
