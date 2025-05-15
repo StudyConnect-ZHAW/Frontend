@@ -1,142 +1,135 @@
 "use client";
 
 import React, { useState, useEffect, FormEvent } from "react";
-import { FiImage, FiSend } from "react-icons/fi";
+import { FiSend } from "react-icons/fi";
 
-interface NewPostFormProps {
+interface Props {
   onPostCreated?: () => void;
+  currentUserId?: string;        // override if you already know the signed-in user
 }
 
-export default function NewPostForm({ onPostCreated }: NewPostFormProps) {
-  const [content, setContent] = useState("");
-  const [images, setImages] = useState<FileList | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+interface Category {
+  id: string;
+  name: string;
+}
 
-  // Beim Laden aus localStorage lesen, ob User "dark" oder "light" eingestellt hat:
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
+
+export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
+  const [title,       setTitle]       = useState("");
+  const [content,     setContent]     = useState("");
+  const [categoryId,  setCategoryId]  = useState<string>("");
+  const [categories,  setCategories]  = useState<Category[]>([]);
+  const [isLoading,   setLoading]     = useState(false);
+  const [errorMsg,    setErrorMsg]    = useState("");
+
+  /* fetch categories once */
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark") {
-      setTheme("dark");
-      document.documentElement.classList.add("dark");
-    } else {
-      setTheme("light");
-      document.documentElement.classList.remove("dark");
-    }
+    (async () => {
+      try {
+        const res  = await fetch(`${API_BASE_URL}/api/v1/categories`, { cache: "no-store" });
+        if (!res.ok) throw new Error(res.statusText);
+        const data = await res.json();
+        console.log("Fetched categories", data);
+        setCategories(
+          data.map((c: any) => ({
+            id:   c.forumCategoryId,
+            name: c.name,
+          }))
+        );
+        data.length && setCategoryId(data[0].id);
+      } catch (e) {
+        console.error("Could not fetch categories", e);
+      }
+    })();
   }, []);
-
-  // Dynamische Farbwerte analog zur Sidebar
-  const borderAndShadowColor = theme === "dark" ?  "#ec3349" : "#FDBA15";
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!title.trim() || !categoryId) return;
 
+    const userId =
+      currentUserId ??
+      localStorage.getItem("userId");
+
+    const createDto = {
+      userId,
+      title:           title.trim(),
+      forumCategoryId: categoryId,
+      content:         content.trim() || null,     // nullable in DTO
+    };
+
+    console.log("Creating post", createDto);
     try {
-      setIsLoading(true);
+      setLoading(true);
       setErrorMsg("");
 
-      const formData = new FormData();
-      formData.append("content", content);
-      if (images) {
-        for (let i = 0; i < images.length; i++) {
-          formData.append("images", images[i]);
-        }
-      }
-
-      const response = await fetch("/v1/forum", {
-        method: "POST",
-        body: formData,
+      const res = await fetch(`${API_BASE_URL}/api/v1/posts`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ createDto }),
       });
 
-      if (!response.ok) {
-        throw new Error(`Fehler beim Erstellen des Posts: ${response.status}`);
-      }
+      if (!res.ok) throw new Error(await res.text());
 
-      if (onPostCreated) {
-        onPostCreated();
-      }
-
+      onPostCreated?.();
+      setTitle("");
       setContent("");
-      setImages(null);
-    } catch (error: any) {
-      setErrorMsg(error.message || "Etwas ist schief gelaufen...");
+    } catch (err: any) {
+      setErrorMsg(err.message ?? "Something went wrong");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   }
 
+  const borderColor =
+    typeof window !== "undefined" && localStorage.getItem("theme") === "dark"
+      ? "#ec3349"
+      : "#FDBA15";
+
   return (
-    <div className="mx">
-      <div
-        className={`
-          relative p-4 flex items-start 
-        `}
-        
-        style={{
-          border: `3px solid ${borderAndShadowColor}`,
-          boxShadow: `4px 4px 10px ${borderAndShadowColor}`,
-          borderRadius: "15px",
-          transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-        }}
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-2 rounded-[15px] border-2 p-4"
+      style={{ borderColor, background: "var(--sidebar-bg)" }}
+    >
+      <input
+        className="w-full rounded border p-1 text-sm focus:outline-none"
+        placeholder="Post title…"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+
+      <select
+        className="w-full rounded border p-1 text-sm focus:outline-none"
+        value={categoryId}
+        onChange={(e) => setCategoryId(e.target.value)}
       >
-        {/* Profilbild (Beispiel) */}
-        <img
-          src="/path/to/avatar.png"
-          alt="Avatar"
-          className="w-12 h-12 rounded-full mr-4 object-cover"
-        />
+        {categories.map((c) => (
+          <option key={c.id} value={c.id}>
+            {c.name}
+          </option>
+        ))}
+      </select>
 
-        {/* Formular */}
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
-          <textarea
-            className={`
-              w-full mb-3 text-base
-              border-0 bg-transparent
-              focus:outline-none focus:ring-0
-            `}
-            rows={3}
-            placeholder="Was gibt's Neues?"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+      <textarea
+        className="h-24 w-full resize-none rounded border p-1 text-sm focus:outline-none"
+        placeholder="What do you want to share?"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
 
-          {/* Bild-Upload-Icon (absolute Position) */}
-        <label
-          className="cursor-pointer absolute bottom-4 left-20"
-          title="Bild hochladen"
-        >
-          <FiImage
-            className="text-2xl text-gray-600
-                       transition-all duration-200
-                       hover:scale-125 hover:text-[#ec3349]"
-          />
-        </label>
+      {errorMsg && <p className="text-sm text-red-600">{errorMsg}</p>}
 
-          {/* Fehlermeldung */}
-          {errorMsg && <p className="text-red-500 text-sm mb-2">{errorMsg}</p>}
-
-          {/* Post-Button */}
-          <div className="text-right">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="inline-flex items-center gap-1
-                         bg-blue-600 text-white px-4 py-2 rounded
-                         hover:bg-blue-700 transition-colors"
-            >
-              {isLoading ? (
-                "Poste..."
-              ) : (
-                <>
-                  <FiSend className="text-white" />
-                  <span>Posten</span>
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="ml-auto flex items-center gap-1 rounded bg-[#ec3349] px-2 py-1 text-sm font-bold text-white transition hover:scale-105 hover:bg-black disabled:opacity-60"
+        style={{ borderRadius: "7px" }}
+      >
+        {isLoading ? "Posting…" : <>Post <FiSend /></>}
+      </button>
+    </form>
   );
 }
