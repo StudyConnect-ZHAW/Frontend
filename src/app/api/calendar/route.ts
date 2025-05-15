@@ -4,20 +4,25 @@ import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
   try {
+    // Extract cookie header from the request
     const cookieHeader = (await headers()).get('cookie');
+
+    // Parse JWT token from cookie header
     const token = cookieHeader
       ?.split(';')
       .find((c) => c.trim().startsWith('access_token='))
       ?.split('=')[1];
 
+    // Validate token existence
     if (!token) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Decode token to extract user ID
     const decoded = jwtDecode<{ oid: string }>(token);
     const userId = decoded.oid;
 
-    // get user infos
+    // Fetch user details from internal API
     const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
     const userRes = await fetch(`${apiUrl}v1/users/${userId}`);
 
@@ -27,30 +32,40 @@ export async function GET(req: Request) {
 
     const user = await userRes.json();
 
-    // TODO: find better solution for creation of shortName sometimes it can contain numbers
-    // create shortname for api request
-    const shortName = (
-      (user.lastName || '').substring(0, 5) +
-      (user.firstName || '').substring(0, 3)
-    ).toLowerCase();
+    // Extract and validate email from user object
+    const email = user.email?.toLowerCase() ?? '';
+    let shortName: string | undefined;
 
-    // get schedule from zhaw api
+    if (email.endsWith('@students.zhaw.ch') || email.endsWith('@zhaw.ch')) {
+      shortName = email.split('@')[0];
+    } else {
+      console.warn(`Email domain not supported: ${email}`);
+
+      return NextResponse.json({ error: 'Invalid email domain' }, { status: 400 });
+    }
+
+    // Fetch student schedule from ZHAW API using shortName
     const scheduleRes = await fetch(
       `https://api.apps.engineering.zhaw.ch/v1/schedules/students/${shortName}`,
       {
         headers: {
           'User-Agent': 'StudyConnect (https://github.com/StudyConnect-ZHAW)',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       }
     );
 
+    // Check if fetching schedule was successful
     if (!scheduleRes.ok) {
-      return NextResponse.json({ error: 'Failed to fetch ZHAW calendar' }, { status: scheduleRes.status });
+      return NextResponse.json(
+        { error: 'Failed to fetch ZHAW calendar' },
+        { status: scheduleRes.status }
+      );
     }
 
     const schedule = await scheduleRes.json();
 
+    // Return the fetched schedule
     return NextResponse.json(schedule);
   } catch (err: any) {
     console.error('Failed to load schedule:', err);
