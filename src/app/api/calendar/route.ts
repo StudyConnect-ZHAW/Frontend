@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     // Extract cookie header from the request
     const cookieHeader = (await headers()).get('cookie');
@@ -67,8 +67,8 @@ export async function GET(req: Request) {
 
     // Return the fetched schedule
     return NextResponse.json(schedule);
-  } catch (err: any) {
-    console.error('Failed to load schedule:', err);
+  } catch (error) {
+    console.error('Failed to load schedule:', error);
 
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
