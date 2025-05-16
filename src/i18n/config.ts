@@ -8,8 +8,9 @@ export const languageOptions: { code: string; label: string }[] = [
 ];
 
 export const normalizeLanguage = (lang: string | null): string => {
-  if (!lang) return fallbackLanguage;
-  if (lang.startsWith('de')) return 'de-CH';
-  if (lang.startsWith('en')) return 'en-GB';
+  if (!lang) { return fallbackLanguage; }
+  if (lang.startsWith('de')) { return 'de-CH'; };
+  if (lang.startsWith('en')) { return 'en-GB'; };
+
   return fallbackLanguage;
 };
