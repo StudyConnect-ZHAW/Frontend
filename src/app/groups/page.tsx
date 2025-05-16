@@ -1,261 +1,106 @@
 'use client';
 
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useMemo, useState } from "react";
+import { useGroups } from "@/hooks/useGroups";
 import { useTranslation } from "react-i18next";
 import PageHeader from "@/components/PageHeader";
-import GroupCard, { Group } from "@/components/GroupCard";
-import SearchField from "@/components/SearchField";
-import SortField from "@/components/SortField";
-import { FiPlus, FiX } from "react-icons/fi";
+import GroupCard from "@/components/GroupCard";
+import SearchInput from "@/components/SearchInput";
+import Selector from "@/components/Selector";
+import Button, { ButtonVariant } from "@/components/Button";
+import CreateGroupModal from "@/components/CreateGroupModal";
+import JoinGroupModal from "@/components/JoinGroupModal";
 
-const initialGroups: Group[] = [
-  {
-    id: "1",
-    name: "Frontend Wizards",
-    description: "Discuss React, Vue & design systems.",
-    members: 42,
-    createdAt: new Date("2024-03-10"),
-  },
-  {
-    id: "2",
-    name: "AI Enthusiasts",
-    description: "All about GPT‑4‑o and beyond.",
-    members: 137,
-    createdAt: new Date("2024-04-01"),
-  },
-];
+const sortOptions = [
+  { label: 'Alphabetical', value: 'alphabet' },
+  { label: 'Most Members', value: 'members' },
+  { label: 'Newest', value: 'newest' },
+]
 
-type SortOption = "newest" | "oldest" | "mostLiked" | "alphabet";
+type SortOption = 'alphabet'; // TODO: Add the other options
 
-export default function GroupsPage() {
+const GroupsPage = () => {
   const { t } = useTranslation(['groups', 'common']);
 
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored === "dark") {
-      setTheme("dark");
-      document.documentElement.classList.add("dark");
-    } else {
-      setTheme("light");
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
-
-  const borderAndShadowColor = theme === "dark" ? "#ec3349" : "#FDBA15";
-
-  const [myGroups, setMyGroups] = useState<Group[]>([]);
-  const [allGroups, setAllGroups] = useState<Group[]>(initialGroups);
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<SortOption>("newest");
+  const { groups = [], isLoading } = useGroups();
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<SortOption>('alphabet');
 
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const filteredMyGroups = useMemo(() => {
-    const text = search.toLowerCase();
+  const filtered = useMemo(() => {
+    let result = groups.filter((g) =>
+      g.name.toLowerCase().includes(search.toLowerCase())
+    );
 
-    const bySearch = myGroups.filter((g) => g.name.toLowerCase().includes(text));
-
-    return bySearch.sort((a, b) => {
-      switch (sort) {
-        case "alphabet":
-          return a.name.localeCompare(b.name);
-        case "newest":
-          return b.createdAt.getTime() - a.createdAt.getTime();
-        case "oldest":
-          return a.createdAt.getTime() - b.createdAt.getTime();
-        case "mostLiked":
-          return b.members - a.members;
-        default:
-          return 0;
-      }
-    });
-  }, [search, sort, myGroups]);
-
-  const handleJoin = useCallback(
-    (id: string) => {
-      const grp = allGroups.find((g) => g.id === id);
-      if (!grp) return;
-      setMyGroups((prev) => [...prev, grp]);
-    },
-    [allGroups]
-  );
-
-  const handleLeave = useCallback((id: string) => {
-    setMyGroups((prev) => prev.filter((g) => g.id !== id));
-  }, []);
-
-  const handleCreate = useCallback((name: string, desc: string) => {
-    const newGroup: Group = {
-      id: crypto.randomUUID(),
-      name,
-      description: desc,
-      members: 1,
-      createdAt: new Date(),
-    };
-    setAllGroups((prev) => [...prev, newGroup]);
-    setMyGroups((prev) => [...prev, newGroup]);
-  }, []);
+    switch (sort) {
+      case 'alphabet':
+        return result.sort((a, b) => a.name.localeCompare(b.name));
+      default:
+        return result;
+    }
+  }, [groups, search, sort]);
 
   return (
-    <>
+    <div className="flex flex-col h-full">
       <PageHeader title={t('title')} />
 
-      <div className="flex flex-wrap gap-4 mb-6 px-4 sm:px-8">
-        <button
-          onClick={() => setShowJoinModal(true)}
-          className="px-4 py-2 rounded border-2 font-semibold transition hover:shadow"
-          style={{ borderColor: borderAndShadowColor }}
-        >
-          Join Group
-        </button>
+      {/* Controls */}
+      <div className="flex flex-wrap items-center gap-4 pb-4">
+        <div className="flex flex-wrap gap-3">
+          <SearchInput
+            placeholder="Search groups..."
+            value={search}
+            onChange={setSearch}
+            className="w-full sm:w-64"
+          />
 
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2 rounded border-2 font-semibold transition hover:shadow"
-          style={{ borderColor: borderAndShadowColor }}
-        >
-          Create new Group
-        </button>
+          <Selector
+            options={sortOptions}
+            value={sort}
+            onChange={(val) => setSort(val as SortOption)}
+            className="w-full sm:w-64"
+          />
+        </div>
 
-        <div className="flex-grow" />
-
-        <div className="w-40 min-w-[8rem]">
-          <SortField value={sort} onChange={(val) => setSort(val as SortOption)} />
+        <div className="flex flex-wrap gap-3 ml-auto">
+          <Button
+            text={"Join Group"}
+            type={ButtonVariant.Primary}
+            onClick={() => setShowJoinModal(true)}
+          />
+          <Button
+            text={"Create Group"}
+            type={ButtonVariant.Primary}
+            onClick={() => setShowCreateModal(true)}
+          />
         </div>
       </div>
 
-      <div className="mb-8 px-4 sm:px-8 max-w-sm">
-        <SearchField
-          placeholder="Search my groups…"
-          value={search}
-          onChange={setSearch}
-        />
-      </div>
-
-      <div className="px-4 sm:px-8">
-        {filteredMyGroups.length === 0 ? (
-          <p className="text-gray-600">You haven’t joined any groups yet.</p>
+      {/* Groups grid */}
+      <div className="grow overflow-y-auto pr-4">
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full text-primary text-xl">
+            Loading...
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-primary text-xl">
+            No groups found.
+          </div>
         ) : (
-          <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
-            {filteredMyGroups.map((g) => (
-              <GroupCard
-                key={g.id}
-                group={g}
-                joined
-                onJoin={() => { }}
-                onLeave={handleLeave}
-              />
+          <div className="grid gap-4 grid-cols-3">
+            {filtered.map((group) => (
+              <GroupCard key={group.groupId} group={group} />
             ))}
           </div>
         )}
       </div>
 
-      {showJoinModal && (
-        <Modal onClose={() => setShowJoinModal(false)}>
-          <h3 className="text-lg font-semibold mb-4">Available Groups</h3>
-          <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
-            {allGroups.map((g) => {
-              const joined = myGroups.some((mg) => mg.id === g.id);
-              return (
-                <GroupCard
-                  key={g.id}
-                  group={g}
-                  joined={joined}
-                  onJoin={handleJoin}
-                  onLeave={handleLeave}
-                />
-              );
-            })}
-          </div>
-        </Modal>
-      )}
-
-      {showCreateModal && (
-        <CreateGroupModal
-          onClose={() => setShowCreateModal(false)}
-          onCreate={handleCreate}
-        />
-      )}
-    </>
-  );
-}
-
-function Modal({
-  children,
-  onClose,
-}: {
-  children: React.ReactNode;
-  onClose: () => void;
-}) {
-  return (
-    <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-[var(--sidebar-bg)] rounded-[15px] p-6 max-h-[80vh] overflow-y-auto w-full max-w-3xl relative"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-xl hover:opacity-70"
-        >
-          <FiX />
-        </button>
-        {children}
-      </div>
+      {showJoinModal && <JoinGroupModal onClose={() => setShowJoinModal(false)} />}
+      {showCreateModal && <CreateGroupModal onClose={() => setShowCreateModal(false)} />}
     </div>
   );
 }
 
-function CreateGroupModal({
-  onClose,
-  onCreate,
-}: {
-  onClose: () => void;
-  onCreate: (name: string, desc: string) => void;
-}) {
-  const [name, setName] = useState("");
-  const [desc, setDesc] = useState("");
-
-  const handleSubmit = () => {
-    onCreate(name.trim(), desc.trim());
-    onClose();
-  };
-
-  return (
-    <Modal onClose={onClose}>
-      <h3 className="text-lg font-semibold mb-4">Create new Group</h3>
-      <div className="space-y-3">
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Group name"
-          className="w-full border px-3 py-2 rounded"
-        />
-        <textarea
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-          placeholder="Description (optional)"
-          rows={3}
-          className="w-full border px-3 py-2 rounded"
-        />
-        <button
-          disabled={name.trim() === ""}
-          onClick={handleSubmit}
-          className="w-full flex items-center justify-center gap-2 py-2 rounded bg-[#ec3349] text-white font-semibold disabled:opacity-50"
-        >
-          <FiPlus /> Create
-        </button>
-      </div>
-    </Modal>
-  );
-}
+export default GroupsPage;
