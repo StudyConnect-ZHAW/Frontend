@@ -9,16 +9,16 @@ import Selector from "@/components/Selector";
 import Button, { ButtonVariant } from "@/components/Button";
 import CreateGroupModal from "@/components/CreateGroupModal";
 import JoinGroupModal from "@/components/JoinGroupModal";
-import { useGroupFilter, sortOptions, SortOption, } from "@/hooks/useGroupsFilter";
+import { useGroupFilter, SortOption } from "@/hooks/useGroupsFilter";
 import { useGroups } from "@/hooks/useGroups";
 
 const userId = 'some-user-id';
 
 const GroupsPage = () => {
-  const { t } = useTranslation(['groups', 'common']);
-
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const { t } = useTranslation(['groups', 'common']);
 
   const {
     myGroups,
@@ -27,9 +27,10 @@ const GroupsPage = () => {
     error,
     handleJoin,
     handleLeave,
+    handleCreate,
   } = useGroups(userId);
 
-  const { search, setSearch, sort, setSort, filteredGroups: filteredMyGroups } = useGroupFilter(myGroups);
+  const { search, setSearch, sort, setSort, sortOptions, filteredGroups: filteredMyGroups } = useGroupFilter(myGroups);
 
   return (
     <div className="flex flex-col h-full">
@@ -39,7 +40,7 @@ const GroupsPage = () => {
       <div className="flex flex-wrap items-center gap-4 pb-4">
         <div className="flex flex-wrap gap-3">
           <SearchInput
-            placeholder="Search groups..."
+            placeholder={t('search')}
             value={search}
             onChange={setSearch}
             className="w-full sm:w-64"
@@ -55,12 +56,12 @@ const GroupsPage = () => {
 
         <div className="flex flex-wrap gap-3 ml-auto">
           <Button
-            text={"Join Group"}
+            text={t('button.join')}
             type={ButtonVariant.Primary}
             onClick={() => setShowJoinModal(true)}
           />
           <Button
-            text={"Create Group"}
+            text={t('button.create')}
             type={ButtonVariant.Primary}
             onClick={() => setShowCreateModal(true)}
           />
@@ -71,7 +72,7 @@ const GroupsPage = () => {
       <div className="grow overflow-y-auto">
         {loading ? (
           <div className="flex items-center justify-center h-full text-primary text-xl">
-            Loading...
+            {t('common:loading')}
           </div>
         ) : error ? (
           <div className="flex items-center justify-center h-full text-primary text-xl">
@@ -79,7 +80,7 @@ const GroupsPage = () => {
           </div>
         ) : filteredMyGroups.length === 0 ? (
           <div className="flex items-center justify-center h-full text-primary text-xl">
-            You don't have any groups.
+            {t('noGroup')}
           </div>
         ) : (
           <div className="grid gap-4 grid-cols-3">
@@ -105,7 +106,12 @@ const GroupsPage = () => {
         />
       )}
 
-      {showCreateModal && <CreateGroupModal onClose={() => setShowCreateModal(false)} />}
+      {showCreateModal && (
+        <CreateGroupModal
+          onClose={() => setShowCreateModal(false)}
+          onCreate={handleCreate}
+        />
+      )}
     </div>
   );
 };

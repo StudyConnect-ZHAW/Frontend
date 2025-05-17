@@ -2,7 +2,8 @@ import { Group } from "@/types/group";
 import SearchInput from "./SearchInput";
 import Selector from "./Selector";
 import GroupCard from "./GroupCard";
-import { SortOption, sortOptions, useGroupFilter } from "@/hooks/useGroupsFilter";
+import { SortOption, useGroupFilter } from "@/hooks/useGroupsFilter";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onClose: () => void;
@@ -13,7 +14,9 @@ interface Props {
 }
 
 export default function JoinGroupModal({ onClose, groups, onJoin, error, loading }: Props) {
-  const { search, setSearch, sort, setSort, filteredGroups } = useGroupFilter(groups);
+  const { search, setSearch, sort, setSort, sortOptions, filteredGroups } = useGroupFilter(groups);
+
+  const { t } = useTranslation(['groups', 'common']);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -28,11 +31,11 @@ export default function JoinGroupModal({ onClose, groups, onJoin, error, loading
           ✕
         </button>
 
-        <h2 className="text-lg font-semibold mb-4">Join a Group</h2>
+        <h2 className="text-lg font-semibold mb-4">{t('titleJoin')}</h2>
 
         <div className="flex items-center gap-4 mb-4">
           <SearchInput
-            placeholder="Search available groups..."
+            placeholder={t('search')}
             value={search}
             onChange={setSearch}
             className="w-full sm:w-64"
@@ -49,7 +52,7 @@ export default function JoinGroupModal({ onClose, groups, onJoin, error, loading
         <div className="flex-1 overflow-y-auto pr-4">
           {loading ? (
             <div className="flex items-center justify-center h-full text-primary text-xl">
-              Loading...
+              {t('common:loading')}
             </div>
           ) : error ? (
             <div className="flex items-center justify-center h-full text-primary text-xl">
@@ -57,7 +60,7 @@ export default function JoinGroupModal({ onClose, groups, onJoin, error, loading
             </div>
           ) : filteredGroups.length === 0 ? (
             <div className="flex items-center justify-center h-full text-primary text-xl">
-              No groups found.
+              {t('noGroupFound')}
             </div>
           ) : (
             <div className="grid gap-4 grid-cols-2">
