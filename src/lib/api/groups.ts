@@ -41,8 +41,8 @@ export async function getOwnGroups(userId: string): Promise<Group[]> {
   return handleResponse<Group[]>(res);
 }
 
-export async function getGroupById(id: string): Promise<Group> {
-  const res = await fetch(`${BASE_URL}/groups/${id}`, {
+export async function getGroupById(groupId: string): Promise<Group> {
+  const res = await fetch(`${BASE_URL}/groups/${groupId}`, {
     method: 'GET',
     credentials: 'include',
     headers: getRequestHeaders(),
@@ -51,8 +51,8 @@ export async function getGroupById(id: string): Promise<Group> {
   return handleResponse<Group>(res);
 }
 
-export async function joinGroup(id: string): Promise<Group> {
-  const res = await fetch(`${BASE_URL}/groups/${id}/join`, {
+export async function joinGroup(groupId: string): Promise<Group> {
+  const res = await fetch(`${BASE_URL}/groups/${groupId}/join`, {
     method: 'POST',
     credentials: 'include',
     headers: getRequestHeaders(),
@@ -61,8 +61,8 @@ export async function joinGroup(id: string): Promise<Group> {
   return handleResponse<Group>(res);
 }
 
-export async function leaveGroup(id: string): Promise<Group> {
-  const res = await fetch(`${BASE_URL}/groups/${id}/leave`, {
+export async function leaveGroup(groupId: string): Promise<Group> {
+  const res = await fetch(`${BASE_URL}/groups/${groupId}/leave`, {
     method: 'POST',
     credentials: 'include',
     headers: getRequestHeaders(),
@@ -71,8 +71,8 @@ export async function leaveGroup(id: string): Promise<Group> {
   return handleResponse<Group>(res);
 }
 
-export async function updateGroup(id: string, data: GroupUpdateData): Promise<Group> {
-  const res = await fetch(`${BASE_URL}/groups/${id}`, {
+export async function updateGroup(groupId: string, data: GroupUpdateData): Promise<Group> {
+  const res = await fetch(`${BASE_URL}/groups/${groupId}`, {
     method: 'PUT',
     credentials: 'include',
     headers: getRequestHeaders(),
@@ -82,8 +82,8 @@ export async function updateGroup(id: string, data: GroupUpdateData): Promise<Gr
   return handleResponse<Group>(res);
 }
 
-export async function deleteGroup(id: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/groups/${id}`, {
+export async function deleteGroup(groupId: string): Promise<void> {
+  const res = await fetch(`${BASE_URL}/groups/${groupId}`, {
     method: 'DELETE',
     credentials: 'include',
     headers: getRequestHeaders(),

@@ -22,5 +22,6 @@
     "titleSuccess": "Erfolgreich",
     "titleError": "Fehler",
     "saveSuccess": "Änderungen wurden erfolgreich gespeichert."
-  }
+  },
+  "loading": "Laden..."
 }

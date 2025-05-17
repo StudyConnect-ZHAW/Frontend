@@ -1,17 +1,20 @@
 import { useMemo, useState } from 'react';
 import type { Group } from '@/types/group';
+import { useTranslation } from 'react-i18next';
 
 export type SortOption = 'alphabet' | 'members' | 'newest';
-
-export const sortOptions = [
-  { label: 'Alphabetical', value: 'alphabet' },
-  { label: 'Most Members', value: 'members' },
-  { label: 'Newest', value: 'newest' },
-];
 
 export function useGroupFilter(groups: Group[]) {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<SortOption>('alphabet');
+
+  const { t } = useTranslation(['groups', 'common']);
+
+  const sortOptions = [
+    { label: t('sort.alphabet'), value: 'alphabet' },
+    { label: t('sort.members'), value: 'members' },
+    { label: t('sort.newest'), value: 'newest' },
+  ];
 
   const filteredGroups = useMemo(() => {
     const filtered = groups.filter((g) =>
@@ -35,6 +38,7 @@ export function useGroupFilter(groups: Group[]) {
     setSearch,
     sort,
     setSort,
+    sortOptions,
     filteredGroups,
   };
 }

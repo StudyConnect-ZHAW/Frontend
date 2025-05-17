@@ -1,36 +1,29 @@
 'use client';
 
-import { createGroup } from '@/lib/api/groups';
 import { useState } from 'react';
 import Button, { ButtonVariant } from '@/components/Button';
+import { GroupCreateData } from '@/types/group';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onClose: () => void;
+  onCreate: (data: GroupCreateData) => void;
 }
 
-export default function CreateGroupModal({ onClose }: Props) {
+const userId = 'some-user-id';
+
+export default function CreateGroupModal({ onClose, onCreate }: Props) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation(['groups', 'common']);
 
-  const handleSubmit = async () => {
-    setError(null);
-    setLoading(true);
+  const handleSubmit = () => {
+    const trimmedName = name.trim();
+    if (!trimmedName) { return; }
 
-    try {
-      await createGroup({
-        name: name.trim(),
-        description: description.trim(),
-        ownerId: '12',
-      });
-      onClose();
-    } catch (err: any) {
-      setError(err.message || 'Failed to create group');
-    } finally {
-      setLoading(false);
-    }
+    onCreate({ name: trimmedName, description: description.trim(), ownerId: userId });
+    onClose();
   };
 
   return (
@@ -46,28 +39,26 @@ export default function CreateGroupModal({ onClose }: Props) {
           ✕
         </button>
 
-        <h2 className="text-lg font-semibold mb-4">Create New Group</h2>
+        <h2 className="text-lg font-semibold mb-4">{t('titleCreate')}</h2>
 
         <div className="space-y-3">
           <input
             className="w-full border px-3 py-2 rounded"
-            placeholder="Group name"
+            placeholder={t('placeholderName')}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
           <textarea
             className="w-full border px-3 py-2 rounded"
-            placeholder="Group description (optional)"
+            placeholder={t('placeholderDescription')}
             rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
 
-          {error && <p className="text-red-600 text-sm">{error}</p>}
-
           <Button
-            text={loading ? 'Creating…' : 'Create Group'}
+            text={t('common:button.create')}
             type={ButtonVariant.Primary}
             onClick={handleSubmit}
           />
