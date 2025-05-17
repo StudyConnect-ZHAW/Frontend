@@ -34,10 +34,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email domain' }, { status: 400 });
     }
 
-    const startingAt = req.nextUrl.searchParams.get('startingAt') ?? new Date().toISOString().split('T')[0];
+    const rawDateStr = req.nextUrl.searchParams.get('startingAt') ?? new Date().toISOString().split('T')[0];
+    const date = new Date(rawDateStr);
+    date.setDate(date.getDate() + 1);
+    const startingAt = date.toISOString().split('T')[0];
 
     const scheduleRes = await fetch(
-      `https://api.apps.engineering.zhaw.ch/v1/schedules/students/${shortName}?days=7&startingAt=${startingAt}`,
+      `https://api.apps.engineering.zhaw.ch/v1/schedules/students/${shortName}?startingAt=${startingAt}`,
       {
         headers: {
           'User-Agent': 'StudyConnect (https://github.com/StudyConnect-ZHAW)',
@@ -46,25 +49,24 @@ export async function GET(req: NextRequest) {
       }
     );
 
-    // when fetching a week that is during semester break api returns a 404
     if (scheduleRes.status === 404) {
       console.warn(`🟡 No schedule found for ${startingAt} → likely semester break`);
-      
-      return NextResponse.json({ days: [] }); // return empty calendar
+
+      return NextResponse.json({ days: [] });
     }
-      
+
     if (!scheduleRes.ok) {
       console.error(`ZHAW error (${scheduleRes.status}):`, await scheduleRes.text());
-      
+
       return NextResponse.json({ error: 'Failed to fetch ZHAW calendar' }, { status: scheduleRes.status });
     }
 
     const schedule = await scheduleRes.json();
-    
+
     return NextResponse.json(schedule);
 
   } catch (error) {
-    console.error('Failed to load schedule:', error);
+    console.error('❌ API-Fehler:', error);
 
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
