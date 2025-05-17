@@ -1,0 +1,40 @@
+import { useMemo, useState } from 'react';
+import type { Group } from '@/types/group';
+
+export type SortOption = 'alphabet' | 'members' | 'newest';
+
+export const sortOptions = [
+  { label: 'Alphabetical', value: 'alphabet' },
+  { label: 'Most Members', value: 'members' },
+  { label: 'Newest', value: 'newest' },
+];
+
+export function useGroupFilter(groups: Group[]) {
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<SortOption>('alphabet');
+
+  const filteredGroups = useMemo(() => {
+    const filtered = groups.filter((g) =>
+      g.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    switch (sort) {
+      case 'alphabet':
+        return filtered.sort((a, b) => a.name.localeCompare(b.name));
+      case 'members':
+        return filtered.sort((a, b) => (b.members?.length ?? 0) - (a.members?.length ?? 0));
+      case 'newest':
+        return filtered.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+      default:
+        return filtered;
+    }
+  }, [groups, search, sort]);
+
+  return {
+    search,
+    setSearch,
+    sort,
+    setSort,
+    filteredGroups,
+  };
+}
