@@ -50,14 +50,12 @@ export async function GET(req: NextRequest) {
     );
 
     if (scheduleRes.status === 404) {
-      console.warn(`🟡 No schedule found for ${startingAt} → likely semester break`);
 
       return NextResponse.json({ days: [] });
     }
 
     if (!scheduleRes.ok) {
-      console.error(`ZHAW error (${scheduleRes.status}):`, await scheduleRes.text());
-
+        
       return NextResponse.json({ error: 'Failed to fetch ZHAW calendar' }, { status: scheduleRes.status });
     }
 
@@ -66,6 +64,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(schedule);
 
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('❌ API-Fehler:', error);
 
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

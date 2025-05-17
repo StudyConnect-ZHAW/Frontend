@@ -5,112 +5,59 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import enLocale from '@fullcalendar/core/locales/en-gb';
-
-// Typdefinition
-interface CalendarEvent {
-  title: string;
-  start: string;
-  end: string;
-  color?: string;
-  allDay?: boolean;
-  extendedProps?: {
-    isHoliday?: boolean;
-  };
-}
-
-function mapZhawDaysToEvents(data: any): CalendarEvent[] {
-  return (data.days ?? []).flatMap((day: any) => {
-    if (!Array.isArray(day.events)) return [];
-
-    return day.events.map((event: any) => {
-      const isHoliday =
-        event.startTime?.includes('T00:00') &&
-        !event.description &&
-        !!event.name;
-
-      return {
-        title: isHoliday ? `${event.name}` : (event.name || event.description || 'Event'),
-        start: event.startTime,
-        end: event.endTime,
-        color: isHoliday ? '#F85A6D' : '#EC3349',
-        allDay: isHoliday ? true : undefined,
-        extendedProps: {
-          isHoliday,
-        },
-      };
-    });
-  });
-}
+import { mapZhawDaysToEvents } from '@/lib/calendar';
+import type { EventSourceFuncArg, EventInput } from '@fullcalendar/core';
+import type { ZhawSchedule } from '@/types/calendar';
 
 export default function Calendar() {
   const fetchEventsDynamically = useCallback(
-    async (fetchInfo: any, successCallback: any, failureCallback: any) => {
+    async (
+      fetchInfo: EventSourceFuncArg,
+      successCallback: (events: EventInput[]) => void,
+      failureCallback: (error: Error) => void
+    ) => {
       try {
-        const rawStart = new Date(fetchInfo.start);
-        rawStart.setDate(rawStart.getDate() + 1);
-        const viewStart = rawStart;
-
+        const viewStart = new Date(fetchInfo.start);
+        viewStart.setDate(viewStart.getDate() + 1);
         const viewEnd = new Date(fetchInfo.end);
-        const maxDays = 7;
-        const lastAllowedDate = new Date(viewEnd);
-        lastAllowedDate.setDate(lastAllowedDate.getDate() - 1);
-
-        const allEvents: CalendarEvent[] = [];
-
+        viewEnd.setDate(viewEnd.getDate() - 1);
+      
+        const allEvents: EventInput[] = [];
         const fetchedWeeks = new Set<string>();
-
-        for (
-          let date = new Date(viewStart);
-          date <= lastAllowedDate;
-        ) {
+        const maxDays = 7;
+      
+        for (let date = new Date(viewStart); date <= viewEnd; date.setDate(date.getDate() + maxDays)) {
           const startingAt = date.toISOString().split('T')[0];
-        
-          if (fetchedWeeks.has(startingAt)) {
-            date.setDate(date.getDate() + maxDays);
-            continue;
-          }
+          if (fetchedWeeks.has(startingAt)) {continue;}
           fetchedWeeks.add(startingAt);
-        
+      
           const res = await fetch(`/api/calendar?startingAt=${startingAt}`);
-          if (!res.ok) {
-            date.setDate(date.getDate() + maxDays);
-            continue;
-          }
-        
-          const data = await res.json();
-
-          const allDaysEmpty =
-            !data.days ||
-            data.days.length === 0 ||
-            data.days.every((day: any) => !day.events || day.events.length === 0);
-          
-          if (allDaysEmpty) {
-            const start = new Date(date);
+          if (!res.ok) {continue;}
+      
+          const data: ZhawSchedule = await res.json();
+      
+          const isWeekEmpty =
+                !data.days || data.days.length === 0 ||
+                data.days.every((day) => !day.events || day.events.length === 0);
+      
+          if (isWeekEmpty) {
             const end = new Date(date);
             end.setDate(end.getDate() + maxDays);
-          
             allEvents.push({
               title: 'Semesterunterbruch',
-              start: start.toISOString().split('T')[0],
+              start: startingAt,
               end: end.toISOString().split('T')[0],
               allDay: true,
-              color: '#F85A6D',
-              extendedProps: {
-                isHoliday: true,
-              },
+              color: '#FACC15',
             });
           } else {
-            const events = mapZhawDaysToEvents(data);
-            allEvents.push(...events);
+            allEvents.push(...mapZhawDaysToEvents(data));
           }
-        
-          // immer ans Ende verschieben, damit jede Woche durchlaufen wird
-          date.setDate(date.getDate() + maxDays);
         }
-
-        successCallback(allEvents);
+      
+        successCallback(allEvents as EventInput[]);
       } catch (err) {
-        failureCallback(err);
+        failureCallback(err as Error);
       }
     },
     []
