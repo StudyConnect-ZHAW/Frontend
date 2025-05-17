@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from "react";
-import { useGroups } from "@/hooks/useGroups";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PageHeader from "@/components/PageHeader";
 import GroupCard from "@/components/GroupCard";
@@ -10,37 +9,27 @@ import Selector from "@/components/Selector";
 import Button, { ButtonVariant } from "@/components/Button";
 import CreateGroupModal from "@/components/CreateGroupModal";
 import JoinGroupModal from "@/components/JoinGroupModal";
+import { useGroupFilter, sortOptions, SortOption, } from "@/hooks/useGroupsFilter";
+import { useGroups } from "@/hooks/useGroups";
 
-const sortOptions = [
-  { label: 'Alphabetical', value: 'alphabet' },
-  { label: 'Most Members', value: 'members' },
-  { label: 'Newest', value: 'newest' },
-]
-
-type SortOption = 'alphabet'; // TODO: Add the other options
+const userId = 'some-user-id';
 
 const GroupsPage = () => {
   const { t } = useTranslation(['groups', 'common']);
 
-  const { groups = [], isLoading } = useGroups();
-  const [search, setSearch] = useState('');
-  const [sort, setSort] = useState<SortOption>('alphabet');
-
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const filtered = useMemo(() => {
-    let result = groups.filter((g) =>
-      g.name.toLowerCase().includes(search.toLowerCase())
-    );
+  const {
+    myGroups,
+    availableGroups,
+    loading,
+    error,
+    handleJoin,
+    handleLeave,
+  } = useGroups(userId);
 
-    switch (sort) {
-      case 'alphabet':
-        return result.sort((a, b) => a.name.localeCompare(b.name));
-      default:
-        return result;
-    }
-  }, [groups, search, sort]);
+  const { search, setSearch, sort, setSort, filteredGroups: filteredMyGroups } = useGroupFilter(myGroups);
 
   return (
     <div className="flex flex-col h-full">
@@ -79,28 +68,46 @@ const GroupsPage = () => {
       </div>
 
       {/* Groups grid */}
-      <div className="grow overflow-y-auto pr-4">
-        {isLoading ? (
+      <div className="grow overflow-y-auto">
+        {loading ? (
           <div className="flex items-center justify-center h-full text-primary text-xl">
             Loading...
           </div>
-        ) : filtered.length === 0 ? (
+        ) : error ? (
           <div className="flex items-center justify-center h-full text-primary text-xl">
-            No groups found.
+            {error}
+          </div>
+        ) : filteredMyGroups.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-primary text-xl">
+            You don't have any groups.
           </div>
         ) : (
           <div className="grid gap-4 grid-cols-3">
-            {filtered.map((group) => (
-              <GroupCard key={group.groupId} group={group} />
+            {filteredMyGroups.map((group) => (
+              <GroupCard
+                key={group.groupId}
+                group={group}
+                joined={true}
+                onLeave={() => handleLeave(group.groupId)}
+              />
             ))}
           </div>
         )}
       </div>
 
-      {showJoinModal && <JoinGroupModal onClose={() => setShowJoinModal(false)} />}
+      {showJoinModal && (
+        <JoinGroupModal
+          onClose={() => setShowJoinModal(false)}
+          groups={availableGroups}
+          onJoin={handleJoin}
+          error={error ?? undefined}
+          loading={loading}
+        />
+      )}
+
       {showCreateModal && <CreateGroupModal onClose={() => setShowCreateModal(false)} />}
     </div>
   );
-}
+};
 
 export default GroupsPage;

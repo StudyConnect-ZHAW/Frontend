@@ -1,44 +1,24 @@
 import { Group } from "@/types/group";
-import { useMemo, useState } from "react";
 import SearchInput from "./SearchInput";
 import Selector from "./Selector";
 import GroupCard from "./GroupCard";
+import { SortOption, sortOptions, useGroupFilter } from "@/hooks/useGroupsFilter";
 
 interface Props {
   onClose: () => void;
+  groups: Group[];
+  onJoin: (groupId: string) => void;
+  error?: string;
+  loading?: boolean;
 }
 
-const sortOptions = [
-  { label: 'Alphabetical', value: 'alphabet' },
-  { label: 'Most Members', value: 'members' },
-  { label: 'Newest', value: 'newest' },
-];
-
-type SortOption = 'alphabet'; // TODO: Add the other options
-
-export default function JoinGroupModal({ onClose }: Props) {
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [search, setSearch] = useState('');
-  const [sort, setSort] = useState<SortOption>('alphabet');
-
-  // TODO: Fetch groups using API function
-
-  const filtered = useMemo(() => {
-    let result = groups.filter((g) =>
-      g.name.toLowerCase().includes(search.toLowerCase())
-    );
-    switch (sort) {
-      case 'alphabet':
-        return result.sort((a, b) => a.name.localeCompare(b.name));
-      default:
-        return result;
-    }
-  }, [groups, search, sort]);
+export default function JoinGroupModal({ onClose, groups, onJoin, error, loading }: Props) {
+  const { search, setSearch, sort, setSort, filteredGroups } = useGroupFilter(groups);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div
-        className="bg-primary-bg shadow-lg p-6 w-full max-w-4xl h-[80vh] relative border-main rounded-2xl"
+        className="bg-primary-bg shadow-lg p-6 w-full max-w-4xl h-[80vh] relative border-main rounded-2xl flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -66,15 +46,28 @@ export default function JoinGroupModal({ onClose }: Props) {
         </div>
 
         {/* Groups grid */}
-        <div className="grow overflow-y-auto">
-          {filtered.length === 0 ? (
+        <div className="flex-1 overflow-y-auto pr-4">
+          {loading ? (
+            <div className="flex items-center justify-center h-full text-primary text-xl">
+              Loading...
+            </div>
+          ) : error ? (
+            <div className="flex items-center justify-center h-full text-primary text-xl">
+              {error}
+            </div>
+          ) : filteredGroups.length === 0 ? (
             <div className="flex items-center justify-center h-full text-primary text-xl">
               No groups found.
             </div>
           ) : (
             <div className="grid gap-4 grid-cols-2">
-              {filtered.map((group) => (
-                <GroupCard key={group.groupId} group={group} />
+              {filteredGroups.map((group) => (
+                <GroupCard
+                  key={group.groupId}
+                  group={group}
+                  joined={false}
+                  onJoin={() => onJoin(group.groupId)}
+                />
               ))}
             </div>
           )}

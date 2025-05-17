@@ -31,9 +31,39 @@ export async function getAllGroups(): Promise<Group[]> {
   return handleResponse<Group[]>(res);
 }
 
+export async function getOwnGroups(userId: string): Promise<Group[]> {
+  const res = await fetch(`${BASE_URL}/users/${userId}/groups`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: getRequestHeaders(),
+  });
+
+  return handleResponse<Group[]>(res);
+}
+
 export async function getGroupById(id: string): Promise<Group> {
   const res = await fetch(`${BASE_URL}/groups/${id}`, {
     method: 'GET',
+    credentials: 'include',
+    headers: getRequestHeaders(),
+  });
+
+  return handleResponse<Group>(res);
+}
+
+export async function joinGroup(id: string): Promise<Group> {
+  const res = await fetch(`${BASE_URL}/groups/${id}/join`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: getRequestHeaders(),
+  });
+
+  return handleResponse<Group>(res);
+}
+
+export async function leaveGroup(id: string): Promise<Group> {
+  const res = await fetch(`${BASE_URL}/groups/${id}/leave`, {
+    method: 'POST',
     credentials: 'include',
     headers: getRequestHeaders(),
   });
