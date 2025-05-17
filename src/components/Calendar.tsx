@@ -48,7 +48,7 @@ export default function Calendar() {
               start: startingAt,
               end: end.toISOString().split('T')[0],
               allDay: true,
-              color: '#FACC15',
+              color: '#F85A6D',
             });
           } else {
             allEvents.push(...mapZhawDaysToEvents(data));

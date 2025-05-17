@@ -1,5 +1,3 @@
-// lib/calendar.ts
-
 import type { CalendarEvent, ZhawSchedule } from '@/types/calendar';
 
 export function mapZhawDaysToEvents(data: ZhawSchedule): CalendarEvent[] {
