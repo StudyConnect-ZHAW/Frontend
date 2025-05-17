@@ -18,6 +18,8 @@
   "copyright": "All Rights Reserved",
   "toast": {
     "titleSuccess": "Success",
+    "titleError": "Error",
     "saveSuccess": "Successfully saved the changes."
-  }
+  },
+  "loading": "Laden..."
 }
