@@ -1,15 +1,4 @@
 {
   "title": "Calendar",
-  "semester_break": "Semester Break",
-  "Karfreitag": "Good Friday",
-  "Ostermontag": "Easter Monday",
-  "Ostersamstag (vor- oder nachgeholt)": "Easter Saturday (rescheduled)",
-  "Tag der Arbeit": "Labour Day",
-  "Pfingstmontag": "Whit Monday",
-  "Auffahrt": "Ascension Day",
-  "Auffahrt ab 15:00h": "Ascension Day from 3:00 p.m.",
-  "Gründonnerstag ab 15:00h": "Maundy Thursday from 3:00 p.m.",
-  "Heiliger Abend": "Christmas Eve",
-  "Weihnachtstag": "Christmas Day",
-  "Stephanstag": "Boxing Day"
+  "semesterBreak": "Semester Break"
 }

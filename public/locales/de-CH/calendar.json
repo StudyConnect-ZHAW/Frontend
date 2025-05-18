@@ -1,15 +1,4 @@
 {
   "title": "Kalender",
-  "semester_break": "Semesterunterbruch",
-  "Karfreitag": "Karfreitag",
-  "Ostermontag": "Ostermontag",
-  "Ostersamstag (vor- oder nachgeholt)": "Ostersamstag (vor- oder nachgeholt)",
-  "Tag der Arbeit": "Tag der Arbeit",
-  "Pfingstmontag": "Pfingstmontag",
-  "Auffahrt": "Auffahrt",
-  "Auffahrt ab 15:00h": "Auffahrt ab 15:00h",
-  "Gründonnerstag ab 15:00h": "Gründonnerstag ab 15:00h",
-  "Heiliger Abend": "Heiliger Abend",
-  "Weihnachtstag": "Weihnachtstag",
-  "Stephanstag": "Stephanstag"
+  "semesterBreak": "Semesterunterbruch"
 }

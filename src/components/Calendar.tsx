@@ -4,15 +4,16 @@ import React, { useCallback } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { mapZhawDaysToEvents } from '@/lib/calendar';
-import type { EventSourceFuncArg, EventInput } from '@fullcalendar/core';
-import type { ZhawSchedule } from '@/types/calendar';
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import deLocale from '@fullcalendar/core/locales/de';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
+
+import { mapZhawDaysToEvents } from '@/lib/calendar';
+import { fetchPublicHolidays } from '@/lib/openholidays';
+import type { EventSourceFuncArg, EventInput } from '@fullcalendar/core';
+import type { ZhawSchedule } from '@/types/calendar';
 
 export default function Calendar() {
-
   const { t, i18n } = useTranslation(['calendar']);
   const calendarLocale = i18n.language === 'de-CH' ? deLocale : enLocale;
 
@@ -27,46 +28,55 @@ export default function Calendar() {
         viewStart.setDate(viewStart.getDate() + 1);
         const viewEnd = new Date(fetchInfo.end);
         viewEnd.setDate(viewEnd.getDate() - 1);
-      
+
         const allEvents: EventInput[] = [];
         const fetchedWeeks = new Set<string>();
         const maxDays = 7;
-      
+
+        const publicHolidays = await fetchPublicHolidays(viewStart.getFullYear());
+        allEvents.push(...publicHolidays);
+
         for (let date = new Date(viewStart); date <= viewEnd; date.setDate(date.getDate() + maxDays)) {
           const startingAt = date.toISOString().split('T')[0];
           if (fetchedWeeks.has(startingAt)) {continue;}
           fetchedWeeks.add(startingAt);
-      
+
           const res = await fetch(`/api/calendar?startingAt=${startingAt}`);
           if (!res.ok) {continue;}
-      
+
           const data: ZhawSchedule = await res.json();
-      
+
           const isWeekEmpty =
-                !data.days || data.days.length === 0 ||
-                data.days.every((day) => !day.events || day.events.length === 0);
-      
+            !data.days || data.days.length === 0 ||
+            data.days.every((day) =>
+              !day.events || day.events.every((e) => e.type === 'Holiday')
+            );
+
           if (isWeekEmpty) {
             const end = new Date(date);
             end.setDate(end.getDate() + maxDays);
             allEvents.push({
-              title: t('semester_break'),
+              title: t('semesterBreak'),
               start: startingAt,
               end: end.toISOString().split('T')[0],
               allDay: true,
               color: '#F85A6D',
             });
           } else {
-            allEvents.push(...mapZhawDaysToEvents(data, t));
+            const filtered = data.days.map((day) => ({
+              ...day,
+              events: (day.events ?? []).filter((e) => e.type !== 'Holiday'),
+            }));
+            allEvents.push(...mapZhawDaysToEvents({ days: filtered }));
           }
         }
-      
-        successCallback(allEvents as EventInput[]);
+
+        successCallback(allEvents);
       } catch (err) {
         failureCallback(err as Error);
       }
     },
-    []
+    [t]
   );
 
   return (
