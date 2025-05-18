@@ -4,12 +4,18 @@ import React, { useCallback } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import enLocale from '@fullcalendar/core/locales/en-gb';
 import { mapZhawDaysToEvents } from '@/lib/calendar';
 import type { EventSourceFuncArg, EventInput } from '@fullcalendar/core';
 import type { ZhawSchedule } from '@/types/calendar';
+import enLocale from '@fullcalendar/core/locales/en-gb';
+import deLocale from '@fullcalendar/core/locales/de';
+import { useTranslation } from "react-i18next";
 
 export default function Calendar() {
+
+  const { t, i18n } = useTranslation(['calendar']);
+  const calendarLocale = i18n.language === 'de-CH' ? deLocale : enLocale;
+
   const fetchEventsDynamically = useCallback(
     async (
       fetchInfo: EventSourceFuncArg,
@@ -44,14 +50,14 @@ export default function Calendar() {
             const end = new Date(date);
             end.setDate(end.getDate() + maxDays);
             allEvents.push({
-              title: 'Semesterunterbruch',
+              title: t('semester_break'),
               start: startingAt,
               end: end.toISOString().split('T')[0],
               allDay: true,
               color: '#F85A6D',
             });
           } else {
-            allEvents.push(...mapZhawDaysToEvents(data));
+            allEvents.push(...mapZhawDaysToEvents(data, t));
           }
         }
       
@@ -75,7 +81,7 @@ export default function Calendar() {
             right: 'dayGridMonth,timeGridWeek,timeGridDay',
           }}
           events={fetchEventsDynamically}
-          locale={enLocale}
+          locale={calendarLocale}
         />
       </div>
     </div>

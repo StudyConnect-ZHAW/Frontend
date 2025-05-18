@@ -3,6 +3,7 @@ export interface ZhawEvent {
     endTime: string;
     name?: string;
     description?: string;
+    type?: string;
   }
   
 export interface ZhawDay {
