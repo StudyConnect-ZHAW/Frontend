@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
+import Calendar from '@/components/Calendar';
 
 const HomePage = () => {
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
@@ -73,7 +74,7 @@ const HomePage = () => {
 
           {/* Right column */}
           <div className="flex flex-col flex-grow basis-0">
-            <WIPSection />
+            <Calendar initialView="timeGridDay" showHeader={false} />
           </div>
         </div>
       </div>
