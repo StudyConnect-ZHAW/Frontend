@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
 
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('❌ API-Fehler:', error);
+    console.error('API-Error:', error);
 
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

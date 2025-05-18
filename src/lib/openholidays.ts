@@ -1,4 +1,4 @@
-import type { OpenHoliday } from '@/types/openHolidays';
+import type { OpenHoliday } from '@/types/openholidays';
 import i18n from 'i18next';
 
 export async function fetchPublicHolidays(year: number) {
