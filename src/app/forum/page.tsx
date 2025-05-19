@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import PageHeader from "@/components/PageHeader";
-import ForumPost, { ForumPostData } from "@/components/ForumPost";
+import { ForumPostData } from "@/types/forum";
+import ForumPost from "@/components/ForumPost";
 import SearchField from "@/components/SearchField";
 import SortField from "@/components/SortField";
 import Link from "next/link";
@@ -19,21 +20,35 @@ export default function ForumPage() {
 
   /* ---- Fetch helpers ------------------------------------------ */
   const fetchPosts = React.useCallback(async (q = "") => {
+    console.log("[fetchPosts] Fetching posts with query:", q);
     setLoading(true);
     try {
       const url = q.trim()
         ? `${API_BASE_URL}/api/v1/posts/search?query=${encodeURIComponent(q)}`
         : `${API_BASE_URL}/api/v1/posts`;
       const res = await fetch(url, { cache: "no-store" });
+
+      console.log("[fetchPosts] Status:", res.status);
+
       if (res.status === 404) {
+        console.warn("[fetchPosts] No posts found (404)");
         setPosts([]);
         return;
       }
-      if (!res.ok) throw new Error(res.statusText);
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`[${res.status}] ${text}`);
+      }
+
       const data = await res.json();
-      setPosts(Array.isArray(data) ? data : []);
+      console.log("[fetchPosts] Received data:", data);
+
+      const safePosts = Array.isArray(data) ? data : [];
+      setPosts(safePosts);
+      console.log("[fetchPosts] Set posts:", safePosts);
     } catch (err) {
-      console.error("Failed to fetch posts", err);
+      console.error("[fetchPosts] Error while fetching posts:", err);
       setPosts([]);
     } finally {
       setLoading(false);
@@ -42,13 +57,21 @@ export default function ForumPage() {
 
   /* ---- Initial load ------------------------------------------- */
   React.useEffect(() => {
+    console.log("[useEffect] Initial fetch");
     fetchPosts();
   }, [fetchPosts]);
 
   /* ---- Debounced search --------------------------------------- */
   React.useEffect(() => {
-    const t = setTimeout(() => fetchPosts(search), SEARCH_DEBOUNCE_MS);
-    return () => clearTimeout(t);
+    console.log("[useEffect] Search changed:", search);
+    const t = setTimeout(() => {
+      console.log("[useEffect] Debounced fetch triggered");
+      fetchPosts(search);
+    }, SEARCH_DEBOUNCE_MS);
+    return () => {
+      console.log("[useEffect] Cleaning up debounce");
+      clearTimeout(t);
+    };
   }, [search, fetchPosts]);
 
   /* ---- Render -------------------------------------------------- */
@@ -57,14 +80,22 @@ export default function ForumPage() {
       <PageHeader title="Forum" />
 
       {/* new post form */}
-      <NewPostForm onPostCreated={() => fetchPosts(search)} />
+      <NewPostForm
+        onPostCreated={() => {
+          console.log("[NewPostForm] Post created → refetching");
+          fetchPosts(search);
+        }}
+      />
 
       {/* search & sort */}
       <div className="mt-4 flex flex-row items-center gap-4">
         <SearchField
           value={search}
           placeholder="Search…"
-          onChange={setSearch}
+          onChange={(v) => {
+            console.log("[SearchField] Updated search:", v);
+            setSearch(v);
+          }}
         />
         <SortField /* TODO: wire‑up with backend sort */ />
       </div>
@@ -74,12 +105,22 @@ export default function ForumPage() {
         <p className="mt-4">Loading…</p>
       ) : (
         <div className="mt-4 flex flex-col gap-4">
-          {posts.map((p) => (
-            <Link key={p.id} href={`/forum/${p.id}`} className="hover:opacity-80">
-              <ForumPost post={p} />
-            </Link>
-          ))}
-          {!posts.length && <p className="text-sm text-gray-500">No posts found.</p>}
+          {posts.map((p, i) => {
+            console.log(`[Render] Post[${i}]:`, p);
+            return (
+              <div key={p.forumPostId}>
+                <Link
+                  href={`/forum/${p.forumPostId}`}
+                  className="hover:opacity-80"
+                >
+                  <ForumPost post={p} />
+                </Link>
+              </div>
+            );
+          })}
+          {!posts.length && (
+            <p className="text-sm text-gray-500">No posts found.</p>
+          )}
         </div>
       )}
     </div>

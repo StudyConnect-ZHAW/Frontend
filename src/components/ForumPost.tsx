@@ -2,17 +2,7 @@
 
 import React from "react";
 import { FiThumbsUp, FiMessageSquare, FiShare2 } from "react-icons/fi";
-
-export interface ForumPostData {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  createdAt: string;
-  likes: number;
-  commentsCount: number;
-  shares: number;
-}
+import { ForumPostData } from "@/types/forum";
 
 interface Props {
   post: ForumPostData;
@@ -36,7 +26,8 @@ export default function ForumPost({ post }: Props) {
           className="whitespace-nowrap text-xs text-gray-500"
           dateTime={post.createdAt}
         >
-          {new Date(post.createdAt).toLocaleDateString()} • {post.author}
+          {new Date(post.createdAt).toLocaleDateString()} •{" "}
+          {`${post.author.firstName} ${post.author.lastName}`}
         </time>
       </header>
 
