@@ -5,7 +5,7 @@ import { FiSend } from "react-icons/fi";
 
 interface Props {
   onPostCreated?: () => void;
-  currentUserId?: string;        // override if you already know the signed-in user
+  currentUserId?: string;
 }
 
 interface Category {
@@ -17,30 +17,31 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
 
 export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
-  const [title,       setTitle]       = useState("");
-  const [content,     setContent]     = useState("");
-  const [categoryId,  setCategoryId]  = useState<string>("");
-  const [categories,  setCategories]  = useState<Category[]>([]);
-  const [isLoading,   setLoading]     = useState(false);
-  const [errorMsg,    setErrorMsg]    = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [categoryId, setCategoryId] = useState<string>("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  /* fetch categories once */
   useEffect(() => {
     (async () => {
       try {
-        const res  = await fetch(`${API_BASE_URL}/api/v1/categories`, { cache: "no-store" });
+        const res = await fetch(`${API_BASE_URL}/api/v1/categories`, {
+          cache: "no-store",
+        });
         if (!res.ok) throw new Error(res.statusText);
         const data = await res.json();
-        console.log("Fetched categories", data);
-        setCategories(
-          data.map((c: any) => ({
-            id:   c.forumCategoryId,
-            name: c.name,
-          }))
-        );
-        data.length && setCategoryId(data[0].id);
+        const formattedCategories = data.map((c: any) => ({
+          id: c.forumCategoryId,
+          name: c.name,
+        }));
+        setCategories(formattedCategories);
+        if (formattedCategories.length) {
+          setCategoryId(formattedCategories[0].id);
+        }
       } catch (e) {
-        console.error("Could not fetch categories", e);
+        setErrorMsg("Failed to load categories.");
       }
     })();
   }, []);
@@ -49,35 +50,49 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
     e.preventDefault();
     if (!title.trim() || !categoryId) return;
 
-    const userId =
-      currentUserId ??
-      localStorage.getItem("userId");
+    const userId = currentUserId ?? "d3f5c8c4-56a9-11ec-90d6-0242ac120003";
 
-    const createDto = {
+    const payload = {
       userId,
-      title:           title.trim(),
+      title: title.trim(),
       forumCategoryId: categoryId,
-      content:         content.trim() || null,     // nullable in DTO
+      content: content.trim(),
     };
 
-    console.log("Creating post", createDto);
     try {
       setLoading(true);
       setErrorMsg("");
 
       const res = await fetch(`${API_BASE_URL}/api/v1/posts`, {
-        method:  "POST",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ createDto }),
+        body: JSON.stringify(payload), // <-- korrektes JSON schicken
       });
 
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) {
+        // ***** Body nur EINMAL lesen *****
+        const errorText = await res.text();
 
+        // Versuchen, Text als JSON zu interpretieren
+        let message = errorText;
+        try {
+          const json = JSON.parse(errorText);
+          message =
+            json?.errors?.[0]?.defaultMessage || // z. B. aus Spring-Validation
+            json?.message ||
+            JSON.stringify(json);
+        } catch {
+          /* war kein JSON – rohen Text behalten */
+        }
+        throw new Error(message);
+      }
+
+      // Erfolg
       onPostCreated?.();
       setTitle("");
       setContent("");
     } catch (err: any) {
-      setErrorMsg(err.message ?? "Something went wrong");
+      setErrorMsg(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -128,7 +143,13 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
         className="ml-auto flex items-center gap-1 rounded bg-[#ec3349] px-2 py-1 text-sm font-bold text-white transition hover:scale-105 hover:bg-black disabled:opacity-60"
         style={{ borderRadius: "7px" }}
       >
-        {isLoading ? "Posting…" : <>Post <FiSend /></>}
+        {isLoading ? (
+          "Posting…"
+        ) : (
+          <>
+            Post <FiSend />
+          </>
+        )}
       </button>
     </form>
   );
