@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 import PageHeader from "@/components/PageHeader";
 import GroupCard from "@/components/GroupCard";
 import SearchInput from "@/components/SearchInput";
@@ -12,13 +13,33 @@ import JoinGroupModal from "@/components/JoinGroupModal";
 import { useGroupFilter, SortOption } from "@/hooks/useGroupsFilter";
 import { useGroups } from "@/hooks/useGroups";
 
-const userId = 'some-user-id';
-
 const GroupsPage = () => {
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const { t } = useTranslation(['groups', 'common']);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/me');
+        if (!res.ok) {
+          router.push('/login');
+          return;
+        }
+
+        const user = await res.json();
+        setUserId(user.userId);
+      } catch (err) {
+        console.error('Error fetching user:', err);
+        router.push('/login');
+      }
+    };
+
+    fetchUser();
+  }, [router]);
 
   const {
     myGroups,
@@ -30,7 +51,22 @@ const GroupsPage = () => {
     handleCreate,
   } = useGroups(userId);
 
-  const { search, setSearch, sort, setSort, sortOptions, filteredGroups: filteredMyGroups } = useGroupFilter(myGroups);
+  const {
+    search,
+    setSearch,
+    sort,
+    setSort,
+    sortOptions,
+    filteredGroups: filteredMyGroups
+  } = useGroupFilter(myGroups);
+
+  if (!userId) {
+    return (
+      <div className="flex items-center justify-center h-full text-primary text-xl">
+        {t('common:loading')}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -106,8 +142,9 @@ const GroupsPage = () => {
         />
       )}
 
-      {showCreateModal && (
+      {showCreateModal && userId && (
         <CreateGroupModal
+          userId={userId}
           onClose={() => setShowCreateModal(false)}
           onCreate={handleCreate}
         />

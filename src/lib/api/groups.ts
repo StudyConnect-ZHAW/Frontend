@@ -1,5 +1,5 @@
 import type { Group, GroupCreateData, GroupUpdateData } from '@/types/group';
-import { handleResponse } from '@/lib/api/handleResponse';
+import { parseResponse } from '@/lib/api/parseResponse';
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}v1`;
 
@@ -18,7 +18,7 @@ export async function createGroup(data: GroupCreateData): Promise<Group> {
     body: JSON.stringify(data),
   });
 
-  return handleResponse<Group>(res);
+  return parseResponse<Group>(res);
 }
 
 export async function getAllGroups(): Promise<Group[]> {
@@ -28,7 +28,7 @@ export async function getAllGroups(): Promise<Group[]> {
     headers: getRequestHeaders(),
   });
 
-  return handleResponse<Group[]>(res);
+  return parseResponse<Group[]>(res);
 }
 
 export async function getOwnGroups(userId: string): Promise<Group[]> {
@@ -38,7 +38,7 @@ export async function getOwnGroups(userId: string): Promise<Group[]> {
     headers: getRequestHeaders(),
   });
 
-  return handleResponse<Group[]>(res);
+  return parseResponse<Group[]>(res);
 }
 
 export async function getGroupById(groupId: string): Promise<Group> {
@@ -48,7 +48,7 @@ export async function getGroupById(groupId: string): Promise<Group> {
     headers: getRequestHeaders(),
   });
 
-  return handleResponse<Group>(res);
+  return parseResponse<Group>(res);
 }
 
 export async function joinGroup(groupId: string): Promise<Group> {
@@ -58,7 +58,7 @@ export async function joinGroup(groupId: string): Promise<Group> {
     headers: getRequestHeaders(),
   });
 
-  return handleResponse<Group>(res);
+  return parseResponse<Group>(res);
 }
 
 export async function leaveGroup(groupId: string): Promise<Group> {
@@ -68,10 +68,10 @@ export async function leaveGroup(groupId: string): Promise<Group> {
     headers: getRequestHeaders(),
   });
 
-  return handleResponse<Group>(res);
+  return parseResponse<Group>(res);
 }
 
-export async function updateGroup(groupId: string, data: GroupUpdateData): Promise<Group> {
+export async function updateGroup(groupId: string, data: GroupUpdateData): Promise<string> {
   const res = await fetch(`${BASE_URL}/groups/${groupId}`, {
     method: 'PUT',
     credentials: 'include',
@@ -79,7 +79,8 @@ export async function updateGroup(groupId: string, data: GroupUpdateData): Promi
     body: JSON.stringify(data),
   });
 
-  return handleResponse<Group>(res);
+  // Success response is "Group updated successfully"
+  return parseResponse<string>(res);
 }
 
 export async function deleteGroup(groupId: string): Promise<void> {
@@ -89,5 +90,10 @@ export async function deleteGroup(groupId: string): Promise<void> {
     headers: getRequestHeaders(),
   });
 
-  await handleResponse<void>(res);
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || 'Unknown error');
+  }
+
+  // 204 No Content
 }

@@ -21,7 +21,9 @@ export async function GET() {
     }
 
     const user = await res.json();
-    return NextResponse.json(user);
+    const userWithId = { ...user, userId: decoded.oid };
+
+    return NextResponse.json(userWithId);
   } catch (err) {
     console.error('Failed to decode token:', err);
     return NextResponse.json({ error: 'Invalid token' }, { status: 400 });

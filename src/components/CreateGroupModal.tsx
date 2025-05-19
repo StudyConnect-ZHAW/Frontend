@@ -6,13 +6,12 @@ import { GroupCreateData } from '@/types/group';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
+  userId: string;
   onClose: () => void;
   onCreate: (data: GroupCreateData) => void;
 }
 
-const userId = 'some-user-id';
-
-export default function CreateGroupModal({ onClose, onCreate }: Props) {
+export default function CreateGroupModal({ userId, onClose, onCreate }: Props) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 

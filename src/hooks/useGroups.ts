@@ -10,7 +10,7 @@ import type { Group, GroupCreateData } from '@/types/group';
 import { showToast, ToastType } from '@/components/Toast';
 import { useTranslation } from 'react-i18next';
 
-export function useGroups(userId: string) {
+export function useGroups(userId: string | null) {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [availableGroups, setAvailableGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,6 +19,8 @@ export function useGroups(userId: string) {
   const { t } = useTranslation(['groups', 'common']);
 
   useEffect(() => {
+    if (!userId) { return };
+
     async function fetchGroups() {
       try {
         setLoading(true);
@@ -26,7 +28,7 @@ export function useGroups(userId: string) {
 
         const [all, own] = await Promise.all([
           getAllGroups(),
-          getOwnGroups(userId),
+          getOwnGroups(userId as string),
         ]);
 
         const ownIds = new Set(own.map((g) => g.groupId));
@@ -46,11 +48,12 @@ export function useGroups(userId: string) {
   }, [userId]);
 
   const handleJoin = async (groupId: string) => {
+    if (!userId) { return };
+
     try {
       const group = await joinGroup(groupId);
       setMyGroups((prev) => [...prev, group]);
       setAvailableGroups((prev) => prev.filter((g) => g.groupId !== groupId));
-
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.joinSuccess'));
     } catch (err) {
       console.error('Failed to join group', err);
@@ -59,13 +62,14 @@ export function useGroups(userId: string) {
   };
 
   const handleLeave = async (groupId: string) => {
+    if (!userId) { return };
+
     try {
       await leaveGroup(groupId);
       const leavingGroup = myGroups.find((g) => g.groupId === groupId);
       if (!leavingGroup) return;
       setAvailableGroups((prev) => [...prev, leavingGroup]);
       setMyGroups((prev) => prev.filter((g) => g.groupId !== groupId));
-
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.leaveSuccess'));
     } catch (err) {
       console.error('Failed to leave group', err);
@@ -74,6 +78,8 @@ export function useGroups(userId: string) {
   };
 
   const handleCreate = async (data: GroupCreateData) => {
+    if (!userId) { return };
+
     try {
       const newGroup = await createGroup({ ...data, ownerId: userId });
       setMyGroups((prev) => [...prev, newGroup]);
@@ -88,7 +94,7 @@ export function useGroups(userId: string) {
   return {
     myGroups,
     availableGroups,
-    loading,
+    loading: loading || !userId,
     error,
     handleJoin,
     handleLeave,
