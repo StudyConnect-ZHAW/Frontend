@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  reactStrictMode: false, // To disable certain code firing twice in DEV
   /* config options here */
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL, // This will be taken from .env file
