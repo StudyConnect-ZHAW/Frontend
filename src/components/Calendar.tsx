@@ -18,6 +18,10 @@ interface CalendarProps {
     showHeader?: boolean;
   }
 
+/*
+* Calendar component for displaying ZHAW schedule and Swiss public holidays
+* Integrates FullCalendar and fetches weekly schedule + holidays dynamically
+*/
 export default function Calendar({ initialView = 'dayGridMonth', showHeader = true }: CalendarProps) {
   const { t, i18n } = useTranslation(['calendar']);
   const calendarLocale = i18n.language === 'de-CH' ? deLocale : enLocale;
@@ -39,14 +43,14 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
         const fetchedWeeks = new Set<string>();
         const maxDays = 7;
 
-        // add public holidays
+        // Add Swiss public holidays for the current year
         const publicHolidays = await fetchPublicHolidays(viewStart.getFullYear());
         allEvents.push(...publicHolidays);
 
-        // fetch events per week
+        // Loop through calendar weeks and fetch events
         for (let date = new Date(viewStart); date <= viewEnd; date.setDate(date.getDate() + maxDays)) {
           const shiftedDate = new Date(date);
-          shiftedDate.setDate(shiftedDate.getDate() + 1);
+          shiftedDate.setDate(shiftedDate.getDate() + 1); // shift to align with ZHAW week start
           const startingAt = shiftedDate.toISOString().split('T')[0];
           if (fetchedWeeks.has(startingAt)) {continue;}
           fetchedWeeks.add(startingAt);
@@ -63,8 +67,9 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
             );
 
           if (isWeekEmpty) {
+            // Add placeholder event for empty weeks (semester break)
             const end = new Date(shiftedDate);
-            end.setDate(end.getDate() + 7);
+            end.setDate(end.getDate() + 7); // mark full week
             allEvents.push({
               title: t('semesterBreak'),
               start: startingAt,
@@ -73,6 +78,7 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
               color: '#F85A6D',
             });
           } else {
+            // Filter and map valid events (exclude holidays)
             const filtered = data.days.map((day) => ({
               ...day,
               events: (day.events ?? []).filter((e) => e.type !== 'Holiday'),

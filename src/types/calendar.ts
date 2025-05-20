@@ -1,3 +1,5 @@
+// * Type definitions for ZHAW schedule and mapped calendar events
+
 export interface ZhawEvent {
     startTime: string;
     endTime: string;

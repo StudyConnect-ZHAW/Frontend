@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
 
+/*
+ * API Route: /api/calendar
+ * Fetches the ZHAW schedule for authenticated users with a valid ZHAW email.
+ * Requires a valid JWT in the 'access_token' cookie.
+ */
 export async function GET(req: NextRequest) {
   try {
     const cookieHeader = req.headers.get('cookie');
 
+    // Extract JWT from cookies
     const token = cookieHeader
       ?.split(';')
       .find((c) => c.trim().startsWith('access_token='))
@@ -27,6 +33,7 @@ export async function GET(req: NextRequest) {
     const user = await userRes.json();
     const email = user.email?.toLowerCase() ?? '';
 
+    // Only ZHAW emails are allowed
     let shortName: string | undefined;
     if (email.endsWith('@students.zhaw.ch') || email.endsWith('@zhaw.ch')) {
       shortName = email.split('@')[0];
@@ -34,6 +41,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email domain' }, { status: 400 });
     }
 
+    // Get the requested date from monday - sunday
     const rawDateStr = req.nextUrl.searchParams.get('startingAt') ?? new Date().toISOString().split('T')[0];
     const date = new Date(rawDateStr);
     date.setDate(date.getDate() + 1);
@@ -55,7 +63,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (!scheduleRes.ok) {
-        
+
       return NextResponse.json({ error: 'Failed to fetch ZHAW calendar' }, { status: scheduleRes.status });
     }
 

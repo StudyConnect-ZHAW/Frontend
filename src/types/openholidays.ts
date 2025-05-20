@@ -1,3 +1,5 @@
+// * Type definitions for data received from the OpenHolidays API
+
 export interface HolidayName {
     language: string;
     text: string;
