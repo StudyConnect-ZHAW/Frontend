@@ -4,7 +4,6 @@ import React, { useCallback, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import deLocale from '@fullcalendar/core/locales/de';
 import { useTranslation } from 'react-i18next';
@@ -94,14 +93,14 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
     <div className="flex-grow flex items-center justify-center h-full">
       <div className="w-full max-w-4xl h-full">
         <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin]}
           initialView={initialView}
           headerToolbar={
             showHeader
               ? {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
               }
               : false
           }
