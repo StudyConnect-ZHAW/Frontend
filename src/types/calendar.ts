@@ -1,8 +1,3 @@
-export interface CalendarProps {
-    initialView?: 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay' | 'listWeek';
-    showHeader?: boolean;
-  }
-
 export interface ZhawEvent {
     startTime: string;
     endTime: string;

@@ -8,20 +8,11 @@ import WIPSection from "@/components/WIPSection";
 import Calendar from '@/components/Calendar';
 
 const HomePage = () => {
-  const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
   const { t, i18n } = useTranslation('common');
 
   useEffect(() => {
-    const date = new Intl.DateTimeFormat(i18n.language, {
-      weekday: 'long',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).format(new Date());
-    setFormattedDate(date);
-
     const fetchUser = async () => {
       try {
         const res = await fetch('/api/me');
@@ -40,7 +31,7 @@ const HomePage = () => {
     fetchUser();
   }, [i18n.language]);
 
-  if (!userName || !formattedDate) {
+  if (!userName) {
     return null;
   }
 
@@ -53,9 +44,6 @@ const HomePage = () => {
         <div className="flex flex-row gap-8">
           <div className="flex-grow basis-0" />
           <div className="flex-grow basis-0">
-            <div className="text-2xl font-bold">
-              {formattedDate}
-            </div>
           </div>
         </div>
 
@@ -73,7 +61,7 @@ const HomePage = () => {
           </div>
 
           {/* Right column */}
-          <div className="flex flex-col flex-grow basis-0">
+          <div className="flex flex-col gap-4 flex-grow basis-0">
             <Calendar initialView="timeGridDay" showHeader={false} />
           </div>
         </div>

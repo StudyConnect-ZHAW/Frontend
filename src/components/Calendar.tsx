@@ -10,9 +10,14 @@ import deLocale from '@fullcalendar/core/locales/de';
 import { useTranslation } from 'react-i18next';
 
 import { mapZhawDaysToEvents } from '@/lib/calendar';
-import { fetchPublicHolidays } from '@/lib/openholidays';
-import type { EventSourceFuncArg, EventInput } from '@fullcalendar/core';
-import type { CalendarProps, ZhawSchedule } from '@/types/calendar';
+import { fetchPublicHolidays } from '@/lib/api/openholidays';
+import { type EventSourceFuncArg, type EventInput, formatDate } from '@fullcalendar/core';
+import type { ZhawSchedule } from '@/types/calendar';
+
+interface CalendarProps {
+    initialView?: 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay' | 'listWeek';
+    showHeader?: boolean;
+  }
 
 export default function Calendar({ initialView = 'dayGridMonth', showHeader = true }: CalendarProps) {
   const { t, i18n } = useTranslation(['calendar']);
@@ -102,8 +107,20 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
           locale={calendarLocale}
           slotMinTime={slotMinTime}
           slotMaxTime={slotMaxTime}
-          height={initialView === 'timeGridDay' ? 'auto' : undefined}
-          dayHeaderContent={initialView === 'timeGridDay' ? () => null : undefined}
+          dayHeaderContent={
+            initialView === 'timeGridDay'
+              ? (arg) => ({
+                html: formatDate(arg.date, {
+                  weekday: 'long',
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  locale: calendarLocale.code,
+                }),
+              })
+              : undefined
+          }
+          height="100%"
         />
       </div>
     </div>
