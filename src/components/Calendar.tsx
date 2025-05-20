@@ -46,7 +46,9 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
 
         // fetch events per week
         for (let date = new Date(viewStart); date <= viewEnd; date.setDate(date.getDate() + maxDays)) {
-          const startingAt = date.toISOString().split('T')[0];
+          const shiftedDate = new Date(date);
+          shiftedDate.setDate(shiftedDate.getDate() + 1);
+          const startingAt = shiftedDate.toISOString().split('T')[0];
           if (fetchedWeeks.has(startingAt)) {continue;}
           fetchedWeeks.add(startingAt);
 
@@ -62,8 +64,8 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
             );
 
           if (isWeekEmpty) {
-            const end = new Date(date);
-            end.setDate(end.getDate() + maxDays);
+            const end = new Date(shiftedDate);
+            end.setDate(end.getDate() + 7);
             allEvents.push({
               title: t('semesterBreak'),
               start: startingAt,
