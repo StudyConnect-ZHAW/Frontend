@@ -19,7 +19,7 @@ export function useGroups(userId: string | null) {
   const { t } = useTranslation(['groups', 'common']);
 
   useEffect(() => {
-    if (!userId) { return };
+    if (!userId) { return; };
 
     async function fetchGroups() {
       try {
@@ -45,13 +45,13 @@ export function useGroups(userId: string | null) {
     }
 
     fetchGroups();
-  }, [userId]);
+  }, [t, userId]);
 
   const handleJoin = async (groupId: string) => {
-    if (!userId) { return };
+    if (!userId) { return; };
 
     try {
-      const group = await joinGroup(groupId);
+      const group = await joinGroup(groupId, userId);
       setMyGroups((prev) => [...prev, group]);
       setAvailableGroups((prev) => prev.filter((g) => g.groupId !== groupId));
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.joinSuccess'));
@@ -62,12 +62,12 @@ export function useGroups(userId: string | null) {
   };
 
   const handleLeave = async (groupId: string) => {
-    if (!userId) { return };
+    if (!userId) { return; };
 
     try {
-      await leaveGroup(groupId);
+      await leaveGroup(groupId, userId);
       const leavingGroup = myGroups.find((g) => g.groupId === groupId);
-      if (!leavingGroup) return;
+      if (!leavingGroup) { return; };
       setAvailableGroups((prev) => [...prev, leavingGroup]);
       setMyGroups((prev) => prev.filter((g) => g.groupId !== groupId));
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.leaveSuccess'));
@@ -78,7 +78,7 @@ export function useGroups(userId: string | null) {
   };
 
   const handleCreate = async (data: GroupCreateData) => {
-    if (!userId) { return };
+    if (!userId) { return; };
 
     try {
       const newGroup = await createGroup({ ...data, ownerId: userId });
@@ -89,7 +89,7 @@ export function useGroups(userId: string | null) {
       console.error('Failed to create group', err);
       showToast(ToastType.Error, t('common:toast.titleError'), t('toast.createError'));
     }
-  }
+  };
 
   return {
     myGroups,

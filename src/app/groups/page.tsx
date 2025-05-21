@@ -27,6 +27,7 @@ const GroupsPage = () => {
         const res = await fetch('/api/me');
         if (!res.ok) {
           router.push('/login');
+
           return;
         }
 

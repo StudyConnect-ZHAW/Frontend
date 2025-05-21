@@ -23,11 +23,11 @@ export function useGroupFilter(groups: Group[]) {
 
     switch (sort) {
       case 'alphabet':
-        return filtered.sort((a, b) => a.name.localeCompare(b.name));
+        return filtered.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
       case 'members':
         return filtered.sort((a, b) => (b.members?.length ?? 0) - (a.members?.length ?? 0));
       case 'newest':
-        return filtered.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+        return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       default:
         return filtered;
     }

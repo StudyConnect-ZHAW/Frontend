@@ -3,11 +3,11 @@ export interface Group {
   ownerId: string;
   name: string;
   description: string;
-  members: {
+  members?: {
     userId: string;
     name: string;
   }[];
-  creationDate: string;
+  createdAt: string;
 }
 
 export interface GroupCreateData {
