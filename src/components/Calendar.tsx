@@ -7,10 +7,10 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import deLocale from '@fullcalendar/core/locales/de';
 import { useTranslation } from 'react-i18next';
+import { type EventInput, type EventSourceFuncArg, formatDate } from '@fullcalendar/core';
 
 import { mapZhawDaysToEvents } from '@/lib/calendar';
 import { fetchPublicHolidays } from '@/lib/api/openholidays';
-import { type EventSourceFuncArg, type EventInput, formatDate } from '@fullcalendar/core';
 import type { ZhawSchedule } from '@/types/calendar';
 
 interface CalendarProps {
@@ -36,8 +36,11 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
       failureCallback: (error: Error) => void
     ) => {
       try {
-        const viewStart = fetchInfo.start ? new Date(fetchInfo.start) : new Date();
-        const viewEnd = fetchInfo.end ? new Date(fetchInfo.end) : new Date();
+        const viewStart = new Date(fetchInfo.start ?? new Date());
+        const viewEnd = new Date(fetchInfo.end ?? new Date());
+
+        const viewType = (fetchInfo as { view?: { type?: string } }).view?.type ?? initialView;
+        const isDailyView = viewType === 'timeGridDay';
 
         const allEvents: EventInput[] = [];
         const fetchedWeeks = new Set<string>();
@@ -47,43 +50,69 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
         const publicHolidays = await fetchPublicHolidays(viewStart.getFullYear());
         allEvents.push(...publicHolidays);
 
-        // Loop through calendar weeks and fetch events
-        for (let date = new Date(viewStart); date <= viewEnd; date.setDate(date.getDate() + maxDays)) {
-          const shiftedDate = new Date(date);
-          shiftedDate.setDate(shiftedDate.getDate() + 1); // shift to align with ZHAW week start
-          const startingAt = shiftedDate.toISOString().split('T')[0];
-          if (fetchedWeeks.has(startingAt)) {continue;}
-          fetchedWeeks.add(startingAt);
+        if (isDailyView) {
+          const adjustedDate = new Date(viewStart);
+          const startingAt = adjustedDate.toISOString().split('T')[0];
 
-          const res = await fetch(`/api/calendar?startingAt=${startingAt}`);
-          if (!res.ok) {continue;}
+          // Fetch calendar for a single day
+          const res = await fetch(`/api/calendar?startingAt=${startingAt}&view=timeGridDay`);
+          if (!res.ok) {return;}
 
           const data: ZhawSchedule = await res.json();
 
-          const isWeekEmpty =
-            !data.days || data.days.length === 0 ||
-            data.days.every((day) =>
-              !day.events || day.events.every((e) => e.type === 'Holiday')
-            );
+          const filtered = data.days.map((day) => ({
+            ...day,
+            events: (day.events ?? []).filter((e) => e.type !== 'Holiday'),
+          }));
 
-          if (isWeekEmpty) {
-            // Add placeholder event for empty weeks (semester break)
-            const end = new Date(shiftedDate);
-            end.setDate(end.getDate() + 7); // mark full week
-            allEvents.push({
-              title: t('semesterBreak'),
-              start: startingAt,
-              end: end.toISOString().split('T')[0],
-              allDay: true,
-              color: '#F85A6D',
-            });
-          } else {
-            // Filter and map valid events (exclude holidays)
-            const filtered = data.days.map((day) => ({
-              ...day,
-              events: (day.events ?? []).filter((e) => e.type !== 'Holiday'),
-            }));
-            allEvents.push(...mapZhawDaysToEvents({ days: filtered }));
+          // Convert to FullCalendar format and add to event list
+          allEvents.push(...mapZhawDaysToEvents({ days: filtered }));
+        } else {
+          // Weekly/monthly view – loop through each week
+          for (let date = new Date(viewStart); date <= viewEnd; date.setDate(date.getDate() + maxDays)) {
+            const adjustedDate = new Date(date);
+
+            // Shift by +1 day because ZHAW calendar weeks start on Monday (API returns Sunday)
+            adjustedDate.setDate(adjustedDate.getDate() + 1);
+
+            const startingAt = adjustedDate.toISOString().split('T')[0];
+
+            // Avoid duplicate API requests for the same week
+            if (fetchedWeeks.has(startingAt)) {
+              continue;
+            }
+            fetchedWeeks.add(startingAt);
+
+            // Fetch calendar for the current week
+            const res = await fetch(`/api/calendar?startingAt=${startingAt}&view=${viewType}`);
+            if (!res.ok) {continue;}
+
+            const data: ZhawSchedule = await res.json();
+
+            // Check if the week is empty (no regular events, only holidays or none)
+            const isWeekEmpty =
+              !data.days || data.days.length === 0 ||
+              data.days.every((day) => !day.events || day.events.every((e) => e.type === 'Holiday'));
+
+            if (isWeekEmpty) {
+              // Add placeholder event to indicate semester break
+              const end = new Date(adjustedDate);
+              end.setDate(end.getDate() + 7);
+              allEvents.push({
+                title: t('semesterBreak'),
+                start: startingAt,
+                end: end.toISOString().split('T')[0],
+                allDay: true,
+                color: '#F85A6D',
+              });
+            } else {
+              // Filter out holidays and map events to calendar format
+              const filtered = data.days.map((day) => ({
+                ...day,
+                events: (day.events ?? []).filter((e) => e.type !== 'Holiday'),
+              }));
+              allEvents.push(...mapZhawDaysToEvents({ days: filtered }));
+            }
           }
         }
 
@@ -92,7 +121,7 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
         failureCallback(err as Error);
       }
     },
-    [t]
+    [initialView, t]
   );
 
   return (

@@ -42,10 +42,16 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
-    // Get the requested date from monday - sunday
+    // Extract params
     const rawDateStr = req.nextUrl.searchParams.get('startingAt') ?? new Date().toISOString().split('T')[0];
+    const view = req.nextUrl.searchParams.get('view') ?? '';
     const date = new Date(rawDateStr);
-    date.setDate(date.getDate() + 1);
+
+    // ZHAW weeks start on Monday but API returns Sunday, shift only for non-day views
+    if (view !== 'timeGridDay') {
+      date.setDate(date.getDate() + 1);
+    }
+
     const startingAt = date.toISOString().split('T')[0];
 
     const scheduleRes = await fetch(
