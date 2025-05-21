@@ -12,10 +12,14 @@
     "sonar": "sonar-scanner"
   },
   "dependencies": {
-    "i18next-http-backend": "^3.0.2",
     "@azure/msal-node": "^3.5.3",
+    "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/list": "^6.1.17",
+    "@fullcalendar/react": "^6.1.17",
+    "@fullcalendar/timegrid": "^6.1.17",
     "@headlessui/react": "^2.2.2",
     "@tailwindcss/postcss": "^4.1.6",
+    "i18next-http-backend": "^3.0.2",
     "jwt-decode": "^4.0.0",
     "next": "^15.3.2",
     "postcss": "^8.5.3",

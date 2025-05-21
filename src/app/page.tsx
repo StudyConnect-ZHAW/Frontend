@@ -5,25 +5,20 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
+import Calendar from '@/components/Calendar';
 
+// * HomePage component: displays welcome header, sections, and calendar for the current ZHAW user
 const HomePage = () => {
-  const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
   const { t, i18n } = useTranslation('common');
 
   useEffect(() => {
-    const date = new Intl.DateTimeFormat(i18n.language, {
-      weekday: 'long',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).format(new Date());
-    setFormattedDate(date);
-
     const fetchUser = async () => {
       try {
         const res = await fetch('/api/me');
+
+        // If not authenticated, redirect to login
         if (!res.ok) {
           redirect('/login');
         }
@@ -36,10 +31,12 @@ const HomePage = () => {
       }
     };
 
+    // Fetch user data on language change
     fetchUser();
   }, [i18n.language]);
 
-  if (!userName || !formattedDate) {
+  // Don't render the page until the user is loaded
+  if (!userName) {
     return null;
   }
 
@@ -51,11 +48,7 @@ const HomePage = () => {
         {/* Top row: left empty, right shows date */}
         <div className="flex flex-row gap-8">
           <div className="flex-grow basis-0" />
-          <div className="flex-grow basis-0">
-            <div className="text-2xl font-bold">
-              {formattedDate}
-            </div>
-          </div>
+          <div className="flex-grow basis-0" />
         </div>
 
         <div className="flex flex-row gap-8 h-full">
@@ -72,8 +65,8 @@ const HomePage = () => {
           </div>
 
           {/* Right column */}
-          <div className="flex flex-col flex-grow basis-0">
-            <WIPSection />
+          <div className="flex flex-col gap-4 flex-grow basis-0">
+            <Calendar initialView="timeGridDay" showHeader={false} />
           </div>
         </div>
       </div>
