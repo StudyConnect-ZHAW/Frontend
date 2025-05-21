@@ -13,11 +13,13 @@
     "cancel": "Cancel",
     "create": "Create",
     "logout": "Logout",
-    "save": "Save"
+    "save": "Save",
+    "update": "Update"
   },
   "copyright": "All Rights Reserved",
   "toast": {
     "titleSuccess": "Success",
     "saveSuccess": "Successfully saved the changes."
-  }
+  },
+  "calendarInfoText": "Only user@students.zhaw.ch emails are supported for calendar synchronization."
 }
