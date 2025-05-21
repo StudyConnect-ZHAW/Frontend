@@ -33,12 +33,13 @@ export async function GET(req: NextRequest) {
     const user = await userRes.json();
     const email = user.email?.toLowerCase() ?? '';
 
-    // Only ZHAW emails are allowed
+    // Extract the username (before @); must match the ZHAW shortname used in the calendar system
     let shortName: string | undefined;
-    if (email.endsWith('@students.zhaw.ch') || email.endsWith('@zhaw.ch')) {
+
+    if (email.includes('@')) {
       shortName = email.split('@')[0];
     } else {
-      return NextResponse.json({ error: 'Invalid email domain' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
     // Get the requested date from monday - sunday
