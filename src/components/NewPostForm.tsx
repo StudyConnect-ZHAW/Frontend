@@ -1,16 +1,23 @@
 "use client";
 
+/**
+ * NewPostForm component for creating forum posts.
+ * Provides form interface with title, category selection, and content fields.
+ * Handles form submission to API, validation, and error handling.
+ * Uses React hooks for state management and API interactions.
+ */
+
 import React, { useState, useEffect, FormEvent } from "react";
 import { FiSend } from "react-icons/fi";
 
 interface Props {
-  onPostCreated?: () => void;
-  currentUserId?: string;
+  onPostCreated?: () => void; // Optional callback triggered after successful post creation
+  currentUserId?: string; // Optional user ID, fallback value used if not provided
 }
 
 interface Category {
-  id: string;
-  name: string;
+  id: string; // Unique identifier for the category
+  name: string; // Display name of the category
 }
 
 const API_BASE_URL =
@@ -27,16 +34,21 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
   useEffect(() => {
     (async () => {
       try {
+        // Fetch available categories on component mount
         const res = await fetch(`${API_BASE_URL}/api/v1/categories`, {
           cache: "no-store",
         });
         if (!res.ok) throw new Error(res.statusText);
         const data = await res.json();
+
+        // Transform API response to match internal Category interface
         const formattedCategories = data.map((c: any) => ({
           id: c.forumCategoryId,
           name: c.name,
         }));
         setCategories(formattedCategories);
+
+        // Auto-select first category if available
         if (formattedCategories.length) {
           setCategoryId(formattedCategories[0].id);
         }
@@ -50,6 +62,7 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
     e.preventDefault();
     if (!title.trim() || !categoryId) return;
 
+    // Use provided user ID or fallback to default
     const userId = currentUserId ?? "d3f5c8c4-56a9-11ec-90d6-0242ac120003";
 
     const payload = {
@@ -63,31 +76,32 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
       setLoading(true);
       setErrorMsg("");
 
+      // Submit post data to API
       const res = await fetch(`${API_BASE_URL}/api/v1/posts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload), // <-- korrektes JSON schicken
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
-        // ***** Body nur EINMAL lesen *****
+        // Read response body only once
         const errorText = await res.text();
 
-        // Versuchen, Text als JSON zu interpretieren
+        // Attempt to parse error response as JSON
         let message = errorText;
         try {
           const json = JSON.parse(errorText);
           message =
-            json?.errors?.[0]?.defaultMessage || // z. B. aus Spring-Validation
+            json?.errors?.[0]?.defaultMessage || // E.g., from Spring-Validation
             json?.message ||
             JSON.stringify(json);
         } catch {
-          /* war kein JSON – rohen Text behalten */
+          /* Not JSON - keep raw text */
         }
         throw new Error(message);
       }
 
-      // Erfolg
+      // Success handling
       onPostCreated?.();
       setTitle("");
       setContent("");
@@ -98,6 +112,7 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
     }
   }
 
+  // Determine border color based on theme
   const borderColor =
     typeof window !== "undefined" && localStorage.getItem("theme") === "dark"
       ? "#ec3349"
