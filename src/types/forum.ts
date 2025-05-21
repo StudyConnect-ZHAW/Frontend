@@ -1,3 +1,5 @@
+// * Type definitions for forum domain entities (Author, Comment, ForumPostData, DetailedPost)
+
 export interface Author {
   firstName: string;
   lastName: string;
@@ -25,7 +27,7 @@ export interface ForumPostData {
 }
 
 export interface DetailedPost {
-  id: string; // oder forumPostId, je nach API
+  id: string;
   title: string;
   content: string;
   author: Author;

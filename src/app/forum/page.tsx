@@ -1,5 +1,20 @@
 "use client";
 
+/**
+ * ForumPage component
+ * ----------------------------------------------------------
+ * Renders the public forum overview page. It fetches posts from the
+ * backend REST API, supports debounced search, shows a loading state,
+ * and lets the user create a new post. When a post is created or the
+ * search term changes, the list is re‑fetched.
+ *
+ * Key features:
+ *   • Search with 300 ms debounce
+ *   • New‑post form that triggers a refresh
+ *   • Graceful handling of loading / empty states
+ *   • Console logging for easy debugging (can be removed in prod)
+ */
+
 import * as React from "react";
 import PageHeader from "@/components/PageHeader";
 import { ForumPostData } from "@/types/forum";
@@ -9,27 +24,37 @@ import SortField from "@/components/SortField";
 import Link from "next/link";
 import NewPostForm from "@/components/NewPostForm";
 
+// ---- Constants -------------------------------------------------
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
 const SEARCH_DEBOUNCE_MS = 300;
 
 export default function ForumPage() {
+  // ---- State ---------------------------------------------------
   const [posts, setPosts] = React.useState<ForumPostData[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [search, setSearch] = React.useState<string>("");
 
-  /* ---- Fetch helpers ------------------------------------------ */
-  const fetchPosts = React.useCallback(async (q = "") => {
+  // ---- Fetch helpers ------------------------------------------
+  /**
+   * Retrieves forum posts from the backend. If a query is supplied it hits the
+   * /search endpoint, otherwise the full list endpoint.
+   *
+   * @param q Optional search string (defaults to "")
+   */
+  const fetchPosts = React.useCallback(async (q: string = "") => {
     console.log("[fetchPosts] Fetching posts with query:", q);
     setLoading(true);
     try {
       const url = q.trim()
         ? `${API_BASE_URL}/api/v1/posts/search?query=${encodeURIComponent(q)}`
         : `${API_BASE_URL}/api/v1/posts`;
+
       const res = await fetch(url, { cache: "no-store" });
 
       console.log("[fetchPosts] Status:", res.status);
 
+      // 404 = no posts found, return empty list gracefully
       if (res.status === 404) {
         console.warn("[fetchPosts] No posts found (404)");
         setPosts([]);
@@ -55,13 +80,13 @@ export default function ForumPage() {
     }
   }, []);
 
-  /* ---- Initial load ------------------------------------------- */
+  // ---- Initial load -------------------------------------------
   React.useEffect(() => {
     console.log("[useEffect] Initial fetch");
     fetchPosts();
   }, [fetchPosts]);
 
-  /* ---- Debounced search --------------------------------------- */
+  // ---- Debounced search ---------------------------------------
   React.useEffect(() => {
     console.log("[useEffect] Search changed:", search);
     const t = setTimeout(() => {
@@ -74,12 +99,13 @@ export default function ForumPage() {
     };
   }, [search, fetchPosts]);
 
-  /* ---- Render -------------------------------------------------- */
+  // ---- Render --------------------------------------------------
   return (
     <div className="p-4">
+      {/* Page header */}
       <PageHeader title="Forum" />
 
-      {/* new post form */}
+      {/* Form to create a new post */}
       <NewPostForm
         onPostCreated={() => {
           console.log("[NewPostForm] Post created → refetching");
@@ -87,7 +113,7 @@ export default function ForumPage() {
         }}
       />
 
-      {/* search & sort */}
+      {/* Search & sort controls */}
       <div className="mt-4 flex flex-row items-center gap-4">
         <SearchField
           value={search}
@@ -100,7 +126,7 @@ export default function ForumPage() {
         <SortField /* TODO: wire‑up with backend sort */ />
       </div>
 
-      {/* list */}
+      {/* Post list */}
       {loading ? (
         <p className="mt-4">Loading…</p>
       ) : (
@@ -109,6 +135,7 @@ export default function ForumPage() {
             console.log(`[Render] Post[${i}]:`, p);
             return (
               <div key={p.forumPostId}>
+                {/* Link to single post view */}
                 <Link
                   href={`/forum/${p.forumPostId}`}
                   className="hover:opacity-80"
