@@ -2,12 +2,14 @@
 
 /**
  * NewPostForm component for creating forum posts.
+ * ----------------------------------------------------------
  * Provides form interface with title, category selection, and content fields.
  * Handles form submission to API, validation, and error handling.
  * Uses React hooks for state management and API interactions.
  */
 
 import React, { useState, useEffect, FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { FiSend } from "react-icons/fi";
 
 interface Props {
@@ -20,10 +22,13 @@ interface Category {
   name: string; // Display name of the category
 }
 
+// ---- Constants -------------------------------------------------
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
 
 export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
+  const { t } = useTranslation(["forum"]);
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [categoryId, setCategoryId] = useState<string>("");
@@ -31,38 +36,34 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
   const [isLoading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  // ---- Fetch categories on mount --------------------------------
   useEffect(() => {
     (async () => {
       try {
-        // Fetch available categories on component mount
         const res = await fetch(`${API_BASE_URL}/api/v1/categories`, {
           cache: "no-store",
         });
         if (!res.ok) throw new Error(res.statusText);
         const data = await res.json();
-
-        // Transform API response to match internal Category interface
-        const formattedCategories = data.map((c: any) => ({
+        const formatted: Category[] = data.map((c: any) => ({
           id: c.forumCategoryId,
           name: c.name,
         }));
-        setCategories(formattedCategories);
-
-        // Auto-select first category if available
-        if (formattedCategories.length) {
-          setCategoryId(formattedCategories[0].id);
+        setCategories(formatted);
+        if (formatted.length) {
+          setCategoryId(formatted[0].id);
         }
       } catch (e) {
-        setErrorMsg("Failed to load categories.");
+        setErrorMsg(t("error.categoriesLoad", "Failed to load categories."));
       }
     })();
-  }, []);
+  }, [t]);
 
+  // ---- Submit handler -------------------------------------------
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!title.trim() || !categoryId) return;
 
-    // Use provided user ID or fallback to default
     const userId = currentUserId ?? "d3f5c8c4-56a9-11ec-90d6-0242ac120003";
 
     const payload = {
@@ -76,7 +77,6 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
       setLoading(true);
       setErrorMsg("");
 
-      // Submit post data to API
       const res = await fetch(`${API_BASE_URL}/api/v1/posts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -84,53 +84,53 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
       });
 
       if (!res.ok) {
-        // Read response body only once
         const errorText = await res.text();
-
-        // Attempt to parse error response as JSON
         let message = errorText;
         try {
           const json = JSON.parse(errorText);
           message =
-            json?.errors?.[0]?.defaultMessage || // E.g., from Spring-Validation
+            json?.errors?.[0]?.defaultMessage ||
             json?.message ||
             JSON.stringify(json);
         } catch {
-          /* Not JSON - keep raw text */
+          /* raw text */
         }
         throw new Error(message);
       }
 
-      // Success handling
+      // Success
       onPostCreated?.();
       setTitle("");
       setContent("");
     } catch (err: any) {
-      setErrorMsg(err.message || "Something went wrong");
+      setErrorMsg(err.message || t("error.generic", "Something went wrong"));
     } finally {
       setLoading(false);
     }
   }
 
-  // Determine border color based on theme
-  const borderColor =
+  // ---- Theme-based accent color --------------------------------
+  const accent =
     typeof window !== "undefined" && localStorage.getItem("theme") === "dark"
       ? "#ec3349"
       : "#FDBA15";
 
+  // ---- Render ---------------------------------------------------
   return (
     <form
       onSubmit={handleSubmit}
       className="space-y-2 rounded-[15px] border-2 p-4"
-      style={{ borderColor, background: "var(--sidebar-bg)" }}
+      style={{ borderColor: accent, background: "var(--sidebar-bg)" }}
     >
+      {/* Title */}
       <input
         className="w-full rounded border p-1 text-sm focus:outline-none"
-        placeholder="Post title…"
+        placeholder={t("placeholder.postTitle")}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
+      {/* Category select */}
       <select
         className="w-full rounded border p-1 text-sm focus:outline-none"
         value={categoryId}
@@ -143,15 +143,17 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
         ))}
       </select>
 
+      {/* Content */}
       <textarea
         className="h-24 w-full resize-none rounded border p-1 text-sm focus:outline-none"
-        placeholder="What do you want to share?"
+        placeholder={t("placeholder.postContent")}
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
 
       {errorMsg && <p className="text-sm text-red-600">{errorMsg}</p>}
 
+      {/* Submit */}
       <button
         type="submit"
         disabled={isLoading}
@@ -159,10 +161,10 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
         style={{ borderRadius: "7px" }}
       >
         {isLoading ? (
-          "Posting…"
+          t("button.posting", "Posting…")
         ) : (
           <>
-            Post <FiSend />
+            <span>{t("button.post")}</span> <FiSend />
           </>
         )}
       </button>
