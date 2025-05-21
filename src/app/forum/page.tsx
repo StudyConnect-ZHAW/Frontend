@@ -16,6 +16,7 @@
  */
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import PageHeader from "@/components/PageHeader";
 import { ForumPostData } from "@/types/forum";
 import ForumPost from "@/components/ForumPost";
@@ -30,6 +31,9 @@ const API_BASE_URL =
 const SEARCH_DEBOUNCE_MS = 300;
 
 export default function ForumPage() {
+  // ---- i18n ----------------------------------------------------
+  const { t } = useTranslation(["forum"]);
+
   // ---- State ---------------------------------------------------
   const [posts, setPosts] = React.useState<ForumPostData[]>([]);
   const [loading, setLoading] = React.useState(false);
@@ -89,13 +93,13 @@ export default function ForumPage() {
   // ---- Debounced search ---------------------------------------
   React.useEffect(() => {
     console.log("[useEffect] Search changed:", search);
-    const t = setTimeout(() => {
+    const tId = setTimeout(() => {
       console.log("[useEffect] Debounced fetch triggered");
       fetchPosts(search);
     }, SEARCH_DEBOUNCE_MS);
     return () => {
       console.log("[useEffect] Cleaning up debounce");
-      clearTimeout(t);
+      clearTimeout(tId);
     };
   }, [search, fetchPosts]);
 
@@ -103,7 +107,7 @@ export default function ForumPage() {
   return (
     <div className="p-4">
       {/* Page header */}
-      <PageHeader title="Forum" />
+      <PageHeader title={t("title")} />
 
       {/* Form to create a new post */}
       <NewPostForm
@@ -117,7 +121,7 @@ export default function ForumPage() {
       <div className="mt-4 flex flex-row items-center gap-4">
         <SearchField
           value={search}
-          placeholder="Search…"
+          placeholder={t("placeholder.search")}
           onChange={(v) => {
             console.log("[SearchField] Updated search:", v);
             setSearch(v);
