@@ -1,4 +1,4 @@
-import { msalInstance } from '@/lib/api/msal';
+import { msalInstance } from '@/lib/msal';
 import { NextRequest, NextResponse } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
 

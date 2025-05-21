@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { msalInstance } from '@/lib/api/msal';
+import { msalInstance } from '@/lib/msal';
 
 /**
  * Redirects the user to the Microsoft SSO login page.
