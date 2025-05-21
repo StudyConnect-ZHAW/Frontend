@@ -6,6 +6,9 @@ export interface ZhawEvent {
     name?: string;
     description?: string;
     type?: string;
+    eventRealizations?: {
+        room?: { name: string };
+    }[];
   }
   
 export interface ZhawDay {

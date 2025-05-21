@@ -135,7 +135,7 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
               ? {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                right: 'dayGridMonth,timeGridWeek,timeGridDay',
               }
               : false
           }
@@ -143,6 +143,7 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
           locale={calendarLocale}
           slotMinTime={slotMinTime}
           slotMaxTime={slotMaxTime}
+          height="100%"
           dayHeaderContent={
             initialView === 'timeGridDay'
               ? (arg) => ({
@@ -156,7 +157,27 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
               })
               : undefined
           }
-          height="100%"
+          
+          /**
+           * Only override rendering if in timeGrid views.
+           * Otherwise let FullCalendar render its default styled event.
+           **/
+          eventContent={
+            initialView === 'timeGridDay' || initialView === 'timeGridWeek'
+              ? (arg) => {
+                const room = arg.event.extendedProps.room;
+
+                return (
+                  <>
+                    <div>{arg.event.title}</div>
+                    {room && (
+                      <div className="text-xs text-white-400">{room}</div>
+                    )}
+                  </>
+                );
+              }
+              : undefined
+          }
         />
       </div>
     </div>

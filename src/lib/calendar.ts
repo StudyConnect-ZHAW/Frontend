@@ -18,6 +18,9 @@ export function mapZhawDaysToEvents(data: ZhawSchedule): EventInput[] {
 
         return {
           title: event.name || event.description!, // fallback to description if name is missing
+          extendedProps: {
+            room: event.eventRealizations?.[0]?.room?.name ?? '',
+          },
           start: event.startTime,
           end: event.endTime,
           color: isHoliday ? '#F85A6D' : '#EC3349',
