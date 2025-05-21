@@ -1,5 +1,6 @@
 import { Group } from '@/types/group';
 
+// TODO: Remove
 export const mockGroups: Group[] = Array.from({ length: 30 }, (_, i) => ({
   groupId: `group-${i + 1}`,
   ownerId: `user-${(i % 3) + 1}`,
@@ -9,5 +10,5 @@ export const mockGroups: Group[] = Array.from({ length: 30 }, (_, i) => ({
     userId: `user-${j + 1}`,
     name: `User ${j + 1}`,
   })),
-  creationDate: new Date(Date.now() - i * 86400000).toISOString(),
+  createdAt: new Date(Date.now() - i * 86400000).toISOString(),
 }));

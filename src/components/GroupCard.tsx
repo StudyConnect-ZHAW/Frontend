@@ -17,7 +17,7 @@ export default function GroupCard({ group, joined, onJoin, onLeave }: Props) {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
-  }).format(new Date(group.creationDate));
+  }).format(new Date(group.createdAt));
 
   return (
     <div className="border-main rounded-lg shadow p-4 bg-primary-bg cursor-pointer relative">
@@ -32,7 +32,7 @@ export default function GroupCard({ group, joined, onJoin, onLeave }: Props) {
       <h3 className="text-lg font-semibold text-primary mb-1">{group.name}</h3>
       <p className="text-sm text-secondary mb-1">{group.description}</p>
       <p className="text-sm text-secondary mb-1">{`Owner: ${group.ownerId}`}</p>
-      <p className="text-sm text-secondary mb-1">{`Members: ${group.members.length}`}</p>
+      <p className="text-sm text-secondary mb-1">{`Members: ${group.members?.length ?? 'N/A'}`}</p>
       <p className="text-sm text-secondary mb-1">{`Created at: ${date}`}</p>
     </div>
   );

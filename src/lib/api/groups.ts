@@ -51,8 +51,8 @@ export async function getGroupById(groupId: string): Promise<Group> {
   return parseResponse<Group>(res);
 }
 
-export async function joinGroup(groupId: string): Promise<Group> {
-  const res = await fetch(`${BASE_URL}/groups/${groupId}/join`, {
+export async function joinGroup(groupId: string, userId: string): Promise<Group> {
+  const res = await fetch(`${BASE_URL}/groups/${groupId}/members/${userId}`, {
     method: 'POST',
     credentials: 'include',
     headers: getRequestHeaders(),
@@ -61,13 +61,14 @@ export async function joinGroup(groupId: string): Promise<Group> {
   return parseResponse<Group>(res);
 }
 
-export async function leaveGroup(groupId: string): Promise<Group> {
-  const res = await fetch(`${BASE_URL}/groups/${groupId}/leave`, {
-    method: 'POST',
+export async function leaveGroup(groupId: string, userId: string): Promise<Group> {
+  const res = await fetch(`${BASE_URL}/groups/${groupId}/members/${userId}`, {
+    method: 'DELETE',
     credentials: 'include',
     headers: getRequestHeaders(),
   });
 
+  // TODO: Handle correctly
   return parseResponse<Group>(res);
 }
 
