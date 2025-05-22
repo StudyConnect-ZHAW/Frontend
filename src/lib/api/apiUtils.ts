@@ -3,6 +3,15 @@ export type APIResponse<T> = {
   error: { message: string } | null;
 };
 
+export const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}v1`;
+
+export function getRequestHeaders(): HeadersInit {
+  return {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+}
+
 export async function parseResponse<T>(res: Response): Promise<T> {
   const text = await res.text();
 
