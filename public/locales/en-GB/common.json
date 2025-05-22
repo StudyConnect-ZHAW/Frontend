@@ -19,7 +19,8 @@
   "copyright": "All Rights Reserved",
   "toast": {
     "titleSuccess": "Success",
-    "saveSuccess": "Successfully saved the changes."
+    "saveSuccess": "Successfully saved the changes.",
+    "titleError": "Error"
   },
   "calendarInfoText": "Only user@students.zhaw.ch emails are supported for calendar synchronization."
 }
