@@ -1,14 +1,5 @@
 import { Post, PostCreateData, PostUpdateData } from "@/types/forum";
-import { parseResponse } from "./parseResponse";
-
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}v1`;
-
-function getRequestHeaders(): HeadersInit {
-  return {
-    'Content-Type': 'application/json',   // Request body format
-    'Accept': 'application/json',         // Response body format
-  };
-}
+import { BASE_URL, getRequestHeaders, parseResponse } from "./apiUtils";
 
 export async function createPost(data: PostCreateData): Promise<string> {
     const res = await fetch(`${BASE_URL}/posts`, {
