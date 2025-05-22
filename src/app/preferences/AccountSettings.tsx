@@ -5,6 +5,7 @@ import Button, { ButtonVariant } from '@/components/Button';
 import { showToast, ToastType } from '@/components/Toast';
 import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { updateUser } from '@/lib/api/users';
 
 type Props = {
   onClose: () => void;
@@ -20,27 +21,12 @@ export default function AccountSettings({ onClose }: Props) {
   };
 
   const handleEmailUpdate = async () => {
-    if (!zhawEmail.endsWith('@students.zhaw.ch')) {
-      showToast(ToastType.Error, t('common:toast.titleError'), 'Only @students.zhaw.ch emails are supported.');
-      
-      return;
-    }
-
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
-
     try {
       setLoading(true);
-      const res = await fetch(`${apiUrl}v1/users/{123}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: 'Sumaya',
-          lastName: 'Mohat',
-          email: zhawEmail,
-        }),
-      });
 
-      if (!res.ok) {throw new Error();}
+      await updateUser({
+        email: zhawEmail,
+      });
 
       showToast(ToastType.Success, t('common:toast.titleSuccess'), 'Email updated successfully!');
     } catch (error) {
