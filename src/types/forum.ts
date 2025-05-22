@@ -1,9 +1,13 @@
-// * Type definitions for forum domain entities (Author, Comment, ForumPostData, DetailedPost)
-
 export interface Author {
   firstName: string;
   lastName: string;
   email: string;
+}
+
+export interface Category {
+  forumCategoryId: string;
+  name: string;
+  description: string;
 }
 
 export interface Comment {
@@ -26,6 +30,16 @@ export interface ForumPostData {
   shares: number;
 }
 
+export interface Post {
+  id: string;
+  userId: string;
+  title: string;
+  content: string;
+  forumCategoryId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface DetailedPost {
   id: string;
   title: string;
@@ -38,21 +52,16 @@ export interface DetailedPost {
   comments?: Comment[];
 }
 
-export interface Post {
-  id: string;
-  userId: string;
-  title: string;
-  content: string;
-  forumCategoryId: string;
-  createdAt: string;
-  updatedAt: string;
+export interface CategoryCreateData {
+  name: string;
+  description: string;
 }
 
 export interface PostCreateData {
   userId: string;
   title: string;
-  content: string;
   forumCategoryId: string;
+  content: string;
 }
 
 export interface PostUpdateData {
