@@ -24,6 +24,8 @@ import SearchField from "@/components/SearchField";
 import SortField from "@/components/SortField";
 import Link from "next/link";
 import NewPostForm from "@/components/NewPostForm";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // ---- Constants -------------------------------------------------
 const API_BASE_URL =
@@ -35,9 +37,33 @@ export default function ForumPage() {
   const { t } = useTranslation(["forum"]);
 
   // ---- State ---------------------------------------------------
-  const [posts, setPosts] = React.useState<ForumPostData[]>([]);
-  const [loading, setLoading] = React.useState(false);
-  const [search, setSearch] = React.useState<string>("");
+  const [posts, setPosts] = useState<ForumPostData[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/me");
+        if (!res.ok) {
+          router.push("/login");
+
+          return;
+        }
+
+        const user = await res.json();
+        setUserId(user.userId);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        router.push("/login");
+      }
+    };
+
+    fetchUser();
+  }, [router]);
 
   // ---- Fetch helpers ------------------------------------------
   /**
@@ -103,6 +129,14 @@ export default function ForumPage() {
     };
   }, [search, fetchPosts]);
 
+  if (!userId) {
+    return (
+      <div className="flex items-center justify-center h-full text-primary text-xl">
+        {t("common:loading")}
+      </div>
+    );
+  }
+
   // ---- Render --------------------------------------------------
   return (
     <div className="p-4">
@@ -111,6 +145,7 @@ export default function ForumPage() {
 
       {/* Form to create a new post */}
       <NewPostForm
+        currentUserId={userId}
         onPostCreated={() => {
           console.log("[NewPostForm] Post created → refetching");
           fetchPosts(search);
