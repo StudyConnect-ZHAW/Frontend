@@ -15,7 +15,7 @@ import { FiSend } from "react-icons/fi";
 
 interface Props {
   onPostCreated?: () => void; // fired after successful POST
-  currentUserId?: string; // if omitted we fall back to dummy
+  currentUserId: string;
 }
 
 interface Category {
@@ -26,8 +26,6 @@ interface Category {
 // ---- Constants -------------------------------------------------
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
-// fallback user (until real auth is wired)
-const FALLBACK_USER_ID = "d3f5c8c4-56a9-11ec-90d6-0242ac120003";
 
 export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
   const { t } = useTranslation(["forum"]);
@@ -68,7 +66,7 @@ export default function NewPostForm({ onPostCreated, currentUserId }: Props) {
     if (!title.trim() || !categoryId) return;
 
     const payload = {
-      userId: currentUserId ?? FALLBACK_USER_ID,
+      userId: currentUserId,
       title: title.trim(),
       forumCategoryId: categoryId,
       content: content.trim(), // optional according to spec
