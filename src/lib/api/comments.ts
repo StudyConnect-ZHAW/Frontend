@@ -1,14 +1,5 @@
 import { Comment, CommentCreateData, CommentUpdateData } from "@/types/forum";
-import { parseResponse } from "./parseResponse";
-
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}v1`;
-
-function getRequestHeaders(): HeadersInit {
-  return {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  };
-}
+import { BASE_URL, getRequestHeaders, parseResponse } from "./apiUtils";
 
 export async function createComment(postId: string, data: CommentCreateData): Promise<string> {
   const res = await fetch(`${BASE_URL}/posts/${postId}/comments`, {
