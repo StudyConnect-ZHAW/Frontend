@@ -15,17 +15,11 @@
     }
   },
   "privacy": {
-    "title": "Privacy",
-    "subtitle": "DnD, Camera",
-    "allowCameraLabel": "Allow Camera Access",
-    "doNotDisturbLabel": "Do Not Disturb"
+    "title": "Privacy"
   },
   "notifications": {
     "title": "Notifications and Activity",
-    "subtitle": "Sound, Mute, Chat Notifications",
-    "activateSoundsLabel": "Activate Sounds",
-    "notificationsForChats": "Show Notifications for Chats",
-    "showPopupNotifications": "Show Pop-Up Notifications"
+    "subtitle": "Sound, Mute, Chat Notifications"
   },
   "account": {
     "title": "Account",
