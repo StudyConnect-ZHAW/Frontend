@@ -15,11 +15,12 @@
     }
   },
   "privacy": {
-    "title": "Privatsphäre"
+    "title": "Privatsphäre",
+    "subtitle": "Noch nicht verfügbar"
   },
   "notifications": {
     "title": "Benachrichtigung und Aktivität",
-    "subtitle": "Sounds, Stummschalten, Chat-Benachrichtigungen"
+    "subtitle": "Noch nicht verfügbar"
   },
   "account": {
     "title": "Konto",

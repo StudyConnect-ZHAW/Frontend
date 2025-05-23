@@ -20,8 +20,8 @@ export default function SettingsPage() {
   const settingsBlocks = [
     { id: 'general', title: t('general.title'), description: t('general.subtitle') },
     { id: 'appearance', title: t('appearance.title'), description: t('appearance.subtitle') },
-    { id: 'privacy', title: t('privacy.title') }, //TODO: yet to be implemented
-    { id: 'notifications', title: t('notifications.title') }, //TODO: yet to be implemented
+    { id: 'privacy', title: t('privacy.title'), description: t('privacy.subtitle') },
+    { id: 'notifications', title: t('notifications.title'), description: t('privacy.subtitle') }, 
     { id: 'account', title: t('account.title'), description: t('account.subtitle') },
     { id: 'profile', title: t('profile.title'), description: t('profile.subtitle') },
   ];
