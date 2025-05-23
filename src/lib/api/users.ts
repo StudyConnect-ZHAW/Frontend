@@ -11,7 +11,7 @@ function getRequestHeaders(): HeadersInit {
   };
 }
 
-export async function updateUser(updatedData: Partial<User>): Promise<User> {
+export async function updateUser(updatedData: Partial<User>): Promise<User | null> {
   const currentUser = await getCurrentUser();
 
   const res = await fetch(`${BASE_URL}/users`, {
@@ -24,12 +24,8 @@ export async function updateUser(updatedData: Partial<User>): Promise<User> {
       lastName: currentUser.lastName,
     }),
   });
-
-  if (!res.ok) {
-    throw new Error(`Failed to update user: ${res.status}`);
-  }
-
-  return await res.json();
+  
+  return res.status === 204 ? null : await res.json();
 }
 
 export async function getCurrentUser(): Promise<User> {

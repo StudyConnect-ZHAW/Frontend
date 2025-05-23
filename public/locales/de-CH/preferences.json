@@ -50,5 +50,9 @@
     "modulePreferencesLabel": "Modulpräferenzen",
     "modulePreferencesInfo": "Halte Strg (Windows) oder Cmd (Mac), um mehrere Module auszuwählen.",
     "availabilityLabel": "Verfügbarkeit (Wochentage & Zeiten)"
+  },
+  "toast": {
+    "emailSuccess": "Deine Email wurde erfolgreich aktualisiert.",
+    "emailError": "Deine Email konnte nicht aktualisiert werden. Bitte versuch es erneut."
   }
 }

@@ -16,10 +16,12 @@ export default function AccountSettings({ onClose }: Props) {
   const [zhawEmail, setZhawEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Handles logout by redirecting to the logout route
   const handleLogout = () => {
     redirect('/auth/logout');
   };
 
+  // Handles the email update logic including loading state and toast feedback
   const handleEmailUpdate = async () => {
     try {
       setLoading(true);
@@ -28,9 +30,10 @@ export default function AccountSettings({ onClose }: Props) {
         email: zhawEmail,
       });
 
-      showToast(ToastType.Success, t('common:toast.titleSuccess'), 'Email updated successfully!');
-    } catch (error) {
-      showToast(ToastType.Error, t('common:toast.titleError'), 'Failed to update email.');
+      showToast(ToastType.Success, t('common:toast.titleSuccess'), t('preferences:toast.emailSuccess'));
+    } catch (err) {
+      console.error('Failed to update email.', err);
+      showToast(ToastType.Error, t('common:toast.titleError'), t('preferences:toast.emailError'));
     } finally {
       setLoading(false);
     }

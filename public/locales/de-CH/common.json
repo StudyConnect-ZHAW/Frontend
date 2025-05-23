@@ -19,8 +19,8 @@
   "copyright": "Alle Rechte vorbehalten",
   "toast": {
     "titleSuccess": "Erfolgreich",
-    "saveSuccess": "Änderungen wurden erfolgreich gespeichert.",
-    "titleError": "Fehler"
+    "titleError": "Fehler",
+    "saveSuccess": "Änderungen wurden erfolgreich gespeichert."
   },
   "calendarInfoText": "Für die Kalendersynchronisierung werden nur E-Mails vom Typ user@students.zhaw.ch unterstützt."
 }
