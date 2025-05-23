@@ -2,27 +2,16 @@
   "title": "Benutzereinstellungen",
   "general": {
     "title": "Allgemein",
-    "subtitle": "System, Sprache, Ansicht",
+    "subtitle": "System, Sprache",
     "languageLabel": "Sprache"
   },
   "appearance": {
     "title": "Erscheinungsbild",
-    "subtitle": "Thema, Dichte, Layout",
+    "subtitle": "Zwischen hellem und dunklem Modus wechseln",
     "themeLabel": "Thema",
     "theme": {
       "light": "Hell",
       "dark": "Dunkel"
-    },
-    "densityLabel": "Dichte",
-    "density": {
-      "normal": "Normal",
-      "spacious": "Geräumig",
-      "compact": "Kompakt"
-    },
-    "layoutLabel": "Layout",
-    "layout": {
-      "grid": "Raster",
-      "list": "Liste"
     }
   },
   "privacy": {

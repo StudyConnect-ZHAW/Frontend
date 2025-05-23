@@ -2,27 +2,16 @@
   "title": "Preferences",
   "general": {
     "title": "General",
-    "subtitle": "System, Language, Views",
+    "subtitle": "System, Language",
     "languageLabel": "Language"
   },
   "appearance": {
     "title": "Appearance",
-    "subtitle": "Theme, Density, Layout",
+    "subtitle": "Switch between Light and Dark Mode",
     "themeLabel": "Theme",
     "theme": {
       "light": "Light",
       "dark": "Dark"
-    },
-    "densityLabel": "Density",
-    "density": {
-      "normal": "Normal",
-      "spacious": "Spacious",
-      "compact": "Compact"
-    },
-    "layoutLabel": "Layout",
-    "layout": {
-      "grid": "Grid",
-      "list": "List"
     }
   },
   "privacy": {
