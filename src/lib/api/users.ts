@@ -1,7 +1,5 @@
 import type { User } from '@/types/user';
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}v1`;
-
 function getRequestHeaders(): HeadersInit {
 
   return {
@@ -14,7 +12,7 @@ function getRequestHeaders(): HeadersInit {
 export async function updateUser(updatedData: Partial<User>): Promise<User | null> {
   const currentUser = await getCurrentUser();
 
-  const res = await fetch(`${BASE_URL}/users`, {
+  const res = await fetch(`/api/users`, {
     method: 'PUT',
     headers: getRequestHeaders(),
     body: JSON.stringify({
