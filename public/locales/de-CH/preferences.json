@@ -15,17 +15,11 @@
     }
   },
   "privacy": {
-    "title": "Privatsphäre",
-    "subtitle": "DnD, Kamera",
-    "allowCameraLabel": "Kamerazugriff erlauben",
-    "doNotDisturbLabel": "Bitte nicht stören"
+    "title": "Privatsphäre"
   },
   "notifications": {
     "title": "Benachrichtigung und Aktivität",
-    "subtitle": "Sounds, Stummschalten, Chat-Benachrichtigungen",
-    "activateSoundsLabel": "Sounds aktivieren",
-    "notificationsForChats": "Benachrichtigungen für Chats",
-    "showPopupNotifications": "Pop-up Hinweise anzeigen"
+    "subtitle": "Sounds, Stummschalten, Chat-Benachrichtigungen"
   },
   "account": {
     "title": "Konto",
