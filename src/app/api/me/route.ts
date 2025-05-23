@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import {jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -21,7 +21,9 @@ export async function GET() {
     }
 
     const user = await res.json();
-    return NextResponse.json(user);
+    const userWithId = { ...user, userId: decoded.oid };
+
+    return NextResponse.json(userWithId);
   } catch (err) {
     console.error('Failed to decode token:', err);
     return NextResponse.json({ error: 'Invalid token' }, { status: 400 });
