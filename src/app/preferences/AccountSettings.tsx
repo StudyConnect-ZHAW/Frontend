@@ -69,7 +69,6 @@ export default function AccountSettings({ onClose }: Props) {
           text={loading ? t('common:button.update') : t('common:button.update')}
           type={ButtonVariant.Primary}
           onClick={handleEmailUpdate}
-          disabled={loading}
         />
       </div>
 
