@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   createGroup,
   getAllGroups,
-  getOwnGroups,
+  getJoinedGroups,
+  getOwnedGroups,
   joinGroup,
   leaveGroup,
 } from '@/lib/api/groups';
@@ -18,42 +19,55 @@ export function useGroups(userId: string | null) {
 
   const { t } = useTranslation(['groups', 'common']);
 
-  useEffect(() => {
+  const fetchGroups = useCallback(async () => {
     if (!userId) { return; };
 
-    async function fetchGroups() {
-      try {
-        setLoading(true);
-        setError(null);
+    try {
+      setLoading(true);
+      setError(null);
 
-        const [all, own] = await Promise.all([
-          getAllGroups(),
-          getOwnGroups(userId as string),
-        ]);
+      const [joined, owned, all] = await Promise.all([
+        getJoinedGroups(userId as string),
+        getOwnedGroups(userId as string),
+        getAllGroups(),
+      ]);
 
-        const ownIds = new Set(own.map((g) => g.groupId));
-        const available = all.filter((g) => !ownIds.has(g.groupId));
+      // Avoid duplicates: prefer owned group over joined group
+      const ownedIds = new Set(owned.map((g) => g.groupId));
+      const combined = [
+        ...owned,
+        ...joined.filter((g) => !ownedIds.has(g.groupId)),
+      ]
 
-        setMyGroups(own);
-        setAvailableGroups(available);
-      } catch (err) {
-        console.error('Error loading groups:', err);
-        setError(t('errorLoading'));
-      } finally {
-        setLoading(false);
-      }
+      const myIds = new Set(combined.map((g) => g.groupId));
+      const available = all.filter((g) => !myIds.has(g.groupId));
+
+      setMyGroups(combined);
+      setAvailableGroups(available);
+    } catch (err) {
+      console.error('Error loading groups:', err);
+      setError(t('errorLoading'));
+    } finally {
+      setLoading(false);
     }
+  }, [userId, t]);
 
+  useEffect(() => {
     fetchGroups();
-  }, [t, userId]);
+  }, [fetchGroups]);
 
   const handleJoin = async (groupId: string) => {
     if (!userId) { return; };
 
     try {
-      const group = await joinGroup(groupId, userId);
+      await joinGroup(groupId, userId);
+
+      const group = availableGroups.find((g) => g.groupId === groupId)
+      if (!group) { return; }
+
       setMyGroups((prev) => [...prev, group]);
       setAvailableGroups((prev) => prev.filter((g) => g.groupId !== groupId));
+
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.joinSuccess'));
     } catch (err) {
       console.error('Failed to join group', err);
@@ -64,12 +78,21 @@ export function useGroups(userId: string | null) {
   const handleLeave = async (groupId: string) => {
     if (!userId) { return; };
 
+    const group = myGroups.find((g) => g.groupId === groupId);
+    if (!group) { return; }
+
     try {
       await leaveGroup(groupId, userId);
-      const leavingGroup = myGroups.find((g) => g.groupId === groupId);
-      if (!leavingGroup) { return; };
-      setAvailableGroups((prev) => [...prev, leavingGroup]);
+
+      const isOwner = group.ownerId === userId;
+
+      // If owner leaves, the group gets deleted on backend, so don't move to available
+      if (!isOwner) {
+        setAvailableGroups((prev) => [...prev, group]);
+      }
+
       setMyGroups((prev) => prev.filter((g) => g.groupId !== groupId));
+
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.leaveSuccess'));
     } catch (err) {
       console.error('Failed to leave group', err);
@@ -99,5 +122,6 @@ export function useGroups(userId: string | null) {
     handleJoin,
     handleLeave,
     handleCreate,
+    refresh: fetchGroups,
   };
 }

@@ -21,8 +21,9 @@
   "titleJoin": "Join a Group",
   "titleCreate": "Create New Group",
   "placeholderName": "Group name",
-  "placeholderDescription": "Description (optional)",
+  "placeholderDescription": "Description",
   "noGroupFound": "No groups found.",
   "noGroup": "You don't have any groups.",
-  "errorLoading": "Failed to load groups. Please try again."
+  "errorLoading": "Failed to load groups. Please try again.",
+  "errorRequiredFields": "Both name and description are required."
 }
