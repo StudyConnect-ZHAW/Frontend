@@ -7,7 +7,7 @@ function getRequestHeaders(): HeadersInit {
   return {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    
+
   };
 }
 
@@ -16,7 +16,6 @@ export async function updateUser(updatedData: Partial<User>): Promise<User | nul
 
   const res = await fetch(`${BASE_URL}/users`, {
     method: 'PUT',
-    credentials: 'include',
     headers: getRequestHeaders(),
     body: JSON.stringify({
       ...updatedData,
@@ -24,9 +23,9 @@ export async function updateUser(updatedData: Partial<User>): Promise<User | nul
       lastName: currentUser.lastName,
     }),
   });
-  
+
   if (!res.ok) {
-    const data = await res.json(); 
+    const data = await res.json();
     throw new Error(data.error ?? `Failed with status ${res.status}`);
   }
 
@@ -35,7 +34,6 @@ export async function updateUser(updatedData: Partial<User>): Promise<User | nul
 
 export async function getCurrentUser(): Promise<User> {
   const res = await fetch('/api/me', {
-    credentials: 'include',
     headers: {
       'Accept': 'application/json',
     },
