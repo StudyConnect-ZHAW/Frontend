@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Button, { ButtonVariant } from '@/components/Button';
 import { GroupCreateData } from '@/types/group';
 import { useTranslation } from 'react-i18next';
+import { showToast, ToastType } from '@/components/Toast';
 
 interface Props {
   userId: string;
@@ -19,9 +20,14 @@ export default function CreateGroupModal({ userId, onClose, onCreate }: Props) {
 
   const handleSubmit = () => {
     const trimmedName = name.trim();
-    if (!trimmedName) { return; }
+    const trimmedDescription = description.trim();
 
-    onCreate({ name: trimmedName, description: description.trim(), ownerId: userId });
+    if (!trimmedName || !trimmedDescription) {
+      showToast(ToastType.Error, t('common:toast.titleError'), t('errorRequiredFields'));
+      return;
+    }
+
+    onCreate({ name: trimmedName, description: trimmedDescription, ownerId: userId });
     onClose();
   };
 
