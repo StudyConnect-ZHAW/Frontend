@@ -3,8 +3,8 @@ import { NextRequest } from "next/server";
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/users`;
 
-export async function GET(req: NextRequest, context: { params: { userId: string } }) {
-  const { userId } = await context.params;
+export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
+  const { userId } = await params;
 
   return proxyRequest(req, {
     method: 'GET',
@@ -12,8 +12,8 @@ export async function GET(req: NextRequest, context: { params: { userId: string 
   });
 }
 
-export async function PUT(req: NextRequest, context: { params: { userId: string } }) {
-  const { userId } = await context.params;
+export async function PUT(req: NextRequest, { params }: { params: { userId: string } }) {
+  const { userId } = await params;
 
   return proxyRequest(req, {
     method: 'PUT',
@@ -22,8 +22,8 @@ export async function PUT(req: NextRequest, context: { params: { userId: string 
   });
 }
 
-export async function DELETE(req: NextRequest, context: { params: { userId: string } }) {
-  const { userId } = await context.params;
+export async function DELETE(req: NextRequest, { params }: { params: { userId: string } }) {
+  const { userId } = await params;
 
   return proxyRequest(req, {
     method: 'DELETE',
