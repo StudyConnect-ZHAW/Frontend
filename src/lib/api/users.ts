@@ -25,6 +25,11 @@ export async function updateUser(updatedData: Partial<User>): Promise<User | nul
     }),
   });
   
+  if (!res.ok) {
+    const data = await res.json(); 
+    throw new Error(data.error ?? `Failed with status ${res.status}`);
+  }
+
   return res.status === 204 ? null : await res.json();
 }
 

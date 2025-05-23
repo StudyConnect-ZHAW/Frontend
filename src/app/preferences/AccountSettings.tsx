@@ -23,12 +23,19 @@ export default function AccountSettings({ onClose }: Props) {
 
   // Handles the email update logic including loading state and toast feedback
   const handleEmailUpdate = async () => {
+    // Basic email regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(zhawEmail)) {
+      showToast(ToastType.Error, t('common:toast.titleError'), t('preferences:toast.invalidEmail'));
+      
+      return;
+    }
+
     try {
       setLoading(true);
 
-      await updateUser({
-        email: zhawEmail,
-      });
+      await updateUser({ email: zhawEmail });
 
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('preferences:toast.emailSuccess'));
     } catch (err) {
@@ -44,7 +51,7 @@ export default function AccountSettings({ onClose }: Props) {
 
       {/* Info Text */}
       <p className="text-sm text-secondary mb-2">
-        {t('common:calendarInfoText')}
+        {t('preferences:account.calendarInfoText')}
       </p>
 
       {/* Email Field */}
@@ -59,7 +66,7 @@ export default function AccountSettings({ onClose }: Props) {
       {/* Update Button */}
       <div className="flex justify-end sticky bottom-0 bg-primary-bg pt-4">
         <Button
-          text={loading ? 'Updating...' : t('common:button.update')}
+          text={loading ? t('common:button.update') : t('common:button.update')}
           type={ButtonVariant.Primary}
           onClick={handleEmailUpdate}
           disabled={loading}

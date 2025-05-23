@@ -14,6 +14,7 @@
     "create": "Create",
     "logout": "Logout",
     "save": "Save",
+    "updating": "Updating...",
     "update": "Update"
   },
   "copyright": "All Rights Reserved",
@@ -21,6 +22,5 @@
     "titleSuccess": "Success",
     "titleError": "Error",
     "saveSuccess": "Successfully saved the changes."
-  },
-  "calendarInfoText": "Only user@students.zhaw.ch emails are supported for calendar synchronization."
+  }
 }

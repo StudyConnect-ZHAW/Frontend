@@ -14,6 +14,7 @@
     "create": "Erstellen",
     "logout": "Abmelden",
     "save": "Speichern",
+    "updating": "Wird aktualisiert...",
     "update": "Aktualisieren"
   },
   "copyright": "Alle Rechte vorbehalten",
@@ -21,6 +22,5 @@
     "titleSuccess": "Erfolgreich",
     "titleError": "Fehler",
     "saveSuccess": "Änderungen wurden erfolgreich gespeichert."
-  },
-  "calendarInfoText": "Für die Kalendersynchronisierung werden nur E-Mails vom Typ user@students.zhaw.ch unterstützt."
+  }
 }
