@@ -15,11 +15,12 @@
     }
   },
   "privacy": {
-    "title": "Privacy"
+    "title": "Privacy",
+    "subtitle": "Not yet available"
   },
   "notifications": {
     "title": "Notifications and Activity",
-    "subtitle": "Sound, Mute, Chat Notifications"
+    "subtitle": "Not yet available"
   },
   "account": {
     "title": "Account",
