@@ -33,7 +33,7 @@
     "nameLabel": "Name",
     "profilePictureLabel": "Profilbild",
     "modulePreferencesLabel": "Modulpräferenzen",
-    "modulePreferencesInfo": "Halte Strg (Windows) oder Cmd (Mac), um mehrere Module auszuwählen.",
+    "modulePreferencesInfo": "Klicke, um Module auszuwählen",
     "availabilityLabel": "Verfügbarkeit (Wochentage & Zeiten)"
   },
   "toast": {
