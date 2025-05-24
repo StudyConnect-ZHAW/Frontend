@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/users`;
 
-export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params;
 
   return proxyRequest(req, {
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, { params }: { params: { userId: stri
   });
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { userId: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params;
 
   return proxyRequest(req, {
@@ -22,7 +22,7 @@ export async function PUT(req: NextRequest, { params }: { params: { userId: stri
   });
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { userId: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params;
 
   return proxyRequest(req, {

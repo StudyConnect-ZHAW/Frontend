@@ -3,8 +3,8 @@ import { NextRequest } from "next/server";
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/groups`;
 
-export async function POST(req: NextRequest, { params }: { params: { groupId: string, userId: string } }) {
-  const { groupId, userId } = params;
+export async function POST(req: NextRequest, { params }: { params: Promise<{ groupId: string, userId: string }> }) {
+  const { groupId, userId } = await params;
 
   return proxyRequest(req, {
     method: 'POST',
@@ -13,8 +13,8 @@ export async function POST(req: NextRequest, { params }: { params: { groupId: st
   });
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { groupId: string, userId: string } }) {
-  const { groupId, userId } = params;
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ groupId: string, userId: string }> }) {
+  const { groupId, userId } = await params;
 
   return proxyRequest(req, {
     method: 'DELETE',

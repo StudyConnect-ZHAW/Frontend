@@ -3,11 +3,11 @@ import { NextRequest } from "next/server";
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/comments`;
 
-// TODO: Discuss with Gleb
-export async function PUT(req: NextRequest, { params }: { params: { cmid: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ cmid: string }> }) {
+  const { cmid } = await params;
+
   return proxyRequest(req, {
     method: 'PUT',
-    backendUrl: `${URL}/${params.cmid}/likes`,
-    withBody: true,
+    backendUrl: `${URL}/${cmid}/likes`,
   });
 }

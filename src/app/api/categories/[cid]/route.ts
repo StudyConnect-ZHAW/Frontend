@@ -3,8 +3,8 @@ import { proxyRequest } from '@/lib/api/proxyRequest';
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/categories`;
 
-export async function GET(req: NextRequest, context: { params: { cid: string } }) {
-  const { cid } = await context.params;
+export async function GET(req: NextRequest, { params }: { params: Promise<{ cid: string }> }) {
+  const { cid } = await params;
 
   return proxyRequest(req, {
     method: 'GET',
@@ -12,8 +12,8 @@ export async function GET(req: NextRequest, context: { params: { cid: string } }
   });
 }
 
-export async function DELETE(req: NextRequest, context: { params: { cid: string } }) {
-  const { cid } = await context.params;
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ cid: string }> }) {
+  const { cid } = await params;
 
   return proxyRequest(req, {
     method: 'DELETE',

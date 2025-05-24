@@ -3,24 +3,30 @@ import { NextRequest } from "next/server";
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/comments`;
 
-export async function GET(req: NextRequest, { params }: { params: { cmid: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ cmid: string }> }) {
+  const { cmid } = await params;
+
   return proxyRequest(req, {
     method: 'GET',
-    backendUrl: `${URL}/${params.cmid}`,
+    backendUrl: `${URL}/${cmid}`,
   });
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { cmid: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ cmid: string }> }) {
+  const { cmid } = await params;
+
   return proxyRequest(req, {
     method: 'PUT',
-    backendUrl: `${URL}/${params.cmid}`,
+    backendUrl: `${URL}/${cmid}`,
     withBody: true,
   });
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { cmid: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ cmid: string }> }) {
+  const { cmid } = await params;
+
   return proxyRequest(req, {
     method: 'DELETE',
-    backendUrl: `${URL}/${params.cmid}`,
+    backendUrl: `${URL}/${cmid}`,
   });
 }
