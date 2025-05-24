@@ -10,7 +10,7 @@ export async function POST(req: NextRequest, { params }: { params: { groupId: st
     method: 'POST',
     backendUrl: `${URL}/${groupId}/members/${userId}`,
     withBody: true,
-  })
+  });
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { groupId: string, userId: string } }) {
@@ -19,5 +19,5 @@ export async function DELETE(req: NextRequest, { params }: { params: { groupId: 
   return proxyRequest(req, {
     method: 'DELETE',
     backendUrl: `${URL}/${groupId}/members/${userId}`,
-  })
+  });
 }

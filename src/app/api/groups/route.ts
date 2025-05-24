@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     method: 'POST',
     backendUrl: URL,
     withBody: true,
-  })
+  });
 }
 
 export async function GET(req: NextRequest) {

@@ -21,9 +21,11 @@ export async function GET() {
     }
 
     const user = await res.json();
+
     return NextResponse.json(user);
   } catch (err) {
     console.error('Failed to decode token:', err);
+
     return NextResponse.json({ error: 'Invalid token' }, { status: 400 });
   }
 }

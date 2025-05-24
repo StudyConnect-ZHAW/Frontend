@@ -9,7 +9,7 @@ export async function GET(req: NextRequest, { params }: { params: { groupId: str
   return proxyRequest(req, {
     method: 'GET',
     backendUrl: `${URL}/${groupId}`,
-  })
+  });
 }
 
 export async function PUT(req: NextRequest, { params }: { params: { groupId: string } }) {
@@ -19,7 +19,7 @@ export async function PUT(req: NextRequest, { params }: { params: { groupId: str
     method: 'PUT',
     backendUrl: `${URL}/${groupId}`,
     withBody: true,
-  })
+  });
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { groupId: string } }) {
@@ -28,5 +28,5 @@ export async function DELETE(req: NextRequest, { params }: { params: { groupId: 
   return proxyRequest(req, {
     method: 'DELETE',
     backendUrl: `${URL}/${groupId}`,
-  })
+  });
 }
