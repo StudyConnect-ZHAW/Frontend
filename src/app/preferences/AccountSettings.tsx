@@ -5,7 +5,8 @@ import Button, { ButtonVariant } from '@/components/Button';
 import { showToast, ToastType } from '@/components/Toast';
 import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { updateUser } from '@/lib/api/users';
+import { getCurrentUser, updateUser } from '@/lib/handlers/userHandler';
+import { User } from '@/types/user';
 
 type Props = {
   onClose: () => void;
@@ -23,19 +24,27 @@ export default function AccountSettings({ onClose }: Props) {
 
   // Handles the email update logic including loading state and toast feedback
   const handleEmailUpdate = async () => {
-    // Basic email regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const trimmedEmail = zhawEmail.trim();
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
 
-    if (!emailRegex.test(zhawEmail)) {
+    if (!isValidEmail) {
       showToast(ToastType.Error, t('common:toast.titleError'), t('preferences:toast.invalidEmail'));
-      
+
       return;
     }
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      await updateUser({ email: zhawEmail });
+    try {
+      const currentUser = await getCurrentUser();
+
+      const updatedUser: User = {
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        email: trimmedEmail,
+      };
+
+      await updateUser(updatedUser);
 
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('preferences:toast.emailSuccess'));
     } catch (err) {

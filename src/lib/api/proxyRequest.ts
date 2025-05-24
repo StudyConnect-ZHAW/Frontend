@@ -4,7 +4,7 @@ export interface ProxyOptions {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   backendUrl: string;
   withBody?: boolean;
-  validate?: (body: any) => string | null;
+  validate?: (body: unknown) => string | null;
 }
 
 /**
@@ -50,10 +50,11 @@ export async function proxyRequest(req: NextRequest, options: ProxyOptions): Pro
   const auth = requireAuth(req);
   if (auth instanceof NextResponse) {
     console.warn('[proxyRequest] Unauthorized request. Aborting.');
+
     return auth;
   }
 
-  let body: any = null;
+  let body: unknown = null;
 
   if (options.withBody) {
     try {
@@ -61,6 +62,7 @@ export async function proxyRequest(req: NextRequest, options: ProxyOptions): Pro
       console.debug('[proxyRequest] Parsed request body:', body);
     } catch {
       console.warn('[proxyRequest] Failed to parse JSON body.');
+
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
     }
 
@@ -69,6 +71,7 @@ export async function proxyRequest(req: NextRequest, options: ProxyOptions): Pro
       const err = options.validate(body);
       if (err) {
         console.warn('[proxyRequest] Validation error:', err);
+
         return NextResponse.json({ error: err }, { status: 400 });
       }
     }
@@ -84,6 +87,7 @@ export async function proxyRequest(req: NextRequest, options: ProxyOptions): Pro
       headers: {
         'Authorization': `Bearer ${auth.token}`,
         ...(options.withBody ? { 'Content-Type': 'application/json' } : {}),
+        // TODO: Do we want to always include Accept header?
       },
       body: options.withBody ? JSON.stringify(body) : undefined,
     });
@@ -94,18 +98,22 @@ export async function proxyRequest(req: NextRequest, options: ProxyOptions): Pro
 
     if (!res.ok) {
       console.warn('[proxyRequest] Backend returned error status:', res.status);
+
       return NextResponse.json({ error: text }, { status: res.status });
     }
 
     try {
       const json = JSON.parse(text);
+
       return NextResponse.json(json);
     } catch {
       console.debug('[proxyRequest] Response is not JSON. Returning raw text.');
+
       return NextResponse.json({ message: text });
     }
   } catch (err) {
     console.error('[proxyRequest] Proxy request failed:', err);
+
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
