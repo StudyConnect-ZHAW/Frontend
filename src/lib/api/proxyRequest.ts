@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/api/requireAuth';
 
 export interface ProxyOptions {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -9,7 +8,38 @@ export interface ProxyOptions {
 }
 
 /**
- * Generic proxy handler for forwarding requests to backend APIs with auth and optional validation.
+ * Extracts the bearer token from the 'access_token' HttpOnly cookie.
+ * If the token is missing, returns a 401 response.
+ *
+ * @param req - The incoming Next.js request
+ * @returns The token string or a 401 NextResponse
+ */
+function requireAuth(req: NextRequest): { token: string } | NextResponse {
+  const token = req.cookies.get('access_token')?.value;
+
+  if (!token) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  return { token };
+}
+
+/**
+ * Proxies a Next.js API route to a backend API, optionally forwarding JSON body and performing validation.
+ *
+ * @param req - The incoming Next.js request
+ * @param options - Proxy configuration options
+ * @returns The backend response wrapped as a Next.js response
+ *
+ * @example
+ * export async function POST(req: NextRequest) {
+ *   return proxyRequest(req, {
+ *     method: 'POST',
+ *     backendUrl: 'https://backend/api/endpoint',
+ *     withBody: true,
+ *     validate: (body) => !body.name ? 'Name is required' : null,
+ *   });
+ * }
  */
 export async function proxyRequest(req: NextRequest, options: ProxyOptions): Promise<NextResponse> {
   console.debug('[proxyRequest] Requested URL:', req.nextUrl.pathname);
