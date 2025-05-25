@@ -13,11 +13,14 @@
     "cancel": "Cancel",
     "create": "Create",
     "logout": "Logout",
-    "save": "Save"
+    "save": "Save",
+    "updating": "Updating...",
+    "update": "Update"
   },
   "copyright": "All Rights Reserved",
   "toast": {
     "titleSuccess": "Success",
+    "titleError": "Error",
     "saveSuccess": "Successfully saved the changes."
   }
 }

@@ -13,11 +13,14 @@
     "cancel": "Abbrechen",
     "create": "Erstellen",
     "logout": "Abmelden",
-    "save": "Speichern"
+    "save": "Speichern",
+    "updating": "Wird aktualisiert...",
+    "update": "Aktualisieren"
   },
   "copyright": "Alle Rechte vorbehalten",
   "toast": {
     "titleSuccess": "Erfolgreich",
+    "titleError": "Fehler",
     "saveSuccess": "Änderungen wurden erfolgreich gespeichert."
   }
 }
