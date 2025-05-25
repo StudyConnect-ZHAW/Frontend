@@ -40,7 +40,8 @@
   },
   "account": {
     "title": "Konto",
-    "subtitle": "Konto-Einstellungen"
+    "subtitle": "Konto-Einstellungen",
+    "calendarInfoText": "Für die Kalendersynchronisierung werden nur E-Mails vom Typ zhaw-kürzel@beispiel.com unterstützt."
   },
   "profile": {
     "title": "Profil",
@@ -50,5 +51,10 @@
     "modulePreferencesLabel": "Modulpräferenzen",
     "modulePreferencesInfo": "Halte Strg (Windows) oder Cmd (Mac), um mehrere Module auszuwählen.",
     "availabilityLabel": "Verfügbarkeit (Wochentage & Zeiten)"
+  },
+  "toast": {
+    "emailSuccess": "Deine Email wurde erfolgreich aktualisiert.",
+    "emailError": "Deine Email konnte nicht aktualisiert werden. Bitte versuch es erneut.",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
   }
 }

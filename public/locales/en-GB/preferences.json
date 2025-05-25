@@ -40,7 +40,8 @@
   },
   "account": {
     "title": "Account",
-    "subtitle": "Account Settings"
+    "subtitle": "Account Settings",
+    "calendarInfoText": "Only zhaw-shortname@example.com emails are supported for calendar synchronization."
   },
   "profile": {
     "title": "Profile",
@@ -50,5 +51,10 @@
     "modulePreferencesLabel": "Module Preferences",
     "modulePreferencesInfo": "Hold Ctrl (Windows) or Cmd (Mac) to select multiple modules.",
     "availabilityLabel": "Availability (Weekdays and Time)"
+  },
+    "toast": {
+    "emailSuccess": "Your email has been successfully updated.",
+    "emailError": "Your email could not be updated. Please try again.",
+    "invalidEmail": "Please enter a valid email address."
   }
 }

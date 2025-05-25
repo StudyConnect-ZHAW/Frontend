@@ -39,6 +39,7 @@ export async function GET(request: NextRequest) {
 
     if (!idToken) {
       console.error('ID token is missing from the token response');
+
       return NextResponse.redirect(new URL('/?error=missing_id_token', request.url));
     }
 
@@ -48,6 +49,7 @@ export async function GET(request: NextRequest) {
 
     if (!userGuid) {
       console.error('OID not found in ID token');
+
       return NextResponse.redirect(new URL('/?error=invalid_token', request.url));
     }
 
@@ -86,9 +88,9 @@ export async function GET(request: NextRequest) {
         );
       }
 
-
     } else if (!userCheck.ok) {
       console.error(`User check failed: ${userCheck.status}`);
+
       return NextResponse.redirect(new URL('/?error=user_check_failed', request.url));
     }
 
@@ -108,10 +110,12 @@ export async function GET(request: NextRequest) {
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error('Error acquiring token:', error.message);
+
       return NextResponse.redirect(new URL(`/?error=${encodeURIComponent(error.message)}`, request.url));
     }
 
     console.error('Unknown error acquiring token:', error);
+
     return NextResponse.redirect(new URL('/?error=unknown_error', request.url));
   }
 
@@ -128,6 +132,7 @@ export async function GET(request: NextRequest) {
         lastName = parts.slice(1).join(' ');
       }
     }
+
     return { firstName, lastName };
   }
 }
