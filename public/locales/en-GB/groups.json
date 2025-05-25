@@ -1,8 +1,16 @@
 {
   "title": "Groups",
   "button": {
-    "create": "Create Group",
-    "join": "Join Group"
+    "createGroup": "Create Group",
+    "joinGroup": "Join Group",
+    "join": "Join",
+    "leave": "Leave"
+  },
+  "card": {
+    "owner": "Owner",
+    "members": "Members",
+    "membersCount": "Member count",
+    "createdAt": "Created at"
   },
   "search": "Search groups...",
   "sort": {

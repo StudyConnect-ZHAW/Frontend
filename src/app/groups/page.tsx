@@ -73,12 +73,12 @@ const GroupsPage = () => {
 
         <div className="flex flex-wrap gap-3 ml-auto">
           <Button
-            text={t('button.join')}
+            text={t('button.joinGroup')}
             type={ButtonVariant.Primary}
             onClick={() => setShowJoinModal(true)}
           />
           <Button
-            text={t('button.create')}
+            text={t('button.createGroup')}
             type={ButtonVariant.Primary}
             onClick={() => setShowCreateModal(true)}
           />

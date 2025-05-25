@@ -1,8 +1,16 @@
 {
   "title": "Gruppen",
   "button": {
-    "create": "Gruppe Erstellen",
-    "join": "Gruppe Beitreten"
+    "createGroup": "Gruppe Erstellen",
+    "joinGroup": "Gruppe Beitreten",
+    "join": "Beitreten",
+    "leave": "Verlassen"
+  },
+  "card": {
+    "owner": "Besitzer",
+    "members": "Mitglieder",
+    "membersCount": "Mitgliederzahl",
+    "createdAt": "Erstellungsdatum"
   },
   "search": "Gruppe suchen...",
   "sort": {

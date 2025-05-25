@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function GroupCard({ group, joined, onJoin, onLeave }: Props) {
-  const { i18n } = useTranslation(['groups', 'common']);
+  const { t, i18n } = useTranslation(['groups', 'common']);
 
   const date = new Intl.DateTimeFormat(i18n.language, {
     day: '2-digit',
@@ -23,7 +23,7 @@ export default function GroupCard({ group, joined, onJoin, onLeave }: Props) {
     <div className="border-main rounded-lg shadow p-4 bg-primary-bg cursor-pointer relative">
       <div className="absolute top-3 right-3">
         <Button
-          text={joined ? "Leave" : "Join"}
+          text={joined ? t('button.leave') : t('button.join')}
           type={ButtonVariant.Primary}
           onClick={joined ? onLeave ?? (() => { }) : onJoin ?? (() => { })}>
         </Button>
@@ -31,9 +31,9 @@ export default function GroupCard({ group, joined, onJoin, onLeave }: Props) {
 
       <h3 className="text-lg font-semibold text-primary mb-1">{group.name}</h3>
       <p className="text-sm text-secondary mb-1">{group.description}</p>
-      <p className="text-sm text-secondary mb-1">{`Owner: ${group.ownerId}`}</p>
-      <p className="text-sm text-secondary mb-1">{`Members: ${group.members?.length ?? 'N/A'}`}</p>
-      <p className="text-sm text-secondary mb-1">{`Created at: ${date}`}</p>
+      <p className="text-sm text-secondary mb-1">{`${t('card.owner')}: ${group.ownerId}`}</p>
+      <p className="text-sm text-secondary mb-1">{`${t('card.members')}: ${group.members?.length ?? 'N/A'}`}</p>
+      <p className="text-sm text-secondary mb-1">{`${t('card.createdAt')}: ${date}`}</p>
     </div>
   );
 }
