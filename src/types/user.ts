@@ -2,7 +2,7 @@
  * Represents an individual user.
  */
 export interface User {
-  userGuid: string;
+  userGuid?: string; // TODO (Adrian): Remove optionality
   firstName: string;
   lastName: string;
   email: string;
