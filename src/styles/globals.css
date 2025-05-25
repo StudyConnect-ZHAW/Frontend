@@ -34,6 +34,13 @@
   --btn-danger: #f87171;
   --btn-danger-hover: #ef4444;
 
+  /* Card and toggle colors */
+  --color-card-bg: #ffffff;          
+  --color-card-border: #ffcc00;      
+  --color-toggle-on: #facc15;        
+  --color-toggle-off: #d1d5db;       
+  --color-toggle-knob: #ffffff;      
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -66,6 +73,13 @@
     --btn-ghost-hover: #475569;
     --btn-danger: #ef4444;
     --btn-danger-hover: #f87171;
+
+    /* Card and toggle colors */
+    --color-card-bg: #2a2931;  
+    --color-card-border: #ffcc00;
+    --color-toggle-on: #facc15;       
+    --color-toggle-off: #4b5563;   
+    --color-toggle-knob: #1f2937; 
 
     /* Icon colors */
     --color-icon: #fdba15;
