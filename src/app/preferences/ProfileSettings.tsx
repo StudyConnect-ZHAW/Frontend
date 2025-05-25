@@ -91,7 +91,7 @@ export default function ProfileSettings({ onClose }: Props) {
   };
 
   return (
-    <div className="flex flex-col h-[85vh] bg-[var(--color-primary-bg)] text-[var(--color-primary)] rounded-2xl overflow-hidden shadow-lg">
+    <div className="flex flex-col h-[85vh] dark:primary-bg dark:text-primary rounded-2xl overflow-hidden shadow-lg">
       <div className="overflow-y-auto p-8 space-y-6 flex-1">
         {/* Profile Picture & Name Row */}
         <div className="flex items-center gap-10 mb-8">
@@ -101,11 +101,11 @@ export default function ProfileSettings({ onClose }: Props) {
               alt="Profilbild"
               width={140}
               height={140}
-              className="rounded-full border-4 border-[var(--color-main-border)] object-cover"
+              className="rounded-full border-4 border-main object-cover"
             />
             <button
               onClick={handleEditPicture}
-              className="mt-3 text-base font-bold text-black dark:text-[var(--color-primary)] hover:underline"
+              className="mt-3 text-base font-bold text-black dark:text-primary hover:underline cursor-pointer"
             >
               {t("Edit")}
             </button>
@@ -127,7 +127,7 @@ export default function ProfileSettings({ onClose }: Props) {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full border-2 border-[var(--color-main-border)] rounded-lg px-4 py-3 bg-[var(--color-primary-bg)] text-base"
+                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:primary-bg text-base cursor-text"
               />
             </div>
             <div>
@@ -138,7 +138,7 @@ export default function ProfileSettings({ onClose }: Props) {
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full border-2 border-[var(--color-main-border)] rounded-lg px-4 py-3 bg-[var(--color-primary-bg)] text-base"
+                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:primary-bg text-base cursor-text"
               />
             </div>
           </div>
@@ -163,10 +163,10 @@ export default function ProfileSettings({ onClose }: Props) {
                         : [...prev, cat.forumCategoryId]
                     );
                   }}
-                  className={`px-5 py-2 rounded-full border-2 text-base transition ${
+                  className={`px-5 py-2 rounded-full border-2 text-base transition cursor-pointer ${
                     isSelected
-                      ? "bg-[var(--color-main-border)] text-black dark:text-[var(--color-primary)] border-[var(--color-main-border)]"
-                      : "bg-[var(--color-card-bg)] text-[var(--color-primary)] border-[var(--color-card-border)] dark:border-[var(--color-main-border)] hover:bg-[var(--color-hover-bg)]"
+                      ? "bg-yellow-400 dark:bg-red-600 text-black dark:text-white border-yellow-400 dark:border-red-600"
+                      : "bg-white dark:bg-gray-800 text-black dark:text-white border-yellow-400 dark:border-red-600 hover:bg-yellow-100 dark:hover:bg-gray-700"
                   }`}
                 >
                   {cat.name}
@@ -180,6 +180,7 @@ export default function ProfileSettings({ onClose }: Props) {
         </div>
 
         {/* Availability */}
+        {/* Availability */}
         <div>
           <label className="block text-base font-semibold mb-3">
             {t("profile.availabilityLabel")}
@@ -190,11 +191,12 @@ export default function ProfileSettings({ onClose }: Props) {
               return (
                 <div
                   key={day}
-                  className={`p-3 rounded-lg border-2 flex flex-col gap-2 transition bg-[var(--color-card-bg)] ${
-                    isActive
-                      ? "border-[var(--color-card-border)]"
-                      : "border-[var(--color-main-border)]"
-                  }`}
+                  className={`p-3 rounded-lg border-2 flex flex-col gap-2 transition
+            ${
+              isActive
+                ? "bg-white dark:bg-gray-800 border-yellow-400 dark:border-red-600"
+                : "bg-white dark:bg-gray-800 border-yellow-400 dark:border-red-600"
+            }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-base">{day}</span>
@@ -206,16 +208,18 @@ export default function ProfileSettings({ onClose }: Props) {
                         onChange={() => toggleDay(day)}
                       />
                       <div
-                        className={`w-12 h-6 rounded-full ${
-                          isActive
-                            ? "bg-[var(--color-toggle-on)]"
-                            : "bg-[var(--color-toggle-off)]"
-                        } relative transition`}
+                        className={`w-12 h-6 rounded-full transition
+                  ${
+                    isActive
+                      ? "bg-yellow-400 dark:bg-yellow-500"
+                      : "bg-gray-300 dark:bg-gray-600"
+                  } relative`}
                       >
                         <div
-                          className={`w-5 h-5 rounded-full shadow absolute top-0.5 transition bg-[var(--color-toggle-knob)] ${
-                            isActive ? "translate-x-6" : "translate-x-0.5"
-                          }`}
+                          className={`w-5 h-5 rounded-full shadow absolute top-0.5 transition
+                    bg-white dark:bg-gray-200
+                    ${isActive ? "translate-x-6" : "translate-x-0.5"}
+                  `}
                         ></div>
                       </div>
                     </label>
@@ -229,14 +233,14 @@ export default function ProfileSettings({ onClose }: Props) {
                         onChange={(e) =>
                           updateTime(day, "from", e.target.value)
                         }
-                        className="border-2 rounded px-3 py-1 w-[100px] bg-[var(--color-primary-bg)] text-base"
+                        className="border-2 rounded px-3 py-1 w-[100px] bg-white dark:bg-gray-700 text-base cursor-text"
                       />
                       <span>–</span>
                       <input
                         type="time"
                         value={availability[day]?.to || ""}
                         onChange={(e) => updateTime(day, "to", e.target.value)}
-                        className="border-2 rounded px-3 py-1 w-[100px] bg-[var(--color-primary-bg)] text-base"
+                        className="border-2 rounded px-3 py-1 w-[100px] bg-white dark:bg-gray-700 text-base cursor-text"
                       />
                     </div>
                   )}
@@ -248,7 +252,7 @@ export default function ProfileSettings({ onClose }: Props) {
       </div>
 
       {/* Sticky Footer */}
-      <div className="border-t-2 border-[var(--color-main-border)] p-4 flex justify-between bg-[var(--color-primary-bg)]">
+      <div className="border-t-2 border-yellow-400 dark:border-red-600 p-4 flex justify-between bg-white dark:bg-gray-800">
         <Button
           text={t("common:button.cancel")}
           type={ButtonVariant.Ghost}
