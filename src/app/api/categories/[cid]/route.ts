@@ -3,6 +3,10 @@ import { proxyRequest } from '@/lib/api/proxyRequest';
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/categories`;
 
+/**
+ * Forwards a GET request to the backend to retrieve a specific category by ID.
+ * The ID is extracted from the dynamic route segment `[cid]`.
+ */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ cid: string }> }) {
   const { cid } = await params;
 
@@ -12,6 +16,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ cid:
   });
 }
 
+/**
+ * Forwards a DELETE request to the backend to delete a specific category by ID.
+ * The ID is extracted from the dynamic route segment `[cid]`.
+ */
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ cid: string }> }) {
   const { cid } = await params;
 

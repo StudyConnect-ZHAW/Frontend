@@ -1,10 +1,17 @@
+/**
+ * Represents an individual user.
+ */
 export interface User {
   firstName: string;
   lastName: string;
   email: string;
 }
 
-export interface UserCreate {
+/**
+ * Payload to create a new user in the backend.
+ * Includes the ID provided by the token.
+ */
+export interface UserCreateData {
   userGuid: string;
   firstName: string;
   lastName: string;

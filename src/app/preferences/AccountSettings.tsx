@@ -12,6 +12,11 @@ type Props = {
   onClose: () => void;
 };
 
+/**
+ * AccountSettings allows users to update their ZHAW email and log out.
+ * The current user's data is retrieved via token-based identification.
+ * Input is validated client-side, and feedback is shown via toast messages.
+ */
 export default function AccountSettings({ onClose }: Props) {
   const { t } = useTranslation(['preferences', 'common']);
   const [zhawEmail, setZhawEmail] = useState('');
@@ -22,9 +27,11 @@ export default function AccountSettings({ onClose }: Props) {
     redirect('/auth/logout');
   };
 
-  // Handles the email update logic including loading state and toast feedback
+  // Updates the user's email after validating the input
   const handleEmailUpdate = async () => {
     const trimmedEmail = zhawEmail.trim();
+
+    // Basic email format check — does not ensure domain or validity
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
 
     if (!isValidEmail) {
@@ -36,8 +43,10 @@ export default function AccountSettings({ onClose }: Props) {
     setLoading(true);
 
     try {
+      // Fetch the current user from backend (based on token)
       const currentUser = await getCurrentUser();
 
+      // Only email is being updated — preserve other user data
       const updatedUser: User = {
         firstName: currentUser.firstName,
         lastName: currentUser.lastName,
@@ -58,12 +67,12 @@ export default function AccountSettings({ onClose }: Props) {
   return (
     <div className="flex flex-col max-h-[70vh] bg-primary-bg text-primary p-4">
 
-      {/* Info Text */}
+      {/* Info about calendar integration and ZHAW email */}
       <p className="text-sm text-secondary mb-2">
         {t('preferences:account.calendarInfoText')}
       </p>
 
-      {/* Email Field */}
+      {/* Email input field for updating ZHAW email */}
       <input
         type="email"
         value={zhawEmail}
@@ -72,7 +81,7 @@ export default function AccountSettings({ onClose }: Props) {
         className="w-full border rounded-md px-4 py-2 bg-primary-bg mb-2"
       />
 
-      {/* Update Button */}
+      {/* Button to confirm email update */}
       <div className="flex justify-end sticky bottom-0 bg-primary-bg pt-4">
         <Button
           text={loading ? t('common:button.update') : t('common:button.update')}
@@ -81,7 +90,7 @@ export default function AccountSettings({ onClose }: Props) {
         />
       </div>
 
-      {/* Footer Buttons */}
+      {/* Cancel and logout actions */}
       <div className="border-t pt-4 mt-4 flex justify-between bg-primary-bg sticky bottom-0">
         <Button text={t('common:button.cancel')} type={ButtonVariant.Ghost} onClick={onClose} />
         <Button text={t('common:button.logout')} type={ButtonVariant.Danger} onClick={handleLogout} />

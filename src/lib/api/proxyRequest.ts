@@ -8,11 +8,11 @@ export interface ProxyOptions {
 }
 
 /**
- * Extracts the bearer token from the 'access_token' HttpOnly cookie.
- * If the token is missing, returns a 401 response.
+ * Retrieves the bearer token from the 'access_token' HttpOnly cookie.
+ * Returns a 401 response if the token is missing.
  *
- * @param req - The incoming Next.js request
- * @returns The token string or a 401 NextResponse
+ * @param req - Incoming request from a Next.js route handler
+ * @returns The extracted token or a 401 response
  */
 function requireAuth(req: NextRequest): { token: string } | NextResponse {
   const token = req.cookies.get('access_token')?.value;
@@ -47,9 +47,10 @@ export async function proxyRequest(req: NextRequest, options: ProxyOptions): Pro
   console.debug('[proxyRequest] HTTP method:', options.method);
   console.debug('[proxyRequest] withBody:', options.withBody);
 
+  // Ensure request is authenticated
   const auth = requireAuth(req);
   if (auth instanceof NextResponse) {
-    console.warn('[proxyRequest] Unauthorized request. Aborting.');
+    console.warn('[proxyRequest] Unauthorized request.');
 
     return auth;
   }
@@ -58,6 +59,7 @@ export async function proxyRequest(req: NextRequest, options: ProxyOptions): Pro
 
   if (options.withBody) {
     try {
+      // Parse JSON body from request
       body = await req.json();
       console.debug('[proxyRequest] Parsed request body:', body);
     } catch {
@@ -102,6 +104,7 @@ export async function proxyRequest(req: NextRequest, options: ProxyOptions): Pro
       return NextResponse.json({ error: text }, { status: res.status });
     }
 
+    // Attempt to parse backend response as JSON
     try {
       const json = JSON.parse(text);
 

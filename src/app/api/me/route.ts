@@ -2,6 +2,12 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
 
+/**
+ * Forwards a GET request to the backend to retrieve the current user's information.
+ * The user ID is extracted by decoding the access token from the cookie.
+ * This route is used by components that need information of the current user but don't
+ * have access the current user's id.
+ */
 export async function GET() {
   const cookieStore = await cookies();
   const token = cookieStore.get('access_token')?.value;
