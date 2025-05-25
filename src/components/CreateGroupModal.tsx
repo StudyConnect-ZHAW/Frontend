@@ -2,17 +2,18 @@
 
 import { useState } from 'react';
 import Button, { ButtonVariant } from '@/components/Button';
-import { GroupCreateData } from '@/types/group';
 import { useTranslation } from 'react-i18next';
 import { showToast, ToastType } from '@/components/Toast';
+import { GroupCreateData } from '@/types/group';
+
+type GroupFormInput = Omit<GroupCreateData, 'ownerId'>;
 
 interface Props {
-  userId: string;
   onClose: () => void;
-  onCreate: (data: GroupCreateData) => void;
+  onCreate: (data: GroupFormInput) => void;
 }
 
-export default function CreateGroupModal({ userId, onClose, onCreate }: Props) {
+export default function CreateGroupModal({ onClose, onCreate }: Props) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
@@ -27,7 +28,7 @@ export default function CreateGroupModal({ userId, onClose, onCreate }: Props) {
       return;
     }
 
-    onCreate({ name: trimmedName, description: trimmedDescription, ownerId: userId });
+    onCreate({ name: trimmedName, description: trimmedDescription });
     onClose();
   };
 

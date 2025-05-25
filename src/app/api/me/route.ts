@@ -28,7 +28,8 @@ export async function GET() {
 
     const user = await res.json();
 
-    return NextResponse.json(user);
+    // Attach the decoded OID as userGuid
+    return NextResponse.json({ ...user, userGuid: decoded.oid });
   } catch (err) {
     console.error('Failed to decode token:', err);
 

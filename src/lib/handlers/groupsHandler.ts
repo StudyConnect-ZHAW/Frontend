@@ -1,20 +1,9 @@
 import type { Group, GroupCreateData, GroupMember, GroupUpdateData } from '@/types/group';
 import { parseResponse } from '@/lib/api/parseResponse';
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}v1`;
-
-function getRequestHeaders(): HeadersInit {
-  return {
-    'Content-Type': 'application/json',   // Request body format
-    'Accept': 'application/json',         // Response body format
-  };
-}
-
 export async function createGroup(data: GroupCreateData): Promise<Group> {
-  const res = await fetch(`${BASE_URL}/groups`, {
+  const res = await fetch(`api/groups`, {
     method: 'POST',
-    credentials: 'include',
-    headers: getRequestHeaders(),
     body: JSON.stringify(data),
   });
 
@@ -22,30 +11,24 @@ export async function createGroup(data: GroupCreateData): Promise<Group> {
 }
 
 export async function getAllGroups(): Promise<Group[]> {
-  const res = await fetch(`${BASE_URL}/groups`, {
+  const res = await fetch(`api/groups`, {
     method: 'GET',
-    credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   return parseResponse<Group[]>(res);
 }
 
 export async function getGroupById(groupId: string): Promise<Group> {
-  const res = await fetch(`${BASE_URL}/groups/${groupId}`, {
+  const res = await fetch(`api/groups/${groupId}`, {
     method: 'GET',
-    credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   return parseResponse<Group>(res);
 }
 
 export async function updateGroup(groupId: string, data: GroupUpdateData): Promise<string> {
-  const res = await fetch(`${BASE_URL}/groups/${groupId}`, {
+  const res = await fetch(`api/groups/${groupId}`, {
     method: 'PUT',
-    credentials: 'include',
-    headers: getRequestHeaders(),
     body: JSON.stringify(data),
   });
 
@@ -54,10 +37,8 @@ export async function updateGroup(groupId: string, data: GroupUpdateData): Promi
 }
 
 export async function deleteGroup(groupId: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/groups/${groupId}`, {
+  const res = await fetch(`api/groups/${groupId}`, {
     method: 'DELETE',
-    credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   if (!res.ok) {
@@ -69,10 +50,8 @@ export async function deleteGroup(groupId: string): Promise<void> {
 }
 
 export async function joinGroup(groupId: string, userId: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/groups/${groupId}/members/${userId}`, {
+  const res = await fetch(`api/groups/${groupId}/members/${userId}`, {
     method: 'POST',
-    credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   // 200 OK with no body
@@ -80,10 +59,8 @@ export async function joinGroup(groupId: string, userId: string): Promise<void> 
 }
 
 export async function leaveGroup(groupId: string, userId: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/groups/${groupId}/members/${userId}`, {
+  const res = await fetch(`api/groups/${groupId}/members/${userId}`, {
     method: 'DELETE',
-    credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   // 204 No Content
@@ -91,30 +68,24 @@ export async function leaveGroup(groupId: string, userId: string): Promise<void>
 }
 
 export async function getGroupMembers(groupId: string): Promise<GroupMember[]> {
-  const res = await fetch(`${BASE_URL}/groups/${groupId}/members`, {
+  const res = await fetch(`api/groups/${groupId}/members`, {
     method: 'GET',
-    credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   return parseResponse<GroupMember[]>(res);
 }
 
 export async function getJoinedGroups(userId: string): Promise<Group[]> {
-  const res = await fetch(`${BASE_URL}/users/${userId}/groups`, {
+  const res = await fetch(`api/users/${userId}/groups`, {
     method: 'GET',
-    credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   return parseResponse<Group[]>(res);
 }
 
 export async function getOwnedGroups(userId: string): Promise<Group[]> {
-  const res = await fetch(`${BASE_URL}/users/${userId}/owned`, {
+  const res = await fetch(`api/users/${userId}/owned`, {
     method: 'GET',
-    credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   return parseResponse<Group[]>(res);

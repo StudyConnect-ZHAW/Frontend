@@ -2,6 +2,7 @@
  * Represents an individual user.
  */
 export interface User {
+  userGuid: string;
   firstName: string;
   lastName: string;
   email: string;

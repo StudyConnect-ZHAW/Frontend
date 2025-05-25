@@ -1,17 +1,23 @@
 import { useEffect, useState, useCallback } from 'react';
 import {
   createGroup,
+  deleteGroup,
   getAllGroups,
   getJoinedGroups,
   getOwnedGroups,
   joinGroup,
   leaveGroup,
-} from '@/lib/api/groups';
+} from '@/lib/handlers/groupsHandler';
 import type { Group, GroupCreateData } from '@/types/group';
 import { showToast, ToastType } from '@/components/Toast';
 import { useTranslation } from 'react-i18next';
 
-export function useGroups(userId: string | null) {
+/**
+ * Custom hook to manage groups the user has joined, owns, or can join.
+ * 
+ * @param userId - The unique identifier of the current user (required).
+ */
+export function useGroups(userId?: string) {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [availableGroups, setAvailableGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,8 +25,12 @@ export function useGroups(userId: string | null) {
 
   const { t } = useTranslation(['groups', 'common']);
 
+  /**
+   * Loads the user's owned/joined groups and all available groups.
+   * Filters out groups the user is already part of (owned or joined).
+   */
   const fetchGroups = useCallback(async () => {
-    if (!userId) { return; };
+    if (!userId) { return; }
 
     try {
       setLoading(true);
@@ -32,13 +42,14 @@ export function useGroups(userId: string | null) {
         getAllGroups(),
       ]);
 
-      // Avoid duplicates: prefer owned group over joined group
+      // Merge owned and joined groups, avoiding duplicates
       const ownedIds = new Set(owned.map((g) => g.groupId));
       const combined = [
         ...owned,
         ...joined.filter((g) => !ownedIds.has(g.groupId)),
       ]
 
+      // Filter out groups the user is already in
       const myIds = new Set(combined.map((g) => g.groupId));
       const available = all.filter((g) => !myIds.has(g.groupId));
 
@@ -56,8 +67,11 @@ export function useGroups(userId: string | null) {
     fetchGroups();
   }, [fetchGroups]);
 
+  /**
+   * Joins a group and moves it from the available list to the joined list.
+   */
   const handleJoin = async (groupId: string) => {
-    if (!userId) { return; };
+    if (!userId) { return; }
 
     try {
       await joinGroup(groupId, userId);
@@ -75,19 +89,25 @@ export function useGroups(userId: string | null) {
     }
   };
 
+  /**
+   * Leaves a group and moves it back to available (unless owned since it gets deleted 
+   * in the backend).
+   */
   const handleLeave = async (groupId: string) => {
-    if (!userId) { return; };
+    if (!userId) { return; }
 
     const group = myGroups.find((g) => g.groupId === groupId);
     if (!group) { return; }
 
     try {
-      await leaveGroup(groupId, userId);
-
       const isOwner = group.ownerId === userId;
 
-      // If owner leaves, the group gets deleted on backend, so don't move to available
-      if (!isOwner) {
+      if (isOwner) {
+        // Delete owned group upon leaving
+        await deleteGroup(groupId);
+      } else {
+        // Leave group and add it to available groups
+        await leaveGroup(groupId, userId);
         setAvailableGroups((prev) => [...prev, group]);
       }
 
@@ -100,8 +120,11 @@ export function useGroups(userId: string | null) {
     }
   };
 
+  /**
+   * Creates a new group and adds it directly to the joined list.
+   */
   const handleCreate = async (data: GroupCreateData) => {
-    if (!userId) { return; };
+    if (!userId) { return; }
 
     try {
       const newGroup = await createGroup({ ...data, ownerId: userId });
@@ -117,7 +140,7 @@ export function useGroups(userId: string | null) {
   return {
     myGroups,
     availableGroups,
-    loading: loading || !userId,
+    loading,
     error,
     handleJoin,
     handleLeave,

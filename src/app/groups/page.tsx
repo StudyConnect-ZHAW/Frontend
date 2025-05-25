@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
 import PageHeader from "@/components/PageHeader";
 import GroupCard from "@/components/GroupCard";
 import SearchInput from "@/components/SearchInput";
@@ -12,35 +11,15 @@ import CreateGroupModal from "@/components/CreateGroupModal";
 import JoinGroupModal from "@/components/JoinGroupModal";
 import { useGroupFilter, SortOption } from "@/hooks/useGroupsFilter";
 import { useGroups } from "@/hooks/useGroups";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const GroupsPage = () => {
+  const { t } = useTranslation(['groups', 'common']);
+  const { user, loading: loadingUser } = useCurrentUser();
+  const userGuid = user?.userGuid;
+
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [userId, setUserId] = useState<string | null>(null);
-
-  const { t } = useTranslation(['groups', 'common']);
-  const router = useRouter();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/api/me');
-        if (!res.ok) {
-          router.push('/login');
-
-          return;
-        }
-
-        const user = await res.json();
-        setUserId(user.userId);
-      } catch (err) {
-        console.error('Error fetching user:', err);
-        router.push('/login');
-      }
-    };
-
-    fetchUser();
-  }, [router]);
 
   const {
     myGroups,
@@ -50,7 +29,7 @@ const GroupsPage = () => {
     handleJoin,
     handleLeave,
     handleCreate,
-  } = useGroups(userId);
+  } = useGroups(userGuid);
 
   const {
     search,
@@ -61,7 +40,8 @@ const GroupsPage = () => {
     filteredGroups: filteredMyGroups
   } = useGroupFilter(myGroups);
 
-  if (!userId) {
+  // Show loading screen until user is loaded
+  if (loadingUser || !userGuid) {
     return (
       <div className="flex items-center justify-center h-full text-primary text-xl">
         {t('common:loading')}
@@ -143,11 +123,12 @@ const GroupsPage = () => {
         />
       )}
 
-      {showCreateModal && userId && (
+      {showCreateModal && (
         <CreateGroupModal
-          userId={userId}
           onClose={() => setShowCreateModal(false)}
-          onCreate={handleCreate}
+          onCreate={({ name, description }) =>
+            handleCreate({ name, description, ownerId: userGuid })
+          }
         />
       )}
     </div>

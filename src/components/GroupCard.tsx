@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function GroupCard({ group, joined, onJoin, onLeave }: Props) {
-  const { t, i18n } = useTranslation(['groups', 'common']);
+  const { i18n } = useTranslation(['groups', 'common']);
 
   const date = new Intl.DateTimeFormat(i18n.language, {
     day: '2-digit',
