@@ -121,7 +121,7 @@ export default function ProfileSettings({ onClose }: Props) {
           <div className="flex flex-col flex-1 gap-4">
             <div>
               <label className="block text-base font-semibold mb-1">
-                {t("First Name")}
+                {t("profile.firstNameLabel")}
               </label>
               <input
                 type="text"
@@ -132,7 +132,7 @@ export default function ProfileSettings({ onClose }: Props) {
             </div>
             <div>
               <label className="block text-base font-semibold mb-1">
-                {t("Last Name")}
+                {t("profile.lastNameLabel")}
               </label>
               <input
                 type="text"
@@ -166,7 +166,7 @@ export default function ProfileSettings({ onClose }: Props) {
                   className={`px-5 py-2 rounded-full border-2 text-base transition ${
                     isSelected
                       ? "bg-[var(--color-main-border)] text-black dark:text-[var(--color-primary)] border-[var(--color-main-border)]"
-                      : "bg-[var(--color-secondary-bg)] text-[var(--color-primary)] border-[var(--color-main-border)] hover:bg-[var(--color-hover-bg)]"
+                      : "bg-[var(--color-card-bg)] text-[var(--color-primary)] border-[var(--color-card-border)] dark:border-[var(--color-main-border)] hover:bg-[var(--color-hover-bg)]"
                   }`}
                 >
                   {cat.name}
@@ -190,10 +190,10 @@ export default function ProfileSettings({ onClose }: Props) {
               return (
                 <div
                   key={day}
-                  className={`p-3 rounded-lg border-2 flex flex-col gap-2 transition ${
+                  className={`p-3 rounded-lg border-2 flex flex-col gap-2 transition bg-[var(--color-card-bg)] ${
                     isActive
-                      ? "bg-[var(--color-highlight-bg)] border-[var(--color-highlight-border)]"
-                      : "bg-[var(--color-secondary-bg)] border-[var(--color-main-border)]"
+                      ? "border-[var(--color-card-border)]"
+                      : "border-[var(--color-main-border)]"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -208,8 +208,8 @@ export default function ProfileSettings({ onClose }: Props) {
                       <div
                         className={`w-12 h-6 rounded-full ${
                           isActive
-                            ? "bg-[var(--color-highlight-border)]"
-                            : "bg-[var(--color-toggle-bg)]"
+                            ? "bg-[var(--color-toggle-on)]"
+                            : "bg-[var(--color-toggle-off)]"
                         } relative transition`}
                       >
                         <div
