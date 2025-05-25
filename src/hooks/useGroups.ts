@@ -7,6 +7,7 @@ import {
   getOwnedGroups,
   joinGroup,
   leaveGroup,
+  getGroupMembers
 } from '@/lib/handlers/groupsHandler';
 import type { Group, GroupCreateData } from '@/types/group';
 import { showToast, ToastType } from '@/components/Toast';
@@ -20,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 export function useGroups(userId?: string) {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [availableGroups, setAvailableGroups] = useState<Group[]>([]);
+  const [memberCounts, setMemberCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,6 +57,30 @@ export function useGroups(userId?: string) {
 
       setMyGroups(combined);
       setAvailableGroups(available);
+
+      // Fetch member in parallel
+      const enrichedGroups = await Promise.all(
+        combined.map(async (group) => {
+          try {
+            const members = await getGroupMembers(group.groupId);
+            return {
+              ...group,
+              members,
+            };
+          } catch {
+            return {
+              ...group,
+              members: [],
+            };
+          }
+        })
+      );
+
+      // Update member count mapping (+1 for owner)
+      const memberCountEntries = enrichedGroups.map(g => [g.groupId, (g.members?.length ?? 0) + 1]);
+      setMemberCounts(Object.fromEntries(memberCountEntries));
+
+      setMyGroups(enrichedGroups);
     } catch (err) {
       console.error('Error loading groups:', err);
       setError(t('errorLoading'));
@@ -81,6 +107,11 @@ export function useGroups(userId?: string) {
 
       setMyGroups((prev) => [...prev, group]);
       setAvailableGroups((prev) => prev.filter((g) => g.groupId !== groupId));
+
+      setMemberCounts((prev) => ({
+        ...prev,
+        [groupId]: (prev[groupId] ?? 1) + 1,
+      }));
 
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.joinSuccess'));
     } catch (err) {
@@ -112,6 +143,11 @@ export function useGroups(userId?: string) {
       }
 
       setMyGroups((prev) => prev.filter((g) => g.groupId !== groupId));
+      setMemberCounts((prev) => {
+        const copy = { ...prev };
+        delete copy[groupId]; // Remove group
+        return copy;
+      });
 
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.leaveSuccess'));
     } catch (err) {
@@ -127,8 +163,13 @@ export function useGroups(userId?: string) {
     if (!userId) { return; }
 
     try {
-      const newGroup = await createGroup({ ...data, ownerId: userId });
+      const now = new Date().toISOString();
+      const newGroup = {
+        ...(await createGroup({ ...data, ownerId: userId })),
+        createdAt: now,
+      };
       setMyGroups((prev) => [...prev, newGroup]);
+      setMemberCounts((prev) => ({ ...prev, [newGroup.groupId]: 1 }));
 
       showToast(ToastType.Success, t('common:toast.titleSuccess'), t('toast.createSuccess'));
     } catch (err) {
@@ -140,6 +181,7 @@ export function useGroups(userId?: string) {
   return {
     myGroups,
     availableGroups,
+    memberCounts,
     loading,
     error,
     handleJoin,

@@ -6,11 +6,12 @@ import Button, { ButtonVariant } from './Button';
 interface Props {
   group: Group;
   joined: boolean;
+  memberCount?: number;
   onJoin?: () => void;
   onLeave?: () => void;
 }
 
-export default function GroupCard({ group, joined, onJoin, onLeave }: Props) {
+export default function GroupCard({ group, joined, memberCount, onJoin, onLeave }: Props) {
   const { t, i18n } = useTranslation(['groups', 'common']);
 
   const date = new Intl.DateTimeFormat(i18n.language, {
@@ -32,7 +33,7 @@ export default function GroupCard({ group, joined, onJoin, onLeave }: Props) {
       <h3 className="text-lg font-semibold text-primary mb-1">{group.name}</h3>
       <p className="text-sm text-secondary mb-1">{group.description}</p>
       <p className="text-sm text-secondary mb-1">{`${t('card.owner')}: ${group.ownerId}`}</p>
-      <p className="text-sm text-secondary mb-1">{`${t('card.members')}: ${group.members?.length ?? 'N/A'}`}</p>
+      <p className="text-sm text-secondary mb-1">{`${t('card.members')}: ${memberCount !== undefined ? memberCount : '1'}`}</p>
       <p className="text-sm text-secondary mb-1">{`${t('card.createdAt')}: ${date}`}</p>
     </div>
   );

@@ -13,7 +13,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ gro
   return proxyRequest(req, {
     method: 'POST',
     backendUrl: `${URL}/${groupId}/members/${userId}`,
-    withBody: true, // TODO (Adrian): Does it really need the body?
   });
 }
 

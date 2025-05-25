@@ -24,6 +24,7 @@ const GroupsPage = () => {
   const {
     myGroups,
     availableGroups,
+    memberCounts,
     loading,
     error,
     handleJoin,
@@ -106,6 +107,7 @@ const GroupsPage = () => {
                 key={group.groupId}
                 group={group}
                 joined={true}
+                memberCount={memberCounts[group.groupId]}
                 onLeave={() => handleLeave(group.groupId)}
               />
             ))}
