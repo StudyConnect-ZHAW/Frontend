@@ -31,6 +31,8 @@
     "title": "Profil",
     "subtitle": "Profilbild, Bio, Name",
     "nameLabel": "Name",
+    "firstNameLabel": "Vorname",
+    "lastNameLabel": "Nachname",
     "profilePictureLabel": "Profilbild",
     "modulePreferencesLabel": "Modulpräferenzen",
     "modulePreferencesInfo": "Klicke, um Module auszuwählen",
