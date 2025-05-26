@@ -1,11 +1,10 @@
 import { Comment, CommentCreateData, CommentUpdateData } from "@/types/forum";
-import { BASE_URL, getRequestHeaders, parseResponse } from "./apiUtils";
+import { parseResponse } from "../api/parseResponse";
 
 export async function createComment(postId: string, data: CommentCreateData): Promise<string> {
-  const res = await fetch(`${BASE_URL}/posts/${postId}/comments`, {
+  const res = await fetch(`/api/posts/${postId}/comments`, {
     method: 'POST',
     credentials: 'include',
-    headers: getRequestHeaders(),
     body: JSON.stringify(data),
   });
 
@@ -13,30 +12,27 @@ export async function createComment(postId: string, data: CommentCreateData): Pr
 }
 
 export async function getCommentsForPost(postId: string): Promise<Comment[]> {
-  const res = await fetch(`${BASE_URL}/posts/${postId}/comments`, {
+  const res = await fetch(`/api/posts/${postId}/comments`, {
     method: 'GET',
     credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   return parseResponse<Comment[]>(res);
 }
 
 export async function getCommentById(commentId: string): Promise<Comment> {
-  const res = await fetch(`${BASE_URL}/comments/${commentId}`, {
+  const res = await fetch(`/api/comments/${commentId}`, {
     method: 'GET',
     credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   return parseResponse<Comment>(res);
 }
 
 export async function updateComment(commentId: string, data: CommentUpdateData): Promise<Comment> {
-  const res = await fetch(`${BASE_URL}/comments/${commentId}`, {
+  const res = await fetch(`/api/comments/${commentId}`, {
     method: 'PUT',
     credentials: 'include',
-    headers: getRequestHeaders(),
     body: JSON.stringify(data),
   });
 
@@ -44,10 +40,9 @@ export async function updateComment(commentId: string, data: CommentUpdateData):
 }
 
 export async function deleteComment(commentId: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/comments/${commentId}`, {
+  const res = await fetch(`/api/comments/${commentId}`, {
     method: 'DELETE',
     credentials: 'include',
-    headers: getRequestHeaders(),
   });
 
   return parseResponse<void>(res);
