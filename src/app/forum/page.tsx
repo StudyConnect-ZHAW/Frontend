@@ -9,7 +9,7 @@
  * search term changes, the list is re‑fetched.
  *
  * Key features:
- *   • Search with 300 ms debounce
+ *   • Search with 300 ms debounce
  *   • New‑post form that triggers a refresh
  *   • Graceful handling of loading / empty states
  *   • Console logging for easy debugging (can be removed in prod)
