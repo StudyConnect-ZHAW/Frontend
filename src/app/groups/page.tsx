@@ -129,7 +129,7 @@ const GroupsPage = () => {
         <CreateGroupModal
           onClose={() => setShowCreateModal(false)}
           onCreate={({ name, description }) =>
-            handleCreate({ name, description, ownerId: userGuid })
+            handleCreate({ name, description })
           }
         />
       )}

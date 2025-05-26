@@ -21,7 +21,7 @@ export default function JoinGroupModal({ onClose, groups, onJoin, error, loading
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div
-        className="bg-primary-bg shadow-lg p-6 w-full max-w-4xl h-[80vh] relative border-main rounded-2xl flex flex-col overflow-hidden"
+        className="bg-primary-bg p-6 w-full max-w-4xl h-[80vh] relative border-main rounded-2xl flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <button

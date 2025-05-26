@@ -49,7 +49,7 @@ export function useGroups(userId?: string) {
       const combined = [
         ...owned,
         ...joined.filter((g) => !ownedIds.has(g.groupId)),
-      ]
+      ];
 
       // Filter out groups the user is already in
       const myIds = new Set(combined.map((g) => g.groupId));
@@ -63,6 +63,7 @@ export function useGroups(userId?: string) {
         combined.map(async (group) => {
           try {
             const members = await getGroupMembers(group.groupId);
+
             return {
               ...group,
               members,
@@ -97,12 +98,10 @@ export function useGroups(userId?: string) {
    * Joins a group and moves it from the available list to the joined list.
    */
   const handleJoin = async (groupId: string) => {
-    if (!userId) { return; }
-
     try {
-      await joinGroup(groupId, userId);
+      await joinGroup(groupId);
 
-      const group = availableGroups.find((g) => g.groupId === groupId)
+      const group = availableGroups.find((g) => g.groupId === groupId);
       if (!group) { return; }
 
       setMyGroups((prev) => [...prev, group]);
@@ -138,7 +137,7 @@ export function useGroups(userId?: string) {
         await deleteGroup(groupId);
       } else {
         // Leave group and add it to available groups
-        await leaveGroup(groupId, userId);
+        await leaveGroup(groupId);
         setAvailableGroups((prev) => [...prev, group]);
       }
 
@@ -146,6 +145,7 @@ export function useGroups(userId?: string) {
       setMemberCounts((prev) => {
         const copy = { ...prev };
         delete copy[groupId]; // Remove group
+
         return copy;
       });
 
@@ -160,12 +160,10 @@ export function useGroups(userId?: string) {
    * Creates a new group and adds it directly to the joined list.
    */
   const handleCreate = async (data: GroupCreateData) => {
-    if (!userId) { return; }
-
     try {
       const now = new Date().toISOString();
       const newGroup = {
-        ...(await createGroup({ ...data, ownerId: userId })),
+        ...(await createGroup(data)),
         createdAt: now,
       };
       setMyGroups((prev) => [...prev, newGroup]);

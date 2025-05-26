@@ -3,19 +3,18 @@
 import { useState } from 'react';
 import Button, { ButtonVariant } from '@/components/Button';
 import { useTranslation } from 'react-i18next';
-import { showToast, ToastType } from '@/components/Toast';
 import { GroupCreateData } from '@/types/group';
-
-type GroupFormInput = Omit<GroupCreateData, 'ownerId'>;
 
 interface Props {
   onClose: () => void;
-  onCreate: (data: GroupFormInput) => void;
+  onCreate: (data: GroupCreateData) => void;
 }
 
 export default function CreateGroupModal({ onClose, onCreate }: Props) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [nameError, setNameError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
 
   const { t } = useTranslation(['groups', 'common']);
 
@@ -23,8 +22,13 @@ export default function CreateGroupModal({ onClose, onCreate }: Props) {
     const trimmedName = name.trim();
     const trimmedDescription = description.trim();
 
-    if (!trimmedName || !trimmedDescription) {
-      showToast(ToastType.Error, t('common:toast.titleError'), t('errorRequiredFields'));
+    const nameValid = !!trimmedName;
+    const descriptionValid = !!trimmedDescription;
+
+    setNameError(!nameValid);
+    setDescriptionError(!descriptionValid);
+
+    if (!nameValid || !descriptionValid) {
       return;
     }
 
@@ -48,20 +52,34 @@ export default function CreateGroupModal({ onClose, onCreate }: Props) {
         <h2 className="text-lg font-semibold mb-4">{t('titleCreate')}</h2>
 
         <div className="space-y-3">
-          <input
-            className="w-full border px-3 py-2 rounded"
-            placeholder={t('placeholderName')}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <div>
+            {nameError && <p className="text-red-500 text-sm mb-1">{t('common:form.required')}</p>}
+            <input
+              className={`w-full border px-3 py-2 rounded ${nameError ? 'border-red-500' : 'border-gray-300'}`}
+              placeholder={t('placeholderName')}
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                if (nameError) { setNameError(false); }
+              }}
+            />
+          </div>
 
-          <textarea
-            className="w-full border px-3 py-2 rounded"
-            placeholder={t('placeholderDescription')}
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <div>
+            {descriptionError && (
+              <p className="text-red-500 text-sm mb-1">{t('common:form.required')}</p>
+            )}
+            <textarea
+              className={`w-full border px-3 py-2 rounded ${descriptionError ? 'border-red-500' : 'border-gray-300'}`}
+              placeholder={t('placeholderDescription')}
+              rows={3}
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                if (descriptionError) { setDescriptionError(false); }
+              }}
+            />
+          </div>
 
           <Button
             text={t('common:button.create')}

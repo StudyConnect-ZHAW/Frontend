@@ -18,6 +18,9 @@
     "update": "Aktualisieren"
   },
   "copyright": "Alle Rechte vorbehalten",
+  "form": {
+    "required": "Erforderlich"
+  },
   "toast": {
     "titleSuccess": "Erfolgreich",
     "titleError": "Fehler",

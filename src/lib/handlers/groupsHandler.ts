@@ -3,6 +3,7 @@ import { parseResponse } from '@/lib/api/parseResponse';
 
 export async function createGroup(data: GroupCreateData): Promise<Group> {
   const res = await fetch(`api/groups`, {
+    credentials: 'include',
     method: 'POST',
     body: JSON.stringify(data),
   });
@@ -12,6 +13,7 @@ export async function createGroup(data: GroupCreateData): Promise<Group> {
 
 export async function getAllGroups(): Promise<Group[]> {
   const res = await fetch(`api/groups`, {
+    credentials: 'include',
     method: 'GET',
   });
 
@@ -20,6 +22,7 @@ export async function getAllGroups(): Promise<Group[]> {
 
 export async function getGroupById(groupId: string): Promise<Group> {
   const res = await fetch(`api/groups/${groupId}`, {
+    credentials: 'include',
     method: 'GET',
   });
 
@@ -28,6 +31,7 @@ export async function getGroupById(groupId: string): Promise<Group> {
 
 export async function updateGroup(groupId: string, data: GroupUpdateData): Promise<string> {
   const res = await fetch(`api/groups/${groupId}`, {
+    credentials: 'include',
     method: 'PUT',
     body: JSON.stringify(data),
   });
@@ -38,6 +42,7 @@ export async function updateGroup(groupId: string, data: GroupUpdateData): Promi
 
 export async function deleteGroup(groupId: string): Promise<void> {
   const res = await fetch(`api/groups/${groupId}`, {
+    credentials: 'include',
     method: 'DELETE',
   });
 
@@ -49,8 +54,9 @@ export async function deleteGroup(groupId: string): Promise<void> {
   // 204 No Content
 }
 
-export async function joinGroup(groupId: string, userId: string): Promise<void> {
-  const res = await fetch(`api/groups/${groupId}/members/${userId}`, {
+export async function joinGroup(groupId: string): Promise<void> {
+  const res = await fetch(`api/groups/${groupId}/members`, {
+    credentials: 'include',
     method: 'POST',
   });
 
@@ -58,8 +64,9 @@ export async function joinGroup(groupId: string, userId: string): Promise<void> 
   return parseResponse<void>(res);
 }
 
-export async function leaveGroup(groupId: string, userId: string): Promise<void> {
-  const res = await fetch(`api/groups/${groupId}/members/${userId}`, {
+export async function leaveGroup(groupId: string): Promise<void> {
+  const res = await fetch(`api/groups/${groupId}/members`, {
+    credentials: 'include',
     method: 'DELETE',
   });
 
@@ -69,6 +76,7 @@ export async function leaveGroup(groupId: string, userId: string): Promise<void>
 
 export async function getGroupMembers(groupId: string): Promise<GroupMember[]> {
   const res = await fetch(`api/groups/${groupId}/members`, {
+    credentials: 'include',
     method: 'GET',
   });
 
@@ -77,6 +85,7 @@ export async function getGroupMembers(groupId: string): Promise<GroupMember[]> {
 
 export async function getJoinedGroups(userId: string): Promise<Group[]> {
   const res = await fetch(`api/users/${userId}/groups`, {
+    credentials: 'include',
     method: 'GET',
   });
 
@@ -85,6 +94,7 @@ export async function getJoinedGroups(userId: string): Promise<Group[]> {
 
 export async function getOwnedGroups(userId: string): Promise<Group[]> {
   const res = await fetch(`api/users/${userId}/owned`, {
+    credentials: 'include',
     method: 'GET',
   });
 

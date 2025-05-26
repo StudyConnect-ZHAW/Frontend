@@ -32,6 +32,5 @@
   "placeholderDescription": "Beschreibung",
   "noGroupFound": "Keine Gruppe gefunden.",
   "noGroup": "Du hast keine Gruppe.",
-  "errorLoading": "Laden der Gruppen fehlgeschlagen. Bitte versuch es erneut.",
-  "errorRequiredFields": "Sowohl Name als auch Beschreibung sind erforderlich."
+  "errorLoading": "Laden der Gruppen fehlgeschlagen. Bitte versuch es erneut."
 }

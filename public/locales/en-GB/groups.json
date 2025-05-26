@@ -32,6 +32,5 @@
   "placeholderDescription": "Description",
   "noGroupFound": "No groups found.",
   "noGroup": "You don't have any groups.",
-  "errorLoading": "Failed to load groups. Please try again.",
-  "errorRequiredFields": "Both name and description are required."
+  "errorLoading": "Failed to load groups. Please try again."
 }

@@ -20,6 +20,8 @@ export default function GroupCard({ group, joined, memberCount, onJoin, onLeave 
     year: 'numeric',
   }).format(new Date(group.createdAt));
 
+  const members = memberCount !== undefined ? memberCount : '1';
+
   return (
     <div className="border-main rounded-lg shadow p-4 bg-primary-bg cursor-pointer relative">
       <div className="absolute top-3 right-3">
@@ -33,7 +35,7 @@ export default function GroupCard({ group, joined, memberCount, onJoin, onLeave 
       <h3 className="text-lg font-semibold text-primary mb-1">{group.name}</h3>
       <p className="text-sm text-secondary mb-1">{group.description}</p>
       <p className="text-sm text-secondary mb-1">{`${t('card.owner')}: ${group.ownerId}`}</p>
-      <p className="text-sm text-secondary mb-1">{`${t('card.members')}: ${memberCount !== undefined ? memberCount : '1'}`}</p>
+      <p className="text-sm text-secondary mb-1">{`${t('card.members')}: ${members}`}</p>
       <p className="text-sm text-secondary mb-1">{`${t('card.createdAt')}: ${date}`}</p>
     </div>
   );

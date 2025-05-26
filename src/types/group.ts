@@ -17,7 +17,6 @@ export interface GroupMember {
 }
 
 export interface GroupCreateData {
-  ownerId: string;
   name: string;
   description: string;
 }

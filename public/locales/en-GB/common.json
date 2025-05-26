@@ -18,6 +18,9 @@
     "update": "Update"
   },
   "copyright": "All Rights Reserved",
+  "form": {
+    "required": "Required"
+  },
   "toast": {
     "titleSuccess": "Success",
     "titleError": "Error",
