@@ -1,4 +1,4 @@
-import { Comment, CommentCreateData, CommentUpdateData } from "@/types/forum";
+import { Comment, CommentCreateData, CommentUpdateData } from "@/types/comment";
 import { parseResponse } from "../api/parseResponse";
 
 export async function createComment(postId: string, data: CommentCreateData): Promise<string> {
