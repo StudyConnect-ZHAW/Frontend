@@ -1,27 +1,22 @@
 {
   "title": "Forum",
   "post": "Post",
-  "comment": "Comment",
-
+  "comments": "Comments",
   "placeholder": {
     "postTitle": "Post title...",
     "postContent": "What do you want to share?",
     "search": "Search..."
   },
-
   "button": {
-    "post": "Post"
+    "createPost": "Create Post"
   },
-
   "category": {
     "general": "General"
   },
-
   "sort": {
     "newest": "Newest first",
     "oldest": "Oldest first"
   },
-
   "date": {
     "invalid": "Invalid Date"
   }

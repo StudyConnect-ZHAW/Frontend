@@ -2,7 +2,7 @@
 
 import Button, { ButtonVariant } from "@/components/Button";
 import CreatePostModal from "@/components/CreatePostModal";
-import ForumPost from "@/components/ForumPost";
+import PostCard from "@/components/PostCard";
 import PageHeader from "@/components/PageHeader";
 import SearchInput from "@/components/SearchInput";
 import Selector from "@/components/Selector";
@@ -10,7 +10,6 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useForumCategories } from "@/hooks/useForumCategories";
 import { SortOption, useForumFilter } from "@/hooks/useForumFilters";
 import { useForumPosts } from "@/hooks/useForumPosts";
-import Link from "next/link";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -51,7 +50,7 @@ export default function ForumPage() {
       <div className="flex flex-wrap items-center gap-4 pb-4">
         <div className="flex flex-wrap gap-3">
           <SearchInput
-            placeholder={t("search")}
+            placeholder={t("placeholder.search")}
             value={search}
             onChange={setSearch}
             className="w-full sm:w-64"
@@ -76,17 +75,11 @@ export default function ForumPage() {
 
       {/* Post list */}
       {loadingPosts ? (
-        <p className="mt-4">{t("common:loading")}</p>
+        <p>{t("common:loading")}</p>
       ) : (
-        <div className="mt-4 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           {filteredPosts.map((p) => (
-            <Link
-              key={p.id}
-              href={`/forum/${p.id}`}
-              className="hover:opacity-80"
-            >
-              <ForumPost post={p} />
-            </Link>
+            <PostCard key={p.forumPostId} post={p} />
           ))}
           {!filteredPosts.length && (
             <p className="text-sm text-gray-500">{t("noPosts")}</p>
