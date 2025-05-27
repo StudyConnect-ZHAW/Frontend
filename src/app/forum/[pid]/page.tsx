@@ -10,7 +10,6 @@ import { Comment } from "@/types/comment";
 import { useTranslation } from "react-i18next";
 import { getPostById } from "@/lib/handlers/postHandler";
 import { getCommentsForPost } from "@/lib/handlers/commentHandler";
-import { create } from "domain";
 import CommentThread from "@/components/CommentThread";
 
 export default function PostDetailPage() {
