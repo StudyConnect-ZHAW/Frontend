@@ -12,5 +12,5 @@ export interface Category {
  */
 export interface CategoryCreateData {
   name: string;
-  description: string;
+  description?: string;
 }
