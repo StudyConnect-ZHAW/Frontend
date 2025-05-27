@@ -1,10 +1,10 @@
-import { Post, PostCreateData, PostUpdateData } from "@/types/forum";
+import { Post, PostCreateData, PostUpdateData } from "@/types/posts";
 import { parseResponse } from "../api/parseResponse";
 
 export async function createPost(data: PostCreateData): Promise<string> {
   const res = await fetch(`/api/posts`, {
-    method: 'POST',
-    credentials: 'include',
+    method: "POST",
+    credentials: "include",
     body: JSON.stringify(data),
   });
 
@@ -14,23 +14,33 @@ export async function createPost(data: PostCreateData): Promise<string> {
 
 export async function getAllPosts(): Promise<Post[]> {
   const res = await fetch(`/api/posts`, {
-    method: 'GET',
-    credentials: 'include',
+    method: "GET",
+    credentials: "include",
   });
 
   return parseResponse<Post[]>(res);
 }
 
-export async function searchPosts(userId?: string, categoryName?: string, title?: string): Promise<Post[]> {
+export async function searchPosts(
+  userId?: string,
+  categoryName?: string,
+  title?: string
+): Promise<Post[]> {
   const params = new URLSearchParams();
 
-  if (userId) { params.append("userId", userId); }
-  if (categoryName) { params.append("categoryName", categoryName); }
-  if (title) { params.append("title", title); }
+  if (userId) {
+    params.append("userId", userId);
+  }
+  if (categoryName) {
+    params.append("categoryName", categoryName);
+  }
+  if (title) {
+    params.append("title", title);
+  }
 
   const res = await fetch(`/api/posts/search?${params.toString()}`, {
-    method: 'GET',
-    credentials: 'include',
+    method: "GET",
+    credentials: "include",
   });
 
   return parseResponse<Post[]>(res);
@@ -38,17 +48,20 @@ export async function searchPosts(userId?: string, categoryName?: string, title?
 
 export async function getPostById(postId: string): Promise<Post> {
   const res = await fetch(`/api/posts/${postId}`, {
-    method: 'GET',
-    credentials: 'include',
+    method: "GET",
+    credentials: "include",
   });
 
   return parseResponse<Post>(res);
 }
 
-export async function updatePostById(postId: string, data: PostUpdateData): Promise<Post> {
+export async function updatePostById(
+  postId: string,
+  data: PostUpdateData
+): Promise<Post> {
   const res = await fetch(`/api/posts/${postId}`, {
-    method: 'PUT',
-    credentials: 'include',
+    method: "PUT",
+    credentials: "include",
     body: JSON.stringify(data),
   });
 
@@ -57,8 +70,8 @@ export async function updatePostById(postId: string, data: PostUpdateData): Prom
 
 export async function deletePostById(postId: string): Promise<void> {
   const res = await fetch(`/api/posts/${postId}`, {
-    method: 'DELETE',
-    credentials: 'include',
+    method: "DELETE",
+    credentials: "include",
   });
 
   return parseResponse<void>(res);
