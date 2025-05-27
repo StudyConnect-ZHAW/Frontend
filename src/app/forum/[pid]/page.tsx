@@ -15,13 +15,11 @@
  * such as loading states and disables the submit button while posting.
  */
 
-import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 import PageHeader from "@/components/PageHeader";
-import SortField from "@/components/SortField";
-import { DetailedPost, Comment } from "@/types/forum";
 import { FiArrowLeft, FiSend, FiShare2, FiThumbsUp } from "react-icons/fi";
 
 // ---- Constants -------------------------------------------------
@@ -271,7 +269,6 @@ export default function PostDetailPage() {
         {/* Comment list header + sort */}
         <div className="mt-6 flex items-center justify-between">
           <span className="text-sm font-semibold">Sorted by: Newest first</span>
-          <SortField />
         </div>
 
         {/* Comment list */}

@@ -1,11 +1,16 @@
+import { Category } from "@/types/category";
+import { User } from "@/types/user";
+
 export interface Post {
   id: string;
-  userId: string;
   title: string;
   content: string;
-  forumCategoryId: string;
   createdAt: string;
   updatedAt: string;
+  commentCount: number;
+  likeCount: number;
+  category: Category;
+  author: User;
 }
 
 /**

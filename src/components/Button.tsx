@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 /**
  * Enum defining available button visual variants.
  */
@@ -14,11 +16,13 @@ export enum ButtonVariant {
 
 type ButtonProps = {
   /** The text to display inside the button. */
-  text: string;
+  text?: string;
   /** The type of button (determines styling). */
   type: ButtonVariant;
   /** Function to be called when the button is clicked. */
   onClick: () => void;
+  /** Optional custom content inside the button. */
+  children?: ReactNode;
   /** Disables the button and applies a faded style */
   disabled?: boolean;
 };
@@ -28,7 +32,7 @@ type ButtonProps = {
  *
  * @param {ButtonProps} props - The props for the Button component.
  */
-const Button = ({ text, type, onClick, disabled = false }: ButtonProps) => {
+const Button = ({ text, type, onClick, disabled, children }: ButtonProps) => {
   const baseStyles = "px-4 py-2 rounded-md font-semibold transition button";
 
   /** Apply CSS for each button variant from globals.css */
@@ -46,7 +50,7 @@ const Button = ({ text, type, onClick, disabled = false }: ButtonProps) => {
       onClick={onClick}
       className={`${baseStyles} ${variantStyles[type]} ${disabledStyles}`}
     >
-      {text}
+      {children ?? text}
     </button>
   );
 };

@@ -1,4 +1,4 @@
-import { Category, CategoryCreateData } from "@/types/forum";
+import { Category, CategoryCreateData } from "@/types/category";
 import { parseResponse } from "../api/parseResponse";
 
 /**
@@ -14,8 +14,8 @@ import { parseResponse } from "../api/parseResponse";
  */
 export async function createCategory(data: CategoryCreateData): Promise<string> {
   const res = await fetch(`/api/categories`, {
-    method: 'POST',
-    credentials: 'include',
+    method: "POST",
+    credentials: "include",
     body: JSON.stringify(data),
   });
 
