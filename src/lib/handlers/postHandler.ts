@@ -1,7 +1,7 @@
 import { Post, PostCreateData, PostUpdateData } from "@/types/posts";
 import { parseResponse } from "../api/parseResponse";
 
-export async function createPost(data: PostCreateData): Promise<string> {
+export async function createPost(data: PostCreateData): Promise<Post> {
   const res = await fetch(`/api/posts`, {
     method: "POST",
     credentials: "include",
@@ -9,7 +9,7 @@ export async function createPost(data: PostCreateData): Promise<string> {
   });
 
   // Expects postId in response body
-  return parseResponse<string>(res);
+  return parseResponse<Post>(res);
 }
 
 export async function getAllPosts(): Promise<Post[]> {

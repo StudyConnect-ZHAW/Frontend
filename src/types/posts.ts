@@ -1,14 +1,17 @@
 import { Category } from "@/types/category";
 import { User } from "@/types/user";
 
+/**
+ * Represents an individual post in the forum page.
+ */
 export interface Post {
-  id: string;
+  forumPostId: string;
   title: string;
   content: string;
-  createdAt: string;
-  updatedAt: string;
   commentCount: number;
   likeCount: number;
+  created: string;
+  updated: string;
   category: Category;
   author: User;
 }
@@ -26,6 +29,6 @@ export interface PostCreateData {
  * Payload to update an existing post.
  */
 export interface PostUpdateData {
-  title?: string;
-  content?: string;
+  title: string;
+  content: string;
 }

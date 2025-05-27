@@ -34,9 +34,8 @@ export function useForumPosts() {
 
   const handleCreatePost = async (data: PostCreateData) => {
     try {
-      const newPostId = await createPost(data);
-      const newPost = await getPostById(newPostId);
-      setPosts((prev) => [newPost, ...prev]);
+      const post = await createPost(data);
+      setPosts((prev) => [post, ...prev]);
     } catch (err) {
       console.error("Failed to create post", err);
       setError(t("common:error.creatingPost", "Failed to create post."));
