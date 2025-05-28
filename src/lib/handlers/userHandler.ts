@@ -12,7 +12,7 @@ export async function updateUser(data: UserUpdateData): Promise<void> {
     method: 'PUT',
     body: JSON.stringify(data),
   });
- 
+
   return parseResponse<void>(res);
 }
  
