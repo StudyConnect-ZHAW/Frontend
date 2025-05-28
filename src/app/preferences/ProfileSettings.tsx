@@ -6,12 +6,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState, ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-
-type Category = {
-  forumCategoryId: string;
-  name: string;
-  description: string;
-};
+import { useForumCategories } from "@/hooks/useForumCategories";
 
 type Availability = {
   [day: string]: {
@@ -31,18 +26,16 @@ export default function ProfileSettings({ onClose }: Props) {
   const [email, setEmail] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("https://i.pravatar.cc/250");
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const {
+    categories,
+    loading: loadingCats,
+    error: catsError,
+  } = useForumCategories();
   const [availability, setAvailability] = useState<Availability>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(["preferences", "common"]);
 
-  const {
-    user,
-    loading: loadingUser,
-    update,
-    updating,
-    error: saveError,
-  } = useCurrentUser();
+  const { user, update } = useCurrentUser();
 
   useEffect(() => {
     if (!user) return;
@@ -169,6 +162,7 @@ export default function ProfileSettings({ onClose }: Props) {
           <label className="block text-base font-semibold mb-3">
             {t("profile.modulePreferencesLabel")}
           </label>
+
           <div className="flex flex-wrap gap-3">
             {categories.map((cat) => {
               const isSelected = selectedModules.includes(cat.forumCategoryId);
@@ -176,13 +170,13 @@ export default function ProfileSettings({ onClose }: Props) {
                 <button
                   key={cat.forumCategoryId}
                   type="button"
-                  onClick={() => {
+                  onClick={() =>
                     setSelectedModules((prev) =>
                       isSelected
                         ? prev.filter((id) => id !== cat.forumCategoryId)
                         : [...prev, cat.forumCategoryId]
-                    );
-                  }}
+                    )
+                  }
                   className={`px-5 py-2 rounded-full border-2 text-base transition cursor-pointer ${
                     isSelected
                       ? "bg-yellow-400 dark:bg-red-600 text-black dark:text-white border-yellow-400 dark:border-red-600"
@@ -194,6 +188,7 @@ export default function ProfileSettings({ onClose }: Props) {
               );
             })}
           </div>
+
           <p className="text-sm text-[var(--color-secondary)] mt-2">
             {t("profile.modulePreferencesInfo")}
           </p>
