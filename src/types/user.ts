@@ -27,3 +27,9 @@ export interface UserUpdateData {
   lastName: string;
   email: string;
 }
+
+export interface UserUpdateData {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
