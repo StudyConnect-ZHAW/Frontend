@@ -33,6 +33,7 @@
     "nameLabel": "Name",
     "firstNameLabel": "First Name",
     "lastNameLabel": "Last Name",
+    "emailLabel": "Email",
     "profilePictureLabel": "Profile Picture",
     "modulePreferencesLabel": "Module Preferences",
     "modulePreferencesInfo": "Click on the module to set your preferences.",
