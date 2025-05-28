@@ -2,11 +2,10 @@
 
 import Button, { ButtonVariant } from "@/components/Button";
 import { showToast, ToastType } from "@/components/Toast";
-import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import React, { useEffect, useRef, useState, ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { useUpdateUser } from "@/hooks/useUpdateUser";
 
 type Category = {
   forumCategoryId: string;
@@ -27,23 +26,23 @@ type Props = {
 };
 
 export default function ProfileSettings({ onClose }: Props) {
-  const [firstName, setFirstName] = useState("Max");
-  const [lastName, setLastName] = useState("Mustermann");
-  const [email, setEmail] = useState("Random");
-  const { user, loading: loadingUser } = useCurrentUser();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("https://i.pravatar.cc/250");
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [availability, setAvailability] = useState<Availability>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation(["preferences", "common"]);
 
   const {
-    update, // == async (dto) => Promise<User>
-    loading: savingUser, // bool
-    error: saveError, // optional
-  } = useUpdateUser();
-
-  const { t } = useTranslation(["preferences", "common"]);
+    user,
+    loading: loadingUser,
+    update,
+    updating,
+    error: saveError,
+  } = useCurrentUser();
 
   useEffect(() => {
     if (!user) return;
@@ -93,15 +92,9 @@ export default function ProfileSettings({ onClose }: Props) {
   };
 
   const handleSave = async () => {
-    if (!user) return; // Absicherung
+    if (!user) return; // Safety
     try {
-      await update({
-        // Hook-Funktion statt fetch()
-        firstName,
-        lastName,
-        email, // DTO verlangt auch die Mail
-      });
-
+      await update({ firstName, lastName, email }); // PATCH
       showToast(
         ToastType.Success,
         t("common:toast.titleSuccess"),
