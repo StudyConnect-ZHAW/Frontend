@@ -8,6 +8,28 @@ import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useForumCategories } from "@/hooks/useForumCategories";
 
+/* --------------------------------------------------------------------------
+ *  ProfileSettings
+ * --------------------------------------------------------------------------
+ *  A single page component that lets the user adjust personal details:
+ *  - avatar
+ *  - first / last name
+ *  - e‑mail address (ZHaw only)
+ *  - preferred forum modules (categories)
+ *  - weekly availability (day + time range)
+ *
+ *  Data flow
+ *  ---------
+ *  • Reads the authenticated user via `useCurrentUser()` and allows a partial
+ *    profile update through the same hook.
+ *  • Retrieves the list of forum categories with `useForumCategories()`.
+ *  • Local UI state is kept in ordinary `useState` hooks; on Save, a PATCH‐
+ *    like call (`update`) is triggered with only the changed fields.
+ * -------------------------------------------------------------------------*/
+
+/* ----- helper types ------------------------------------------------------ */
+
+/** Availability map keyed by weekday (localized) */
 type Availability = {
   [day: string]: {
     active: boolean;
@@ -16,27 +38,34 @@ type Availability = {
   };
 };
 
-type Props = {
-  onClose: () => void;
-};
+/* ----- props ------------------------------------------------------------- */
+
+type Props = { onClose: () => void };
+
+/* ----- component --------------------------------------------------------- */
 
 export default function ProfileSettings({ onClose }: Props) {
+  /* ------------ local state -------------------------------------------- */
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("https://i.pravatar.cc/250");
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
+  const [availability, setAvailability] = useState<Availability>({});
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /* ------------ i18n ---------------------------------------------------- */
+  const { t } = useTranslation(["preferences", "common"]);
+
+  /* ------------ data hooks --------------------------------------------- */
+  const { user, update } = useCurrentUser();
   const {
     categories,
     loading: loadingCats,
     error: catsError,
   } = useForumCategories();
-  const [availability, setAvailability] = useState<Availability>({});
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { t } = useTranslation(["preferences", "common"]);
 
-  const { user, update } = useCurrentUser();
-
+  /* ------------ sync incoming user ------------------------------------- */
   useEffect(() => {
     if (!user) return;
     setFirstName(user.firstName);
@@ -44,69 +73,95 @@ export default function ProfileSettings({ onClose }: Props) {
     setEmail(user.email);
   }, [user]);
 
+  /* ------------ weekday helpers ---------------------------------------- */
   const weekdays = [
-    `${t("common:weekday.monday")}`,
-    `${t("common:weekday.tuesday")}`,
-    `${t("common:weekday.wednesday")}`,
-    `${t("common:weekday.thursday")}`,
-    `${t("common:weekday.friday")}`,
-    `${t("common:weekday.saturday")}`,
-    `${t("common:weekday.sunday")}`,
+    t("common:weekday.monday"),
+    t("common:weekday.tuesday"),
+    t("common:weekday.wednesday"),
+    t("common:weekday.thursday"),
+    t("common:weekday.friday"),
+    t("common:weekday.saturday"),
+    t("common:weekday.sunday"),
   ];
 
+  /** Toggles the active state of a single weekday slot */
   const toggleDay = (day: string) =>
     setAvailability((prev) => ({
       ...prev,
       [day]: {
         active: !prev[day]?.active,
-        from: prev[day]?.from || "08:00",
-        to: prev[day]?.to || "17:00",
+        from: prev[day]?.from ?? "08:00",
+        to: prev[day]?.to ?? "17:00",
       },
     }));
 
+  /** Updates either the `from` or `to` time for a given weekday */
   const updateTime = (day: string, type: "from" | "to", value: string) =>
     setAvailability((prev) => ({
       ...prev,
       [day]: { ...prev[day], [type]: value },
     }));
 
-  const handleEditPicture = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
+  /** Opens the hidden file input so the user can pick a new avatar */
+  const handleEditPicture = () => fileInputRef.current?.click();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /** Stores the chosen avatar locally so the user sees an instant preview */
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setAvatarUrl(imageUrl);
-    }
+    if (file) setAvatarUrl(URL.createObjectURL(file));
   };
 
+  /** Client‑side validation + PATCH update */
   const handleSave = async () => {
-    if (!user) return; // Safety
+    if (!user) return; // Should never happen
+
+    const trimmedEmail = email.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(trimmedEmail)) {
+      showToast(
+        ToastType.Error,
+        t("common:toast.titleError"),
+        t("preferences:toast.invalidEmail")
+      );
+      return;
+    }
+
     try {
-      await update({ firstName, lastName, email }); // PATCH
+      await update({
+        firstName,
+        lastName,
+        email: trimmedEmail,
+      });
+
       showToast(
         ToastType.Success,
         t("common:toast.titleSuccess"),
         t("common:toast.saveSuccess")
       );
     } catch (err: any) {
-      console.error("Update failed:", err);
+      console.error("Update failed", err);
       showToast(
         ToastType.Error,
         t("common:toast.titleError"),
-        err?.message || "Update failed"
+        err?.message ?? "Update failed"
       );
     }
   };
 
+  /* -------------------------------------------------------------------- */
+  /*  Loading / error states                                              */
+  /* -------------------------------------------------------------------- */
+  if (loadingCats) return <p className="p-8">{t("common:loading")}</p>;
+  if (catsError) return <p className="p-8 text-red-500">{catsError}</p>;
+
+  /* -------------------------------------------------------------------- */
+  /*  UI                                                                  */
+  /* -------------------------------------------------------------------- */
   return (
     <div className="flex flex-col h-[85vh] dark:primary-bg dark:text-primary rounded-2xl overflow-hidden shadow-lg">
       <div className="overflow-y-auto p-8 space-y-6 flex-1">
-        {/* Profile Picture & Name Row */}
+        {/* Profile Picture, Name & Email Setting Field */}
         <div className="flex items-center gap-10 mb-8">
           <div className="flex flex-col items-center">
             <Image
@@ -169,7 +224,7 @@ export default function ProfileSettings({ onClose }: Props) {
           </div>
         </div>
 
-        {/* Module Preferences */}
+        {/* Module Preferences Field*/}
         <div>
           <label className="block text-base font-semibold mb-3">
             {t("profile.modulePreferencesLabel")}
@@ -206,7 +261,7 @@ export default function ProfileSettings({ onClose }: Props) {
           </p>
         </div>
 
-        {/* Availability */}
+        {/* Availability Setting Field*/}
         <div>
           <label className="block text-base font-semibold mb-3">
             {t("profile.availabilityLabel")}
