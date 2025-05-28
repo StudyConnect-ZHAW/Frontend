@@ -127,7 +127,7 @@ export default function ProfileSettings({ onClose }: Props) {
               accept="image/*"
               ref={fileInputRef}
               onChange={handleFileChange}
-              style={{ display: "none" }}
+              className="hidden"
             />
           </div>
 
@@ -140,7 +140,7 @@ export default function ProfileSettings({ onClose }: Props) {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:primary-bg text-base cursor-text"
+                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:bg-primary-bg text-base"
               />
             </div>
             <div>
@@ -151,7 +151,19 @@ export default function ProfileSettings({ onClose }: Props) {
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:primary text-base cursor-text"
+                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:bg-primary-bg text-base"
+              />
+            </div>
+            <div>
+              <label className="block text-base font-semibold mb-1">
+                {t("profile.emailLabel")}
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="user@students.zhaw.ch"
+                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:bg-primary-bg text-base"
               />
             </div>
           </div>
