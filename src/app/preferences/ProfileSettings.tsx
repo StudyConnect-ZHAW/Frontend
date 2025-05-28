@@ -5,6 +5,8 @@ import { showToast, ToastType } from "@/components/Toast";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useUpdateUser } from "@/hooks/useUpdateUser";
 
 type Category = {
   forumCategoryId: string;
@@ -27,20 +29,28 @@ type Props = {
 export default function ProfileSettings({ onClose }: Props) {
   const [firstName, setFirstName] = useState("Max");
   const [lastName, setLastName] = useState("Mustermann");
-  const [avatarUrl, setAvatarUrl] = useState("https://i.pravatar.cc/150?img=3");
+  const [email, setEmail] = useState("Random");
+  const { user, loading: loadingUser } = useCurrentUser();
+  const [avatarUrl, setAvatarUrl] = useState("https://i.pravatar.cc/250");
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [availability, setAvailability] = useState<Availability>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const {
+    update, // == async (dto) => Promise<User>
+    loading: savingUser, // bool
+    error: saveError, // optional
+  } = useUpdateUser();
+
   const { t } = useTranslation(["preferences", "common"]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/v1/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data))
-      .catch((err) => console.error("Failed to load categories:", err));
-  }, []);
+    if (!user) return;
+    setFirstName(user.firstName);
+    setLastName(user.lastName);
+    setEmail(user.email);
+  }, [user]);
 
   const weekdays = [
     `${t("common:weekday.monday")}`,
@@ -82,12 +92,29 @@ export default function ProfileSettings({ onClose }: Props) {
     }
   };
 
-  const handleSave = () => {
-    showToast(
-      ToastType.Success,
-      t("common:toast.titleSuccess"),
-      t("common:toast.saveSuccess")
-    );
+  const handleSave = async () => {
+    if (!user) return; // Absicherung
+    try {
+      await update({
+        // Hook-Funktion statt fetch()
+        firstName,
+        lastName,
+        email, // DTO verlangt auch die Mail
+      });
+
+      showToast(
+        ToastType.Success,
+        t("common:toast.titleSuccess"),
+        t("common:toast.saveSuccess")
+      );
+    } catch (err: any) {
+      console.error("Update failed:", err);
+      showToast(
+        ToastType.Error,
+        t("common:toast.titleError"),
+        err?.message || "Update failed"
+      );
+    }
   };
 
   return (
@@ -138,7 +165,7 @@ export default function ProfileSettings({ onClose }: Props) {
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:primary-bg text-base cursor-text"
+                className="w-full border-2 border-main rounded-lg px-4 py-3 dark:primary text-base cursor-text"
               />
             </div>
           </div>
@@ -179,7 +206,6 @@ export default function ProfileSettings({ onClose }: Props) {
           </p>
         </div>
 
-        {/* Availability */}
         {/* Availability */}
         <div>
           <label className="block text-base font-semibold mb-3">

@@ -12,10 +12,10 @@ export async function updateUser(data: UserUpdateData): Promise<void> {
     method: 'PUT',
     body: JSON.stringify(data),
   });
-
+ 
   return parseResponse<void>(res);
 }
-
+ 
 /**
  * Fetches the current user's profile via the Next.js API route `/api/users/me`.
  * The route handler decodes the access token and forwards the request to the backend.
@@ -26,6 +26,6 @@ export async function getCurrentUser(): Promise<User> {
   const res = await fetch('/api/users/me', {
     method: 'GET',
   });
-
+ 
   return parseResponse<User>(res);
 }
