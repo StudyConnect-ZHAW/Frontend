@@ -66,26 +66,28 @@ export default function PostDetailPage() {
         }
       />
 
-      <section className="rounded-xl border border-main bg-sidebar-bg p-6 shadow-sm">
-        <div className="text-sm text-gray-500 mb-2">
-          {formattedDate} • {post.user.firstName} {post.user.lastName}
-        </div>
-        <p className="text-base text-primary whitespace-pre-wrap">{post.content}</p>
-      </section>
-
-      <section className="mt-4">
-        <h2 className="text-lg font-semibold mb-3">{t('comments')}</h2>
-
-        {comments.length === 0 ? (
-          <p className="text-sm text-gray-500">{t('noComments', 'No comments yet.')}</p>
-        ) : (
-          <div className="space-y-4">
-            {comments.map((comment) => (
-              <CommentThread key={comment.id} comment={comment} depth={0} />
-            ))}
+      <div className="pl-100 pr-100">
+        <section className="rounded-xl border border-main bg-sidebar-bg p-6 shadow-sm">
+          <div className="text-sm text-gray-500 mb-2">
+            {formattedDate} • {post.user.firstName} {post.user.lastName}
           </div>
-        )}
-      </section>
+          <p className="text-base text-primary whitespace-pre-wrap">{post.content}</p>
+        </section>
+
+        <section className="mt-4">
+          <h2 className="text-lg font-semibold mb-3">{t('comments')}</h2>
+
+          {comments.length === 0 ? (
+            <p className="text-sm text-gray-500">{t('noComments', 'No comments yet.')}</p>
+          ) : (
+            <div className="space-y-4">
+              {comments.map((comment) => (
+                <CommentThread key={comment.id} comment={comment} depth={0} />
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
