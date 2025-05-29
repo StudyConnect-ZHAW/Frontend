@@ -34,7 +34,7 @@ export default function PostCard({ post }: Props) {
         {/* Meta */}
         <div className="mb-2 text-xs text-gray-500 flex items-center justify-between">
           <span>
-            {formattedDate} • {post.author.firstName} {post.author.lastName}
+            {formattedDate} • {post.user.firstName} {post.user.lastName}
           </span>
         </div>
 
