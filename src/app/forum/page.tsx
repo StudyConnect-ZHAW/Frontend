@@ -43,55 +43,58 @@ export default function ForumPage() {
     <div className="flex flex-col h-full">
       <PageHeader title={t("title")} />
 
-      {/* Controls */}
-      <div className="flex flex-wrap items-center gap-4 pb-4">
-        <div className="flex flex-wrap gap-3">
-          <SearchInput
-            placeholder={t("placeholder.search")}
-            value={search}
-            onChange={setSearch}
-            className="w-full sm:w-64"
-          />
+      <div className="pl-100 pr-100">
+        {/* Controls */}
+        <div className="flex flex-wrap items-center gap-4 pb-4">
 
-          <Selector
-            options={sortOptions}
-            value={sort}
-            onChange={(val) => setSort(val as SortOption)}
-            className="w-full sm:w-64"
-          />
+          <div className="flex flex-wrap gap-3">
+            <SearchInput
+              placeholder={t("placeholder.search")}
+              value={search}
+              onChange={setSearch}
+              className="w-full sm:w-64"
+            />
+
+            <Selector
+              options={sortOptions}
+              value={sort}
+              onChange={(val) => setSort(val as SortOption)}
+              className="w-full sm:w-64"
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-3 ml-auto">
+            <Button
+              text={t("button.createPost")}
+              type={ButtonVariant.Primary}
+              onClick={() => setShowCreateModal(true)}
+            />
+          </div>
         </div>
 
-        <div className="flex flex-wrap gap-3 ml-auto">
-          <Button
-            text={t("button.createPost")}
-            type={ButtonVariant.Primary}
-            onClick={() => setShowCreateModal(true)}
+        {/* Post list */}
+        {loadingPosts ? (
+          <p>{t("common:loading")}</p>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {filteredPosts.map((p) => (
+              <PostCard key={p.forumPostId} post={p} />
+            ))}
+            {!filteredPosts.length && (
+              <p className="text-sm text-gray-500">{t("noPosts")}</p>
+            )}
+          </div>
+        )}
+
+        {/* Modal for creating a new post */}
+        {showCreateModal && (
+          <CreatePostModal
+            onClose={() => setShowCreateModal(false)}
+            onCreate={handleCreatePost}
+            categories={categories}
           />
-        </div>
+        )}
       </div>
-
-      {/* Post list */}
-      {loadingPosts ? (
-        <p>{t("common:loading")}</p>
-      ) : (
-        <div className="flex flex-col gap-4">
-          {filteredPosts.map((p) => (
-            <PostCard key={p.forumPostId} post={p} />
-          ))}
-          {!filteredPosts.length && (
-            <p className="text-sm text-gray-500">{t("noPosts")}</p>
-          )}
-        </div>
-      )}
-
-      {/* Modal for creating a new post */}
-      {showCreateModal && (
-        <CreatePostModal
-          onClose={() => setShowCreateModal(false)}
-          onCreate={handleCreatePost}
-          categories={categories}
-        />
-      )}
     </div>
   );
 }
