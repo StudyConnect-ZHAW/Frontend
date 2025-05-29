@@ -8,6 +8,7 @@ import enLocale from '@fullcalendar/core/locales/en-gb';
 import deLocale from '@fullcalendar/core/locales/de';
 import { useTranslation } from 'react-i18next';
 import { type EventInput, type EventSourceFuncArg, formatDate } from '@fullcalendar/core';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 import { mapZhawDaysToEvents } from '@/lib/calendar';
 import { fetchPublicHolidays } from '@/lib/api/openholidays';
@@ -28,6 +29,13 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
 
   const [slotMinTime] = useState('08:00:00');
   const [slotMaxTime] = useState('22:00:00');
+
+  const { user, loading: loadingUser } = useCurrentUser();
+
+  const email = user?.email?.toLowerCase() ?? '';
+  const shortName = email.includes('@') ? email.split('@')[0] : null;
+
+  //   const [events, setEvents] ≠ useState([]);
 
   const fetchEventsDynamically = useCallback(
     async (
@@ -55,7 +63,8 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
           const startingAt = adjustedDate.toISOString().split('T')[0];
 
           // Fetch calendar for a single day
-          const res = await fetch(`/api/calendar?startingAt=${startingAt}&view=timeGridDay`);
+          const res = await fetch(`/api/calendar/students/${shortName}?startingAt=${startingAt}&view=${viewType}`);
+
           if (!res.ok) {return;}
 
           const data: ZhawSchedule = await res.json();
@@ -84,7 +93,7 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
             fetchedWeeks.add(startingAt);
 
             // Fetch calendar for the current week
-            const res = await fetch(`/api/calendar?startingAt=${startingAt}&view=${viewType}`);
+            const res = await fetch(`/api/calendar/students/${shortName}?startingAt=${startingAt}&view=${viewType}`);
             if (!res.ok) {continue;}
 
             const data: ZhawSchedule = await res.json();
@@ -115,14 +124,23 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
             }
           }
         }
+        console.log(allEvents);
 
         successCallback(allEvents);
       } catch (err) {
         failureCallback(err as Error);
       }
     },
-    [initialView, t]
+    [initialView, shortName, t]
   );
+
+  if (!user || !user.email || loadingUser) {
+    return (
+      <div className="flex items-center justify-center h-full text-primary text-xl">
+        {t('common:loading')}
+      </div>
+    );
+  }
 
   return (
     <div className="flex-grow flex items-center justify-center h-full">

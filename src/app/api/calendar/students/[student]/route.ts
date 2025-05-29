@@ -1,46 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { jwtDecode } from 'jwt-decode';
 
 /*
  * API Route: /api/calendar
  * Fetches the ZHAW schedule for authenticated users with a valid ZHAW email.
  * Requires a valid JWT in the 'access_token' cookie.
  */
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ student: string }> }) {
+  
+  // TODO: request to get all students and all lectureres cache it in a list, 
+  // look if shortname part of student, or part of lecturer list, if neither dont call api !
+
+  // TODO: separate api calls and logic dont do everything in one file 
+  // (hooks, lib/api, handlers, calendar.ts with mapZhawDaysToEvents)
+  
   try {
-    const cookieHeader = req.headers.get('cookie');
-
-    // Extract JWT from cookies
-    const token = cookieHeader
-      ?.split(';')
-      .find((c) => c.trim().startsWith('access_token='))
-      ?.split('=')[1];
-
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const decoded = jwtDecode<{ oid: string }>(token);
-    const userId = decoded.oid;
-
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
-    const userRes = await fetch(`${apiUrl}v1/users/${userId}`);
-
-    if (!userRes.ok) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    const user = await userRes.json();
-    const email = user.email?.toLowerCase() ?? '';
-
-    // Extract the username (before @); must match the ZHAW shortname used in the calendar system
-    let shortName: string | undefined;
-
-    if (email.includes('@')) {
-      shortName = email.split('@')[0];
-    } else {
-      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
-    }
+    console.log(req);
+    const { student }= await params;
 
     // Extract params
     const rawDateStr = req.nextUrl.searchParams.get('startingAt') ?? new Date().toISOString().split('T')[0];
@@ -55,7 +30,7 @@ export async function GET(req: NextRequest) {
     const startingAt = date.toISOString().split('T')[0];
 
     const scheduleRes = await fetch(
-      `https://api.apps.engineering.zhaw.ch/v1/schedules/students/${shortName}?startingAt=${startingAt}`,
+      `https://api.apps.engineering.zhaw.ch/v1/schedules/students/${student}?startingAt=${startingAt}`,
       {
         headers: {
           'User-Agent': 'StudyConnect (https://github.com/StudyConnect-ZHAW)',
@@ -65,12 +40,10 @@ export async function GET(req: NextRequest) {
     );
 
     if (scheduleRes.status === 404) {
-
       return NextResponse.json({ days: [] });
     }
 
     if (!scheduleRes.ok) {
-
       return NextResponse.json({ error: 'Failed to fetch ZHAW calendar' }, { status: scheduleRes.status });
     }
 
