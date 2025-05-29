@@ -6,46 +6,44 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState, ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { useForumCategories } from "@/hooks/useForumCategories";
+import type { Category } from "@/types/category";
 
 /* --------------------------------------------------------------------------
  *  ProfileSettings
  * --------------------------------------------------------------------------
- *  A single page component that lets the user adjust personal details:
- *  - avatar
- *  - first / last name
- *  - e‑mail address (ZHaw only)
- *  - preferred forum modules (categories)
- *  - weekly availability (day + time range)
- *
- *  Data flow
- *  ---------
- *  • Reads the authenticated user via `useCurrentUser()` and allows a partial
- *    profile update through the same hook.
- *  • Retrieves the list of forum categories with `useForumCategories()`.
- *  • Local UI state is kept in ordinary `useState` hooks; on Save, a PATCH‐
- *    like call (`update`) is triggered with only the changed fields.
+ *  A single‑page component that lets the user adjust personal details:
+ *    • avatar
+ *    • first / last name
+ *    • e‑mail address (ZHAW only)
+ *    • preferred forum modules (categories)
+ *    • weekly availability (day + time range)
  * -------------------------------------------------------------------------*/
 
-/* ----- helper types ------------------------------------------------------ */
+/* ---------- helper types ------------------------------------------------- */
 
 /** Availability map keyed by weekday (localized) */
 type Availability = {
-  [day: string]: {
-    active: boolean;
-    from?: string;
-    to?: string;
-  };
+  [day: string]: { active: boolean; from?: string; to?: string };
 };
 
-/* ----- props ------------------------------------------------------------- */
+/* ---------- props -------------------------------------------------------- */
 
-type Props = { onClose: () => void };
+type Props = {
+  onClose: () => void;
+  categories: Category[];
+  loadingCats: boolean;
+  catsError?: string | null;
+};
 
-/* ----- component --------------------------------------------------------- */
+/* ---------- component ---------------------------------------------------- */
 
-export default function ProfileSettings({ onClose }: Props) {
-  /* ------------ local state -------------------------------------------- */
+export default function ProfileSettings({
+  onClose,
+  categories,
+  loadingCats,
+  catsError,
+}: Props) {
+  /* ---------------- local state ---------------------------------------- */
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -54,18 +52,12 @@ export default function ProfileSettings({ onClose }: Props) {
   const [availability, setAvailability] = useState<Availability>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /* ------------ i18n ---------------------------------------------------- */
+  /* ---------------- i18n ------------------------------------------------ */
   const { t } = useTranslation(["preferences", "common"]);
 
-  /* ------------ data hooks --------------------------------------------- */
+  /* ---------------- user data ------------------------------------------ */
   const { user, update } = useCurrentUser();
-  const {
-    categories,
-    loading: loadingCats,
-    error: catsError,
-  } = useForumCategories();
 
-  /* ------------ sync incoming user ------------------------------------- */
   useEffect(() => {
     if (!user) return;
     setFirstName(user.firstName);
@@ -73,7 +65,7 @@ export default function ProfileSettings({ onClose }: Props) {
     setEmail(user.email);
   }, [user]);
 
-  /* ------------ weekday helpers ---------------------------------------- */
+  /* ---------------- weekday helpers ------------------------------------ */
   const weekdays = [
     t("common:weekday.monday"),
     t("common:weekday.tuesday"),
@@ -84,7 +76,6 @@ export default function ProfileSettings({ onClose }: Props) {
     t("common:weekday.sunday"),
   ];
 
-  /** Toggles the active state of a single weekday slot */
   const toggleDay = (day: string) =>
     setAvailability((prev) => ({
       ...prev,
@@ -95,25 +86,21 @@ export default function ProfileSettings({ onClose }: Props) {
       },
     }));
 
-  /** Updates either the `from` or `to` time for a given weekday */
   const updateTime = (day: string, type: "from" | "to", value: string) =>
     setAvailability((prev) => ({
       ...prev,
       [day]: { ...prev[day], [type]: value },
     }));
 
-  /** Opens the hidden file input so the user can pick a new avatar */
   const handleEditPicture = () => fileInputRef.current?.click();
 
-  /** Stores the chosen avatar locally so the user sees an instant preview */
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) setAvatarUrl(URL.createObjectURL(file));
   };
 
-  /** Client‑side validation + PATCH update */
   const handleSave = async () => {
-    if (!user) return; // Should never happen
+    if (!user) return;
 
     const trimmedEmail = email.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -140,7 +127,6 @@ export default function ProfileSettings({ onClose }: Props) {
         t("common:toast.saveSuccess")
       );
     } catch (err: any) {
-      console.error("Update failed", err);
       showToast(
         ToastType.Error,
         t("common:toast.titleError"),
@@ -149,9 +135,7 @@ export default function ProfileSettings({ onClose }: Props) {
     }
   };
 
-  /* -------------------------------------------------------------------- */
-  /*  Loading / error states                                              */
-  /* -------------------------------------------------------------------- */
+  /* ---------------- loading / error UI --------------------------------- */
   if (loadingCats) return <p className="p-8">{t("common:loading")}</p>;
   if (catsError) return <p className="p-8 text-red-500">{catsError}</p>;
 
