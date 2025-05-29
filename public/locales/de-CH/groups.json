@@ -1,3 +1,36 @@
 {
-  "title": "Gruppen"
+  "title": "Gruppen",
+  "button": {
+    "createGroup": "Gruppe Erstellen",
+    "joinGroup": "Gruppe Beitreten",
+    "join": "Beitreten",
+    "leave": "Verlassen"
+  },
+  "card": {
+    "owner": "Besitzer",
+    "members": "Mitglieder",
+    "membersCount": "Mitgliederzahl",
+    "createdAt": "Erstellungsdatum"
+  },
+  "search": "Gruppe suchen...",
+  "sort": {
+    "alphabet": "Alphabetisch",
+    "members": "Mitgliederzahl",
+    "newest": "Neuste"
+  },
+  "toast": {
+    "joinSuccess": "Du bist der Gruppe erfolgreich beigetreten.",
+    "joinError": "Die Gruppe konnte nicht beigetreten werden. Bitte versuch es erneut.",
+    "leaveSuccess": "Du hast die Gruppe erfolgreich verlassen.",
+    "leaveError": "Die Gruppe konnte nicht verlassen werden. Bitte versuch es erneut.",
+    "createSuccess": "Die Gruppe wurde erfolgreich erstellt.",
+    "createError": "Die Gruppe konnte nicht erstellt werden. Bitte versuch es erneut."
+  },
+  "titleJoin": "Einer Gruppe Beitreten",
+  "titleCreate": "Neue Gruppe Erstellen",
+  "placeholderName": "Gruppenname",
+  "placeholderDescription": "Beschreibung",
+  "noGroupFound": "Keine Gruppe gefunden.",
+  "noGroup": "Du hast keine Gruppe.",
+  "errorLoading": "Laden der Gruppen fehlgeschlagen. Bitte versuch es erneut."
 }

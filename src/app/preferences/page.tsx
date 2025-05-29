@@ -50,8 +50,8 @@ export default function SettingsPage() {
         onClose={() => setSelectedBlock(null)}
         className="relative z-50"
       >
-        <div className="fixed inset-0 flex items-center justify-center p-4 overflow-hidden">
-          <Dialog.Panel className="bg-primary-bg rounded-2xl p-6 w-full max-w-4xl shadow-lg border-main h-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 overflow-hidden">
+          <Dialog.Panel className="bg-primary-bg p-6 w-full max-w-4xl shadow-lg border-main rounded-2xl h-auto">
             <Dialog.Title className="text-xl font-bold mb-4">
               {settingsBlocks.find(b => b.id === selectedBlock)?.title}
             </Dialog.Title>

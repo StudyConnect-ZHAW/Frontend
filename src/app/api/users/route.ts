@@ -1,19 +1,20 @@
 import { proxyRequest } from "@/lib/api/proxyRequest";
 import { NextRequest } from "next/server";
 
-const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/users`;
+const URL_V1 = `${process.env.NEXT_PUBLIC_API_URL}v1/users`;
+/** New endpoint to create a new user using solely the token. */
+const URL_V2 = `${process.env.NEXT_PUBLIC_API_URL}v2/users`;
 
 /**
  * Forwards a POST request to the backend to create a new user.
- * The request body is expected to contain the user's registration data.
+ * The data will be inferred from the token in the backend.
  * This route is used to create and store a new user in the backend after
  * logging in using the authentication service for the first time.
  */
 export async function POST(req: NextRequest) {
   return proxyRequest(req, {
     method: 'POST',
-    backendUrl: URL,
-    withBody: true,
+    backendUrl: URL_V2,
   });
 }
 
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   return proxyRequest(req, {
     method: 'PUT',
-    backendUrl: URL,
+    backendUrl: URL_V1,
     withBody: true,
   });
 }

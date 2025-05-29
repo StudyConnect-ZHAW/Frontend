@@ -11,7 +11,7 @@ export async function GET() {
   const clientId = process.env.CLIENT_ID!;
 
   const authCodeUrl = await msalInstance.getAuthCodeUrl({
-    scopes: ['openid', 'profile',`api://${clientId}/StudyConnectAPI`],
+    scopes: ['openid', 'profile', `api://${clientId}/StudyConnectAPI`],
     redirectUri,
     responseMode: 'query',
   });

@@ -27,8 +27,8 @@
   /* Button colors */
   --btn-primary: #22c55e;
   --btn-primary-hover: #16a34a;
-  --btn-secondary: #22c55e;
-  --btn-secondary-hover: #16a34a;
+  --btn-secondary: #24a0ed;
+  --btn-secondary-hover: #246eed;
   --btn-ghost: #c5c7cb;
   --btn-ghost-hover: #b1b5bb;
   --btn-danger: #f87171;
@@ -60,8 +60,8 @@
     /* Button colors */
     --btn-primary: #22c55e;
     --btn-primary-hover: #16a34a;
-    --btn-secondary: #22c55e;
-    --btn-secondary-hover: #16a34a;
+    --btn-secondary: #24a0ed;
+    --btn-secondary-hover: #246eed;
     --btn-ghost: #334155;
     --btn-ghost-hover: #475569;
     --btn-danger: #ef4444;

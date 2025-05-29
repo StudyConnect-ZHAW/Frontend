@@ -1,3 +1,36 @@
 {
-  "title": "Groups"
+  "title": "Groups",
+  "button": {
+    "createGroup": "Create Group",
+    "joinGroup": "Join Group",
+    "join": "Join",
+    "leave": "Leave"
+  },
+  "card": {
+    "owner": "Owner",
+    "members": "Members",
+    "membersCount": "Member count",
+    "createdAt": "Created at"
+  },
+  "search": "Search groups...",
+  "sort": {
+    "alphabet": "Alphabetisch",
+    "members": "Mitgliederzahl",
+    "newest": "Neuste"
+  },
+  "toast": {
+    "joinSuccess": "You have successfully joined the group.",
+    "joinError": "Could not join the group. Please try again.",
+    "leaveSuccess": "You have successfully left the group.",
+    "leaveError": "Could not leave the group. Please try again.",
+    "createSuccess": "Your group was successfully created.",
+    "createError": "Could not create the group. Please try again."
+  },
+  "titleJoin": "Join a Group",
+  "titleCreate": "Create New Group",
+  "placeholderName": "Group name",
+  "placeholderDescription": "Description",
+  "noGroupFound": "No groups found.",
+  "noGroup": "You don't have any groups.",
+  "errorLoading": "Failed to load groups. Please try again."
 }

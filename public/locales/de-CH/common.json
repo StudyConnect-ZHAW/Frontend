@@ -18,9 +18,13 @@
     "update": "Aktualisieren"
   },
   "copyright": "Alle Rechte vorbehalten",
+  "form": {
+    "required": "Erforderlich"
+  },
   "toast": {
     "titleSuccess": "Erfolgreich",
     "titleError": "Fehler",
     "saveSuccess": "Änderungen wurden erfolgreich gespeichert."
-  }
+  },
+  "loading": "Laden..."
 }

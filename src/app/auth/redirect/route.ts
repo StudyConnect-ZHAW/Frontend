@@ -45,9 +45,9 @@ export async function GET(request: NextRequest) {
 
     const decoded = jwtDecode<MicrosoftToken>(idToken);
 
-    const { oid: userGuid, name, email, upn, preferred_username } = decoded;
+    const { oid, name, email, upn, preferred_username } = decoded;
 
-    if (!userGuid) {
+    if (!oid) {
       console.error('OID not found in ID token');
 
       return NextResponse.redirect(new URL('/?error=invalid_token', request.url));
@@ -57,11 +57,9 @@ export async function GET(request: NextRequest) {
     const userEmail = email ?? upn ?? preferred_username;
 
     // Check if user already exists in backend
-    const userCheck = await fetch(`${apiUrl}v1/users/${userGuid}`);
+    const userCheck = await fetch(`${apiUrl}v1/users/${oid}`);
 
     if (userCheck.status === 404) {
-      // User does not exist, create a new user
-
       // Default values for first and last names
       let firstName = 'Unknown';
       let lastName = 'User';
@@ -75,7 +73,7 @@ export async function GET(request: NextRequest) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userGuid,
+          oid,
           firstName,
           lastName,
           email: userEmail ?? 'no-email@example.com',

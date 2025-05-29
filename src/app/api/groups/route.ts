@@ -5,6 +5,7 @@ const URL = `${process.env.NEXT_PUBLIC_API_URL}v1/groups`;
 
 /**
  * Forwards a POST request to the backend to create a new group.
+ * Note that the backend infers the current user from the token to set as the group owner.
  * The request body is expected to contain all the necessary group information.
  */
 export async function POST(req: NextRequest) {
