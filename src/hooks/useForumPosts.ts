@@ -1,7 +1,6 @@
 import {
   createPost,
   getAllPosts,
-  getPostById,
 } from "@/lib/handlers/postHandler";
 import { Post, PostCreateData } from "@/types/posts";
 import { useEffect, useState } from "react";
