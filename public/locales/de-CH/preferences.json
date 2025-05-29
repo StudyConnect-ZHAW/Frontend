@@ -43,5 +43,8 @@
     "emailSuccess": "Deine Email wurde erfolgreich aktualisiert.",
     "emailError": "Deine Email konnte nicht aktualisiert werden. Bitte versuch es erneut.",
     "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+  },
+  "errors": {
+    "required": "Dieses Feld darf nicht leer sein."
   }
 }

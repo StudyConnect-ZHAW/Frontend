@@ -21,12 +21,7 @@ export default function AccountSettings({ onClose }: Props) {
   const handleLogout = () => redirect("/auth/logout");
 
   return (
-    <div className="flex flex-col bg-primary-bg text-primary p-4">
-      {/* FYI text about calendar sync (still useful information) */}
-      <p className="text-sm text-secondary mb-4">
-        {t("preferences:account.calendarInfoText")}
-      </p>
-
+    <div className="flex flex-col bg-primary-bg text-primary">
       {/* Cancel / Logout actions */}
       <div className="flex justify-between border-t pt-4 mt-4 sticky bottom-0 bg-primary-bg">
         <Button
