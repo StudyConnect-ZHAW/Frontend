@@ -19,22 +19,19 @@ export default function ForumPage() {
   const { t } = useTranslation(["forum", "common"]);
 
   const { user, loading: loadingUser } = useCurrentUser();
-  const userGuid = user?.userGuid;
 
   const {
     posts,
     loading: loadingPosts,
-    error,
     handleCreatePost,
   } = useForumPosts();
 
   const { search, setSearch, sort, setSort, sortOptions, filteredPosts } =
     useForumFilter(posts);
 
-  const { categories, loading: loadingCategories } = useForumCategories();
+  const { categories } = useForumCategories();
 
-  if (loadingUser || !userGuid) {
-    console.log("Loading | No user guid");
+  if (loadingUser || !user) {
     return (
       <div className="flex items-center justify-center h-full text-primary text-xl">
         {t("common:loading")}

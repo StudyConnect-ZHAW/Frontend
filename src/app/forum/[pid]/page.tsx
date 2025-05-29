@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "@/components/PageHeader";
-import { FiArrowLeft, FiSend, FiShare2, FiThumbsUp } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import { Post } from "@/types/posts";
 import { Comment } from "@/types/comment";
 import { useTranslation } from "react-i18next";
