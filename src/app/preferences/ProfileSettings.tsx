@@ -201,21 +201,14 @@ export default function ProfileSettings({
         modules: [...selectedModules],
       };
 
-      // Replace previous toast to avoid stacking
-      if ((showToast as any).dismiss && lastToastId.current) {
-        (showToast as any).dismiss(lastToastId.current);
-      }
       lastToastId.current = showToast(
         ToastType.Success,
         t("common:toast.titleSuccess"),
         t("common:toast.saveSuccess")
       ) as unknown as string;
-    } catch (err: any) {
-      showToast(
-        ToastType.Error,
-        t("common:toast.titleError"),
-        err?.message ?? "Update failed"
-      );
+    } catch (err) {
+      console.error("Update failed:", err);
+      showToast(ToastType.Error, t("common:toast.titleError"), "Update failed");
     }
   };
 
