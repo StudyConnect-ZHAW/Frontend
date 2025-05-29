@@ -6,7 +6,7 @@ import { showToast, ToastType } from '@/components/Toast';
 import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { getCurrentUser, updateUser } from '@/lib/handlers/userHandler';
-import { User } from '@/types/user';
+import { UserUpdateData } from '@/types/user';
 
 type Props = {
   onClose: () => void;
@@ -47,7 +47,7 @@ export default function AccountSettings({ onClose }: Props) {
       const currentUser = await getCurrentUser();
 
       // Only email is being updated — preserve other user data
-      const updatedUser: User = {
+      const updatedUser: UserUpdateData = {
         firstName: currentUser.firstName,
         lastName: currentUser.lastName,
         email: trimmedEmail,
