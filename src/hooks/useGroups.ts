@@ -130,7 +130,7 @@ export function useGroups(userId?: string) {
     if (!group) { return; }
 
     try {
-      const isOwner = group.ownerId === userId;
+      const isOwner = group.owner.oid === userId;
 
       if (isOwner) {
         // Delete owned group upon leaving
