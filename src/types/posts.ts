@@ -13,7 +13,7 @@ export interface Post {
   created: string;
   updated: string;
   category: Category;
-  author: User;
+  user: User;
 }
 
 /**

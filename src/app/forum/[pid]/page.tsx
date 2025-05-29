@@ -68,7 +68,7 @@ export default function PostDetailPage() {
 
       <section className="rounded-xl border border-main bg-sidebar-bg p-6 shadow-sm">
         <div className="text-sm text-gray-500 mb-2">
-          {formattedDate} • {post.author.firstName} {post.author.lastName}
+          {formattedDate} • {post.user.firstName} {post.user.lastName}
         </div>
         <p className="text-base text-primary whitespace-pre-wrap">{post.content}</p>
       </section>

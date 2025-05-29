@@ -3,8 +3,9 @@
   "post": "Beitrag",
   "comments": "Kommentare",
   "placeholder": {
-    "postTitle": "Beitragstitel...",
+    "postTitle": "Beitragstitel",
     "postContent": "Was möchtest du mitteilen?",
+    "selectCategory": "Kategorie auswählen",
     "search": "Suchen..."
   },
   "button": {
