@@ -3,8 +3,9 @@
   "post": "Post",
   "comments": "Comments",
   "placeholder": {
-    "postTitle": "Post title...",
+    "postTitle": "Post Title",
     "postContent": "What do you want to share?",
+    "selectCategory": "Select category",
     "search": "Search..."
   },
   "button": {
