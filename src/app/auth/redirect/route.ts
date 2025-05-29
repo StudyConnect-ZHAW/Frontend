@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
     });
 
     const idToken = tokenResponse.idToken;
+    const accessToken = tokenResponse.accessToken;
 
     if (!idToken) {
       console.error('ID token is missing from the token response');
@@ -44,8 +45,7 @@ export async function GET(request: NextRequest) {
     }
 
     const decoded = jwtDecode<MicrosoftToken>(idToken);
-
-    const { oid, name, email, upn, preferred_username } = decoded;
+    const oid = decoded.oid;
 
     if (!oid) {
       console.error('OID not found in ID token');
@@ -53,31 +53,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/?error=invalid_token', request.url));
     }
 
-    // Check if user has email or username
-    const userEmail = email ?? upn ?? preferred_username;
-
     // Check if user already exists in backend
     const userCheck = await fetch(`${apiUrl}v1/users/${oid}`);
 
     if (userCheck.status === 404) {
-      // Default values for first and last names
-      let firstName = 'Unknown';
-      let lastName = 'User';
+      console.log("User doesn't exist. Creating a new user...");
 
-      // Extract first and last names from the full name or use default values
-      ({ firstName, lastName } = extractNames(name, firstName, lastName));
-
-      const createUserRes = await fetch(`${apiUrl}v1/users`, {
+      const createUserRes = await fetch(`${apiUrl}v2/users`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({
-          oid,
-          firstName,
-          lastName,
-          email: userEmail ?? 'no-email@example.com',
-        }),
       });
 
       if (!createUserRes.ok) {
@@ -115,22 +101,5 @@ export async function GET(request: NextRequest) {
     console.error('Unknown error acquiring token:', error);
 
     return NextResponse.redirect(new URL('/?error=unknown_error', request.url));
-  }
-
-  // Helper function to extract first and last names from a full name
-  // If the name is not provided, use default values
-  function extractNames(name: string | undefined, firstName: string, lastName: string) {
-    const fullName = name?.trim();
-    if (fullName) {
-      const parts = fullName.split(/\s+/);
-      if (parts.length === 1) {
-        firstName = parts[0];
-      } else {
-        firstName = parts[0];
-        lastName = parts.slice(1).join(' ');
-      }
-    }
-
-    return { firstName, lastName };
   }
 }
