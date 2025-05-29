@@ -11,10 +11,6 @@ type Props = {
 export default function AppearanceSettings({ onClose }: Props) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-  // Placeholder settings
-  const [density, setDensity] = useState('normal');
-  const [layout, setLayout] = useState('grid');
-
   const { t } = useTranslation(['preferences', 'common']);
 
   useEffect(() => {
@@ -34,10 +30,8 @@ export default function AppearanceSettings({ onClose }: Props) {
   };
 
   return (
-    <div className="flex flex-col space-y-6 max-h-[70vh] bg-primary-bg text-primary">
-      {/* scrollable content */}
+    <div className="flex flex-col max-h-[70vh] bg-primary-bg text-primary">
       <div className="overflow-y-auto pr-2 space-y-6 flex-1">
-
         {/* Theme selection */}
         <div>
           <label className="block text-primary mb-1">{t('appearance.themeLabel')}</label>
@@ -48,33 +42,6 @@ export default function AppearanceSettings({ onClose }: Props) {
           >
             <option value="light">{t('appearance.theme.light')}</option>
             <option value="dark">{t('appearance.theme.dark')}</option>
-          </select>
-        </div>
-
-        {/* Chat density selection */}
-        <div>
-          <label className="block text-primary mb-1">{t('appearance.densityLabel')}</label>
-          <select
-            value={density}
-            onChange={e => setDensity(e.target.value)}
-            className="w-full border rounded-md px-4 py-2 bg-primary-bg text-primary"
-          >
-            <option value="spacious">{t('appearance.density.spacious')}</option>
-            <option value="normal">{t('appearance.density.normal')}</option>
-            <option value="compact">{t('appearance.density.compact')}</option>
-          </select>
-        </div>
-
-        {/* Layout selection */}
-        <div>
-          <label className="block text-primary mb-1">{t('appearance.layoutLabel')}</label>
-          <select
-            value={layout}
-            onChange={e => setLayout(e.target.value)}
-            className="w-full border rounded-md px-4 py-2 bg-primary-bg text-primary"
-          >
-            <option value="grid">{t('appearance.layout.grid')}</option>
-            <option value="list">{t('appearance.layout.list')}</option>
           </select>
         </div>
       </div>
