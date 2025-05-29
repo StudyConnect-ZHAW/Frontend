@@ -1,48 +1,28 @@
 'use client';
 
-import { redirect } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 import Calendar from '@/components/Calendar';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 // * HomePage component: displays welcome header, sections, and calendar for the current ZHAW user
 const HomePage = () => {
-  const [userName, setUserName] = useState<string | null>(null);
-
-  const { t, i18n } = useTranslation('common');
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/api/me');
-
-        // If not authenticated, redirect to login
-        if (!res.ok) {
-          redirect('/login');
-        }
-
-        const user = await res.json();
-        setUserName(user.firstName + ' ' + user.lastName);
-      } catch (err) {
-        console.error('Error fetching user:', err);
-        redirect('/login');
-      }
-    };
-
-    // Fetch user data on language change
-    fetchUser();
-  }, [i18n.language]);
+  const { user, loading } = useCurrentUser();
+  const { t } = useTranslation('common');
 
   // Don't render the page until the user is loaded
-  if (!userName) {
-    return null;
+  if (loading || !user) {
+    return (
+      <div className="flex items-center justify-center h-full text-primary text-xl">
+        {t('common:loading')}
+      </div>
+    );
   }
 
   return (
     <>
-      <PageHeader title={t('welcomeUser', { name: `${userName}` })} />
+      <PageHeader title={t('welcomeUser', { name: `${user.firstName} ${user.lastName}` })} />
 
       <div className="flex flex-col flex-1 gap-4">
         {/* Top row: left empty, right shows date */}
@@ -71,7 +51,6 @@ const HomePage = () => {
         </div>
       </div>
     </>
-
   );
 };
 

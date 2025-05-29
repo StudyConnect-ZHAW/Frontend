@@ -16,7 +16,6 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 const GroupsPage = () => {
   const { t } = useTranslation(['groups', 'common']);
   const { user, loading: loadingUser } = useCurrentUser();
-  const userGuid = user?.userGuid;
 
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -30,7 +29,7 @@ const GroupsPage = () => {
     handleJoin,
     handleLeave,
     handleCreate,
-  } = useGroups(userGuid);
+  } = useGroups(user?.oid);
 
   const {
     search,
@@ -42,7 +41,7 @@ const GroupsPage = () => {
   } = useGroupFilter(myGroups);
 
   // Show loading screen until user is loaded
-  if (loadingUser || !userGuid) {
+  if (loadingUser || !user) {
     return (
       <div className="flex items-center justify-center h-full text-primary text-xl">
         {t('common:loading')}

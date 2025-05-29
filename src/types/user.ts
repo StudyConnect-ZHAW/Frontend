@@ -2,7 +2,7 @@
  * Represents an individual user.
  */
 export interface User {
-  userGuid?: string; // TODO (Adrian): Remove optionality
+  oid: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -13,7 +13,16 @@ export interface User {
  * Includes the ID provided by the token.
  */
 export interface UserCreateData {
-  userGuid: string;
+  oid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+/**
+ * Payload to update an existing user in the backend.
+ */
+export interface UserUpdateData {
   firstName: string;
   lastName: string;
   email: string;

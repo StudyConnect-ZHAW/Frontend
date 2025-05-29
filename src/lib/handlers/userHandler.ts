@@ -1,4 +1,4 @@
-import type { User } from '@/types/user';
+import type { User, UserUpdateData } from '@/types/user';
 import { parseResponse } from '@/lib/api/parseResponse';
 
 /**
@@ -7,7 +7,7 @@ import { parseResponse } from '@/lib/api/parseResponse';
  *
  * @param data - The updated user object
  */
-export async function updateUser(data: User): Promise<void> {
+export async function updateUser(data: UserUpdateData): Promise<void> {
   const res = await fetch(`/api/users`, {
     method: 'PUT',
     body: JSON.stringify(data),
@@ -17,13 +17,13 @@ export async function updateUser(data: User): Promise<void> {
 }
 
 /**
- * Fetches the current user's profile via the Next.js API route `/api/me`.
+ * Fetches the current user's profile via the Next.js API route `/api/users/me`.
  * The route handler decodes the access token and forwards the request to the backend.
  *
  * @returns The authenticated user's profile
  */
 export async function getCurrentUser(): Promise<User> {
-  const res = await fetch('/api/me', {
+  const res = await fetch('/api/users/me', {
     method: 'GET',
   });
 
