@@ -79,7 +79,9 @@ export default function ProfileSettings({
 
   /* ---------------- populate inputs when user loads ------------------- */
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      return;
+    }
     setFirstName(user.firstName);
     setLastName(user.lastName);
     setEmail(user.email);
@@ -138,6 +140,7 @@ export default function ProfileSettings({
       lastName: lastName.trim() === "" ? requiredMsg : "",
       email: email.trim() === "" ? requiredMsg : "",
     };
+
     setErrors(draft);
     return Object.values(draft).every((msg) => msg === "");
   };
@@ -145,14 +148,20 @@ export default function ProfileSettings({
   const handleEditPicture = () => fileInputRef.current?.click();
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setAvatarUrl(URL.createObjectURL(file));
+    if (file) {
+      setAvatarUrl(URL.createObjectURL(file));
+    }
   };
 
   /* ---------------- save --------------------------------------------- */
   const handleSave = async () => {
-    if (!user) return;
+    if (!user) {
+      return;
+    }
 
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      return;
+    }
     // Detect changes (dirty state)
     const isDirty =
       firstName !== baseline.current.firstName ||
@@ -161,7 +170,9 @@ export default function ProfileSettings({
       selectedModules.length !== baseline.current.modules.length ||
       !selectedModules.every((id) => baseline.current.modules.includes(id));
 
-    if (!isDirty) return; // nothing changed
+    if (!isDirty) {
+      return;
+    }
 
     // Validate email
     const trimmedEmail = email.trim();
@@ -209,8 +220,12 @@ export default function ProfileSettings({
   };
 
   /* ---------------- loading / error UI ------------------------------- */
-  if (loadingCats) return <p className="p-8">{t("common:loading")}</p>;
-  if (catsError) return <p className="p-8 text-red-500">{catsError}</p>;
+  if (loadingCats) {
+    return <p className="p-8">{t("common:loading")}</p>;
+  }
+  if (catsError) {
+    return <p className="p-8 text-red-500">{catsError}</p>;
+  }
 
   /* -------------------------------------------------------------------- */
   /*  UI                                                                  */
@@ -351,7 +366,8 @@ export default function ProfileSettings({
                   className={`px-5 py-2 rounded-full border-2 text-base transition cursor-pointer ${
                     isSelected
                       ? "bg-yellow-400 dark:bg-red-600 text-black dark:text-white border-yellow-400 dark:border-red-600"
-                      : "bg-white dark:bg-gray-800 text-black dark:text-white border-yellow-400 dark:border-red-600 hover:bg-yellow-100 dark:hover:bg-gray-700"
+                      : "bg-white dark:bg-gray-800 text-black" +
+                        "dark:text-white border-yellow-400 dark:border-red-600 hover:bg-yellow-100 dark:hover:bg-gray-700"
                   }`}
                 >
                   {cat.name}
