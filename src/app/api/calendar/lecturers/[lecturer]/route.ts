@@ -1,1 +1,1 @@
-// call lectuerer
+// TODO: get schedule of lecturer

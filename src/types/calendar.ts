@@ -30,3 +30,17 @@ export interface CalendarEvent {
       isHoliday?: boolean;
     };
   }
+
+export interface ZhawStudents {
+    students: string[];
+  }
+
+export interface Lecturer {
+  name: string;
+  shortName: string;
+}
+
+export interface ZhawLecturers {
+  lec‌: string[] | PromiseLike<string[]>;
+  lecturers: Lecturer[];
+}

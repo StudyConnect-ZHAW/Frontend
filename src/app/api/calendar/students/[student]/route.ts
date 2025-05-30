@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-/*
- * API Route: /api/calendar
- * Fetches the ZHAW schedule for authenticated users with a valid ZHAW email.
- * Requires a valid JWT in the 'access_token' cookie.
+/**
+ * Forwards a GET request to the external ZHAW Engineering API to fetch the schedule
+ * for a specific student shortName and date.
+ * The student is taken from the dynamic route segment `[student]`.
  */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ student: string }> }) {
   
   // TODO: request to get all students and all lectureres cache it in a list, 
   // look if shortname part of student, or part of lecturer list, if neither dont call api !
 
-  // TODO: separate api calls and logic dont do everything in one file 
-  // (hooks, lib/api, handlers, calendar.ts with mapZhawDaysToEvents)
-  
   try {
     console.log(req);
     const { student }= await params;
@@ -52,7 +49,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ stud
     return NextResponse.json(schedule);
 
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('API-Error:', error);
 
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
