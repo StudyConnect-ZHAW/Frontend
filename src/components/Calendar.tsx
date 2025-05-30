@@ -35,12 +35,14 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
   const {
     loading: loadingCalendar,
     loadStudents,
+    loadLecturers,
     fetchEventsDynamically,
   } = useCalendar(shortName);
 
   useEffect(() => {
     loadStudents();
-  }, [loadStudents]);
+    loadLecturers();
+  }, [loadStudents, loadLecturers]);
 
   if (loadingUser || loadingCalendar) {
     return (
@@ -89,7 +91,7 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
            * Otherwise let FullCalendar render its default styled event.
            **/
           eventContent={
-            initialView === 'timeGridDay' || initialView === 'timeGridWeek'
+            initialView === 'timeGridDay'
               ? (arg) => {
                 const room = arg.event.extendedProps.room;
 
