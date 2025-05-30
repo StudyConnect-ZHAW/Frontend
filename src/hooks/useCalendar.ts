@@ -16,33 +16,27 @@ export function useCalendar(shortName: string) {
   const { t } = useTranslation(['calendar']);
 
   const determineUserRole = useCallback(async () => {
-    if (rolePath !== null) {return;} // already determined
-
     setLoading(true);
     try {
-      const studentList = await fetchZhawStudents();
+      const [studentList, lecturerList] = await Promise.all([
+        fetchZhawStudents(),
+        fetchZhawLecturers(),
+      ]);
+
       if (studentList.students.includes(shortName)) {
         setRolePath('students');
-
-        return;
-      }
-
-      const lecturerList = await fetchZhawLecturers();
-      const lecturerShortNames = (lecturerList?.lecturers ?? []).map((l) => l.shortName);
-
-      if (lecturerShortNames.includes(shortName)) {
+      } else if (lecturerList.lecturers.some((l) => l.shortName === shortName)) {
         setRolePath('lecturers');
-        
-        return;
+      } else {
+        setRolePath(null);
       }
-
-      setRolePath(null); // neither student nor lecturer
     } catch (err) {
       console.error('Failed to determine user role', err);
+      setRolePath(null); // fallback
     } finally {
       setLoading(false);
     }
-  }, [shortName, rolePath]);
+  }, [shortName]);
 
   const fetchEventsDynamically = useCallback(
     async (
@@ -53,29 +47,13 @@ export function useCalendar(shortName: string) {
       try {
         const viewStart = new Date(fetchInfo.start ?? new Date());
         const viewEnd = new Date(fetchInfo.end ?? new Date());
-        const viewType = fetchInfo.view?.type ?? 'timeGridWeek';
-        const isDailyView = viewType === 'timeGridDay';
 
-        const allEvents: EventInput[] = [];
+        const [publicHolidays, scheduleEvents] = await Promise.all([
+          fetchPublicHolidays(viewStart.getFullYear()),
+          rolePath ? fetchScheduleEvents(shortName, viewStart, viewEnd, rolePath, t) : Promise.resolve([]),
+        ]);
 
-        const publicHolidays = await fetchPublicHolidays(viewStart.getFullYear());
-        allEvents.push(...publicHolidays);
-
-        if (rolePath === null) {
-          successCallback(allEvents);
-
-          return;
-        }
-
-        if (isDailyView) {
-          const dailyEvents = await fetchDailyView(shortName, viewStart, viewType, rolePath);
-          allEvents.push(...dailyEvents);
-        } else {
-          const weekEvents = await fetchWeeklyOrMonthlyView(shortName, viewStart, viewEnd, viewType, rolePath, t);
-          allEvents.push(...weekEvents);
-        }
-
-        successCallback(allEvents);
+        successCallback([...publicHolidays, ...scheduleEvents]);
       } catch (err) {
         console.error('Error fetching events:', err);
         failureCallback(err as Error);
@@ -93,22 +71,10 @@ export function useCalendar(shortName: string) {
   };
 }
 
-const fetchDailyView = async (shortName: string, viewStart: Date, viewType: string, rolePath: string) => {
-  const startingAt = viewStart.toISOString().split('T')[0];
-  const data = await fetchZhawSchedule(shortName, startingAt, rolePath);
-  const filtered = data.days.map((day) => ({
-    ...day,
-    events: (day.events ?? []).filter((e) => e.type !== 'Holiday'),
-  }));
-
-  return mapZhawDaysToEvents({ days: filtered });
-};
-
-const fetchWeeklyOrMonthlyView = async (
+const fetchScheduleEvents = async (
   shortName: string,
   viewStart: Date,
   viewEnd: Date,
-  viewType: string,
   rolePath: string,
   t: (key: string) => string
 ) => {
