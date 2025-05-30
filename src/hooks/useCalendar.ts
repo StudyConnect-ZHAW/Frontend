@@ -6,51 +6,48 @@ import type { EventInput, EventSourceFuncArg } from '@fullcalendar/core';
 import { useTranslation } from 'react-i18next';
 
 /**
- * Custom hook to manage loading student/lecturer lists and fetching calendar events.
+ * Custom hook to manage loading user role and fetching calendar events.
  *
- * @param shortName The user shortName (e.g., ZHAW login) used to fetch personalized schedules.
+ * @param shortName The user shortName (e.g., ZHAW login).
  */
 export function useCalendar(shortName: string) {
-  const [students, setStudents] = useState<string[]>([]);
-  const [lecturers, setLecturers] = useState<string[]>([]);
+  const [rolePath, setRolePath] = useState<'students' | 'lecturers' | null>(null);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation(['calendar']);
 
-  /**
-   * Loads the list of students from the backend.
-   */
-  const loadStudents = useCallback(async () => {
+  const determineUserRole = useCallback(async () => {
+    if (rolePath !== null) {return;} // already determined
+
     setLoading(true);
     try {
       const studentList = await fetchZhawStudents();
-      setStudents(studentList.students);
-      console.log('Loaded students:', studentList.students);
-    } catch (err) {
-      console.error('Failed to load students', err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      if (studentList.students.includes(shortName)) {
+        setRolePath('students');
+        console.log('User identified as student');
 
-  /**
-   * Loads the list of lecturers from the backend.
-   */
-  const loadLecturers = useCallback(async () => {
-    setLoading(true);
-    try {
+        return;
+      }
+
       const lecturerList = await fetchZhawLecturers();
-      setLecturers(lecturerList.lecturers.map((l) => l.shortName));
-      console.log('Loaded lecturers:', lecturerList.lecturers.map((l) => l.shortName));
+      console.log(lecturerList);
+      const lecturerShortNames = (lecturerList?.lecturers ?? []).map((l) => l.shortName);
+
+      if (lecturerShortNames.includes(shortName)) {
+        setRolePath('lecturers');
+        console.log('User identified as lecturer');
+        
+        return;
+      }
+
+      setRolePath(null); // guest/holidays only
+      console.log('User identified as external/guest (holidays only)');
     } catch (err) {
-      console.error('Failed to load lecturers', err);
+      console.error('Failed to determine user role', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [shortName, rolePath]);
 
-  /**
-   * Fetch dynamic calendar events based on the selected view and date range.
-   */
   const fetchEventsDynamically = useCallback(
     async (
       fetchInfo: EventSourceFuncArg,
@@ -60,28 +57,25 @@ export function useCalendar(shortName: string) {
       try {
         const viewStart = new Date(fetchInfo.start ?? new Date());
         const viewEnd = new Date(fetchInfo.end ?? new Date());
-        const viewType = (fetchInfo as { view?: { type?: string } }).view?.type ?? 'timeGridWeek';
+        const viewType = fetchInfo.view?.type ?? 'timeGridWeek';
         const isDailyView = viewType === 'timeGridDay';
 
         const allEvents: EventInput[] = [];
 
-        // Always add Swiss public holidays
         const publicHolidays = await fetchPublicHolidays(viewStart.getFullYear());
         allEvents.push(...publicHolidays);
 
-        // If user is not a student → skip ZHAW API calls, only return holidays
-        if (!students.includes(shortName) && !lecturers.includes(shortName)) {
+        if (rolePath === null) {
           successCallback(allEvents);
 
           return;
         }
 
-        // Add ZHAW schedule events
         if (isDailyView) {
-          const dailyEvents = await fetchDailyView(shortName, viewStart, viewType);
+          const dailyEvents = await fetchDailyView(shortName, viewStart, viewType, rolePath);
           allEvents.push(...dailyEvents);
         } else {
-          const weekEvents = await fetchWeeklyOrMonthlyView(shortName, viewStart, viewEnd, viewType, t);
+          const weekEvents = await fetchWeeklyOrMonthlyView(shortName, viewStart, viewEnd, viewType, rolePath, t);
           allEvents.push(...weekEvents);
         }
 
@@ -91,25 +85,21 @@ export function useCalendar(shortName: string) {
         failureCallback(err as Error);
       }
     },
-    [shortName, students, lecturers, t]
+    [shortName, rolePath, t]
   );
 
   return {
-    students,
-    lecturers,
+    isStudent: rolePath === 'students',
+    isLecturer: rolePath === 'lecturers',
     loading,
-    loadStudents,
-    loadLecturers,
+    determineUserRole,
     fetchEventsDynamically,
   };
 }
 
-/**
- * Fetch events for a daily view.
- */
-const fetchDailyView = async (shortName: string, viewStart: Date, viewType: string) => {
+const fetchDailyView = async (shortName: string, viewStart: Date, viewType: string, rolePath: string) => {
   const startingAt = viewStart.toISOString().split('T')[0];
-  const data = await fetchZhawSchedule(shortName, startingAt, viewType);
+  const data = await fetchZhawSchedule(shortName, startingAt, rolePath);
   const filtered = data.days.map((day) => ({
     ...day,
     events: (day.events ?? []).filter((e) => e.type !== 'Holiday'),
@@ -118,15 +108,13 @@ const fetchDailyView = async (shortName: string, viewStart: Date, viewType: stri
   return mapZhawDaysToEvents({ days: filtered });
 };
 
-/**
- * Fetch events for weekly or monthly view.
- */
 const fetchWeeklyOrMonthlyView = async (
   shortName: string,
   viewStart: Date,
   viewEnd: Date,
   viewType: string,
-  t: (key: string) => string // pass translator function into helper
+  rolePath: string,
+  t: (key: string) => string
 ) => {
   const allEvents: EventInput[] = [];
   const fetchedWeeks = new Set<string>();
@@ -140,7 +128,7 @@ const fetchWeeklyOrMonthlyView = async (
     if (fetchedWeeks.has(startingAt)) {continue;}
     fetchedWeeks.add(startingAt);
 
-    const data = await fetchZhawSchedule(shortName, startingAt, viewType);
+    const data = await fetchZhawSchedule(shortName, startingAt, rolePath);
     const isWeekEmpty =
       !data.days || data.days.length === 0 ||
       data.days.every((day) => !day.events || day.events.every((e) => e.type === 'Holiday'));

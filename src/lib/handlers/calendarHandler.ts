@@ -4,9 +4,9 @@ import type { ZhawSchedule, ZhawStudents, ZhawLecturers } from '@/types/calendar
 /**
  * Fetch schedule for a given student shortName and date.
  */
-export async function fetchZhawSchedule(shortName: string, startingAt: string): Promise<ZhawSchedule> {
-  const res = await fetch(`/api/calendar/students/${shortName}?startingAt=${startingAt}`);
-
+export async function fetchZhawSchedule(shortName: string, startingAt: string, rolePath: string) {
+  const res = await fetch(`/api/calendar/${rolePath}/${shortName}?startingAt=${startingAt}`);
+  
   return parseResponse<ZhawSchedule>(res);
 }
 

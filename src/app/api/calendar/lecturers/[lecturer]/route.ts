@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Forwards a GET request to the external ZHAW Engineering API to fetch the schedule
- * for a specific student shortName and date.
- * The student is taken from the dynamic route segment `[student]`.
+ * for a specific lecturer shortName and date.
+ * The lecturer is taken from the dynamic route segment `[lecturer]`.
  */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ lecturer: string }> }) {
   try {
     console.log(req);
-    const { lecturer: student }= await params;
+    const { lecturer }= await params;
 
     // Extract params
     const rawDateStr = req.nextUrl.searchParams.get('startingAt') ?? new Date().toISOString().split('T')[0];
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ lect
     console.log("starting at:" + startingAt);
 
     const scheduleRes = await fetch(
-      `https://api.apps.engineering.zhaw.ch/v1/schedules/lecturer/${student}?startingAt=${startingAt}`,
+      `https://api.apps.engineering.zhaw.ch/v1/schedules/lecturers/${lecturer}?startingAt=${startingAt}`,
       {
         headers: {
           'User-Agent': 'StudyConnect (https://github.com/StudyConnect-ZHAW)',

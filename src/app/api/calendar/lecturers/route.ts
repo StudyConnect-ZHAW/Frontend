@@ -9,7 +9,7 @@ export async function GET() {
   try {
 
     const lecturersRes = await fetch(
-      `https://api.apps.engineering.zhaw.ch/v1/schedules/students/`,
+      `https://api.apps.engineering.zhaw.ch/v1/schedules/lecturers/`,
       {
         headers: {
           'User-Agent': 'StudyConnect (https://github.com/StudyConnect-ZHAW)',

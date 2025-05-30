@@ -14,7 +14,7 @@ import { useCalendar } from '@/hooks/useCalendar';
 interface CalendarProps {
     initialView?: 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay';
     showHeader?: boolean;
-  }
+}
 
 /*
 * Calendar component for displaying ZHAW schedule and Swiss public holidays
@@ -34,15 +34,13 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
 
   const {
     loading: loadingCalendar,
-    loadStudents,
-    loadLecturers,
+    determineUserRole,
     fetchEventsDynamically,
   } = useCalendar(shortName);
 
   useEffect(() => {
-    loadStudents();
-    loadLecturers();
-  }, [loadStudents, loadLecturers]);
+    determineUserRole();
+  }, [determineUserRole]);
 
   if (loadingUser || loadingCalendar) {
     return (
