@@ -5,30 +5,21 @@ import { NextResponse } from 'next/server';
  * This route acts as a proxy, adding necessary headers and passing the data back to the frontend.
  */
 export async function GET() {
-
-  try {
-
-    const lecturersRes = await fetch(
-      `https://api.apps.engineering.zhaw.ch/v1/schedules/lecturers/`,
-      {
-        headers: {
-          'User-Agent': 'StudyConnect (https://github.com/StudyConnect-ZHAW)',
-          Accept: 'application/json',
-        },
-      }
-    );
-
-    if (!lecturersRes.ok) {
-      return NextResponse.json({ error: 'Failed to fetch ZHAW calendar' }, { status: lecturersRes.status });
+  const lecturersRes = await fetch(
+    `https://api.apps.engineering.zhaw.ch/v1/schedules/lecturers/`,
+    {
+      headers: {
+        'User-Agent': 'StudyConnect (https://github.com/StudyConnect-ZHAW)',
+        Accept: 'application/json',
+      },
     }
-    
-    const lecturers = await lecturersRes.json();
+  );
 
-    return NextResponse.json(lecturers);
-
-  } catch (error) {
-    console.error('API-Error:', error);
-
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  if (!lecturersRes.ok) {
+    return NextResponse.json({ error: 'Failed to fetch ZHAW calendar' }, { status: lecturersRes.status });
   }
+
+  const lecturers = await lecturersRes.json();
+
+  return NextResponse.json(lecturers);
 }
