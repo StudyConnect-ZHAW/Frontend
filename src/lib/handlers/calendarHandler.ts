@@ -1,14 +1,3 @@
-
-// make request to /students to get all students save in list 
-
-// wenn nicht student dann leerer kalendar
-
-// get all students and all lectueres
-
-//getstudentbyshortname und lectuere 
-// 
-// getweekview/ monthview
-
 import { parseResponse } from '@/lib/api/parseResponse';
 import type { ZhawSchedule, ZhawStudents, ZhawLecturers } from '@/types/calendar';
 

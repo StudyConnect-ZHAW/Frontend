@@ -12,7 +12,7 @@ import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useCalendar } from '@/hooks/useCalendar';
 
 interface CalendarProps {
-    initialView?: 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay' | 'listWeek';
+    initialView?: 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay';
     showHeader?: boolean;
   }
 
@@ -33,7 +33,6 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
   const shortName = email.includes('@') ? email.split('@')[0] : '';
 
   const {
-    students,
     loading: loadingCalendar,
     loadStudents,
     fetchEventsDynamically,
@@ -47,14 +46,6 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
     return (
       <div className="flex items-center justify-center h-full text-primary text-xl">
         {t('common:loading')}
-      </div>
-    );
-  }
-
-  if (!shortName || !students.includes(shortName)) {
-    return (
-      <div className="flex items-center justify-center h-full text-primary text-xl">
-        {t('calendar:noStudentAccess')}
       </div>
     );
   }
