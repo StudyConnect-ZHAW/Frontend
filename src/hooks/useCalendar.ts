@@ -17,47 +17,36 @@ export function useCalendar(shortName: string) {
 
   const determineUserRole = useCallback(async () => {
     setLoading(true);
-    try {
-      const [studentList, lecturerList] = await Promise.all([
-        fetchZhawStudents(),
-        fetchZhawLecturers(),
-      ]);
 
-      if (studentList.students.includes(shortName)) {
-        setRolePath('students');
-      } else if (lecturerList.lecturers.some((l) => l.shortName === shortName)) {
-        setRolePath('lecturers');
-      } else {
-        setRolePath(null);
-      }
-    } catch (err) {
-      console.error('Failed to determine user role', err);
-      setRolePath(null); // fallback
-    } finally {
-      setLoading(false);
+    const [studentList, lecturerList] = await Promise.all([
+      fetchZhawStudents(),
+      fetchZhawLecturers(),
+    ]);
+
+    if (studentList.students.includes(shortName)) {
+      setRolePath('students');
+    } else if (lecturerList.lecturers.some((l) => l.shortName === shortName)) {
+      setRolePath('lecturers');
+    } else {
+      setRolePath(null);
     }
+
+    setLoading(false);
   }, [shortName]);
 
   const fetchEventsDynamically = useCallback(
     async (
       fetchInfo: EventSourceFuncArg,
-      successCallback: (events: EventInput[]) => void,
-      failureCallback: (error: Error) => void
-    ) => {
-      try {
-        const viewStart = new Date(fetchInfo.start ?? new Date());
-        const viewEnd = new Date(fetchInfo.end ?? new Date());
+      successCallback: (events: EventInput[]) => void    ) => {
+      const viewStart = new Date(fetchInfo.start ?? new Date());
+      const viewEnd = new Date(fetchInfo.end ?? new Date());
 
-        const [publicHolidays, scheduleEvents] = await Promise.all([
-          fetchPublicHolidays(viewStart.getFullYear()),
-          rolePath ? fetchScheduleEvents(shortName, viewStart, viewEnd, rolePath, t) : Promise.resolve([]),
-        ]);
+      const [publicHolidays, scheduleEvents] = await Promise.all([
+        fetchPublicHolidays(viewStart.getFullYear()),
+        rolePath ? fetchScheduleEvents(shortName, viewStart, viewEnd, rolePath, t) : Promise.resolve([]),
+      ]);
 
-        successCallback([...publicHolidays, ...scheduleEvents]);
-      } catch (err) {
-        console.error('Error fetching events:', err);
-        failureCallback(err as Error);
-      }
+      successCallback([...publicHolidays, ...scheduleEvents]);
     },
     [shortName, rolePath, t]
   );
