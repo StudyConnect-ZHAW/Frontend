@@ -23,24 +23,20 @@ export function useCalendar(shortName: string) {
       const studentList = await fetchZhawStudents();
       if (studentList.students.includes(shortName)) {
         setRolePath('students');
-        console.log('User identified as student');
 
         return;
       }
 
       const lecturerList = await fetchZhawLecturers();
-      console.log(lecturerList);
       const lecturerShortNames = (lecturerList?.lecturers ?? []).map((l) => l.shortName);
 
       if (lecturerShortNames.includes(shortName)) {
         setRolePath('lecturers');
-        console.log('User identified as lecturer');
         
         return;
       }
 
-      setRolePath(null); // guest/holidays only
-      console.log('User identified as external/guest (holidays only)');
+      setRolePath(null); // neither student nor lecturer
     } catch (err) {
       console.error('Failed to determine user role', err);
     } finally {

@@ -21,9 +21,8 @@ export async function GET() {
     if (!lecturersRes.ok) {
       return NextResponse.json({ error: 'Failed to fetch ZHAW calendar' }, { status: lecturersRes.status });
     }
-
+    
     const lecturers = await lecturersRes.json();
-    console.log("Lecturers: " + lecturers);
 
     return NextResponse.json(lecturers);
 

@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ lecturer: string }> }) {
   try {
-    console.log(req);
     const { lecturer }= await params;
 
     // Extract params
