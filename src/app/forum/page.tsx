@@ -26,8 +26,14 @@ export default function ForumPage() {
     handleCreatePost,
   } = useForumPosts();
 
-  const { search, setSearch, sort, setSort, sortOptions, filteredPosts } =
-    useForumFilter(posts);
+  const {
+    search,
+    setSearch,
+    sort,
+    setSort,
+    sortOptions,
+    filteredPosts
+  } = useForumFilter(posts);
 
   const { categories } = useForumCategories();
 
