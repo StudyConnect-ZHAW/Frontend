@@ -23,7 +23,7 @@ export const generateCalendarEvents = async (
   viewStart: Date,
   viewEnd: Date,
   rolePath: string,
-  t: (_key) => string
+  t: (key: string) => string
 ) => {
   const allEvents: EventInput[] = [];
   const fetchedWeeks = new Set<string>();
