@@ -52,7 +52,7 @@ export default function Calendar({ initialView = 'dayGridMonth', showHeader = tr
 
   return (
     <div className="flex-grow flex items-center justify-center h-full">
-      <div className="w-full max-w-4xl h-full">
+      <div className="w-full max-w-4xl h-full border-main rounded-lg p-2">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin]}
           initialView={initialView}
