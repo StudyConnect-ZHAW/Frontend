@@ -16,7 +16,8 @@
   },
   "sort": {
     "newest": "Neueste zuerst",
-    "oldest": "Älteste zuerst"
+    "mostComments": "Meiste Kommentare",
+    "mostLikes": "Meiste Likes"
   },
   "date": {
     "invalid": "Ungültiges Datum"
