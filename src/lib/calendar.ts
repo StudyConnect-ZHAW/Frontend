@@ -1,6 +1,6 @@
 import type { ZhawSchedule } from '@/types/calendar';
 import type { EventInput } from '@fullcalendar/core';
-import { fetchZhawSchedule} from '@/lib/handlers/calendarHandler';
+import { fetchZhawSchedule } from '@/lib/handlers/calendarHandler';
 
 /**
  * Fetches ZHAW schedule data for a given shortName and date range,
@@ -23,7 +23,7 @@ export const generateCalendarEvents = async (
   viewStart: Date,
   viewEnd: Date,
   rolePath: string,
-  t: (key: string) => string
+  t: (_key) => string
 ) => {
   const allEvents: EventInput[] = [];
   const fetchedWeeks = new Set<string>();
