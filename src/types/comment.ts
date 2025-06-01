@@ -1,19 +1,25 @@
 import { User } from "./user";
 
 export interface Comment {
-  id: string;
-  author: User;
-  createdAt: string; // ISO 8601
+  forumCommentId: string;
   content: string;
-  likes: number;
-  children?: Comment[];
+  created: string; // ISO 8601
+  updated: string; // ISO 8601
+  replyCount: number;
+  likeCount: number;
+  edited: boolean;
+  deleted: boolean;
+  postId: string;
+  parentCommentId: string;
+  user: User;
+  replies?: Comment[];
 }
 
 /**
  * Payload to create a comment or reply.
  */
 export interface CommentCreateData {
-  parentCommentId: string;
+  parentCommentId: string | null;
   content: string;
 }
 
