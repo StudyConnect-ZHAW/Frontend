@@ -76,3 +76,12 @@ export async function deletePostById(postId: string): Promise<void> {
 
   return parseResponse<void>(res);
 }
+
+export async function toggleLike(postId: string): Promise<void> {
+  const res = await fetch(`/api/posts/${postId}/likes`, {
+    method: "PUT",
+    credentials: "include",
+  });
+
+  return parseResponse<void>(res);
+}

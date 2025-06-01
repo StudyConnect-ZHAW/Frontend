@@ -1,6 +1,8 @@
 import {
   createPost,
   getAllPosts,
+  getPostById,
+  toggleLike,
 } from "@/lib/handlers/postHandler";
 import { Post, PostCreateData } from "@/types/posts";
 import { useEffect, useState } from "react";
@@ -41,10 +43,31 @@ export function useForumPosts() {
     }
   };
 
+  const handleToggleLike = async (postId: string) => {
+    try {
+      await toggleLike(postId);
+
+      // TODO: Like count isn't updated in time for this call (backend problem)
+      const updatedPost = await getPostById(postId);
+
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.forumPostId === postId ? updatedPost : p
+        )
+      );
+
+      setError(null);
+    } catch (err) {
+      console.error("Failed to toggle like", err);
+      setError(t("common:toast.titleError", "Failed to update like."));
+    }
+  };
+
   return {
     posts,
     loading,
     error,
     handleCreatePost,
+    handleToggleLike,
   };
 }
