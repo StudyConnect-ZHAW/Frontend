@@ -9,9 +9,10 @@ import { Post } from "@/types/posts";
 import { Comment } from "@/types/comment";
 import { useTranslation } from "react-i18next";
 import { getPostById } from "@/lib/handlers/postHandler";
-import { getCommentsForPost } from "@/lib/handlers/commentHandler";
+import { createComment, getCommentsForPost } from "@/lib/handlers/commentHandler";
 import CommentThread from "@/components/CommentThread";
 import Logo from "@/components/Logo";
+import CommentInput from "@/components/CommentInput";
 
 export default function PostDetailPage() {
   const { t, i18n } = useTranslation(["forum", "common"]);
@@ -75,6 +76,17 @@ export default function PostDetailPage() {
           <p className="text-base text-primary whitespace-pre-wrap">{post.content}</p>
         </section>
 
+        <CommentInput
+          onSubmit={async (text) => {
+            await createComment(pid, {
+              parentCommentId: null,
+              content: text,
+            });
+            const updated = await getCommentsForPost(pid);
+            setComments(updated);
+          }}
+        />
+
         <section className="mt-2">
           <h2 className="text-lg font-semibold mb-3">{t('comments')}</h2>
 
@@ -82,9 +94,22 @@ export default function PostDetailPage() {
             <p className="text-sm text-gray-500">{t('noComments', 'No comments yet.')}</p>
           ) : (
             <div className="space-y-4">
-              {comments.map((comment) => (
-                <CommentThread key={comment.id} comment={comment} depth={0} />
-              ))}
+              {comments.map((comment) => {
+                console.log("Rendering comment:", comment);
+
+                return (
+                  <CommentThread
+                    key={comment.forumCommentId}
+                    comment={comment}
+                    depth={0}
+                    postId={pid}
+                    onCommentsUpdated={async () => {
+                      const updated = await getCommentsForPost(pid);
+                      setComments(updated);
+                    }}
+                  />
+                );
+              })}
             </div>
           )}
         </section>
