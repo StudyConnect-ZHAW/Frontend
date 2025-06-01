@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { getPostById } from "@/lib/handlers/postHandler";
 import { getCommentsForPost } from "@/lib/handlers/commentHandler";
 import CommentThread from "@/components/CommentThread";
+import Logo from "@/components/Logo";
 
 export default function PostDetailPage() {
   const { t, i18n } = useTranslation(["forum", "common"]);
@@ -52,29 +53,29 @@ export default function PostDetailPage() {
   }).format(createdAt);
 
   return (
-    <div className="flex flex-col">
-      <PageHeader
-        title={post.title}
-        leadingContent={
-          <Link
-            href={"/forum"}
-            className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-main text-primary bg-sidebar-bg hover:bg-primary-bg transition"
-            aria-label="Back to forum"
-          >
-            <FiArrowLeft className="text-xl" />
-          </Link>
-        }
-      />
+    <div className="flex flex-row justify-between items-start w-full gap-4">
+      {/* Left corner: Back button */}
+      <Link
+        href="/forum"
+        className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-main text-primary bg-sidebar-bg hover:bg-primary-bg transition shrink-0"
+        aria-label="Back to forum"
+      >
+        <FiArrowLeft className="text-2xl" />
+      </Link>
 
-      <div className="pl-100 pr-100">
-        <section className="rounded-xl border border-main bg-sidebar-bg p-6 shadow-sm">
-          <div className="text-sm text-gray-500 mb-2">
+      {/* Middle: Post */}
+      <div className="grow px-4 sm:px-8 md:px-16 lg:px-32 xl:px-48 2xl:px-64">
+        <section className="rounded-xl border border-main bg-sidebar-bg p-5 shadow-sm mb-6">
+          <div className="text-sm text-gray-500 mb-1">
             {formattedDate} • {post.user.firstName} {post.user.lastName}
           </div>
+
+          <h1 className="text-xl font-semibold mb-2">{post.title}</h1>
+
           <p className="text-base text-primary whitespace-pre-wrap">{post.content}</p>
         </section>
 
-        <section className="mt-4">
+        <section className="mt-2">
           <h2 className="text-lg font-semibold mb-3">{t('comments')}</h2>
 
           {comments.length === 0 ? (
@@ -87,6 +88,11 @@ export default function PostDetailPage() {
             </div>
           )}
         </section>
+      </div>
+
+      {/* Right corner: Logo */}
+      <div className="shrink-0">
+        <Logo />
       </div>
     </div>
   );
