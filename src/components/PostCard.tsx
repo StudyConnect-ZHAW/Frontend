@@ -7,41 +7,48 @@ import Link from 'next/link';
 
 interface Props {
   post: Post;
+  onLike: (postId: string) => void;
 }
 
-export default function PostCard({ post }: Props) {
+export default function PostCard({ post, onLike }: Props) {
   const { i18n } = useTranslation();
-
-  console.log(post.created);
-
   const createdAt = new Date(post.created);
-
   const formattedDate = new Intl.DateTimeFormat(i18n.language, {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(createdAt);
 
   return (
-    <Link
-      href={`/forum/${post.forumPostId}`}
-      className="hover:opacity-80 transition"
-    >
-      <article className="rounded-lg p-4 bg-sidebar-bg border-main">
+    <article className="flex rounded-lg bg-sidebar-bg border-main overflow-hidden">
+      {/* Left column - Like button */}
+      <div className="flex flex-col items-center justify-start px-3 py-4 min-w-[50px]">
+        <button
+          onClick={() => onLike(post.forumPostId)}
+          className="text-gray-600 hover:text-primary cursor-pointer"
+          title="Like this post"
+        >
+          <FiThumbsUp className="text-xl" />
+        </button>
+        <span className="text-xs text-gray-600 mt-1">{post.likeCount}</span>
+      </div>
 
+      {/* Right column - Post content */}
+      <Link
+        href={`/forum/${post.forumPostId}`}
+        className="flex-1 p-4 hover:opacity-80 transition"
+      >
         {/* Title */}
         <h3 className="text-lg font-bold">{post.title}</h3>
 
-        {/* Meta */}
-        <div className="mb-2 text-xs text-gray-500 flex items-center justify-between">
-          <span>
-            {formattedDate} • {post.user.firstName} {post.user.lastName}
-          </span>
+        {/* Meta info */}
+        <div className="mb-2 text-xs text-gray-500">
+          {formattedDate} • {post.user.firstName} {post.user.lastName}
         </div>
 
-        {/* Post content preview with line clamping */}
+        {/* Post content preview */}
         <p className="line-clamp-2 text-sm leading-snug">{post.content}</p>
 
-        {/* Post footer with engagement metrics */}
+        {/* Footer with stats */}
         <footer className="mt-2 flex gap-4 text-xs text-gray-600">
           <span className="flex items-center gap-1">
             <FiThumbsUp /> {post.likeCount}
@@ -50,7 +57,7 @@ export default function PostCard({ post }: Props) {
             <FiMessageSquare /> {post.commentCount}
           </span>
         </footer>
-      </article>
-    </Link >
+      </Link>
+    </article>
   );
 }

@@ -24,6 +24,7 @@ export default function ForumPage() {
     posts,
     loading: loadingPosts,
     handleCreatePost,
+    handleToggleLike,
   } = useForumPosts();
 
   const {
@@ -49,7 +50,7 @@ export default function ForumPage() {
     <div className="flex flex-col h-full">
       <PageHeader title={t("title")} />
 
-      <div className="pl-100 pr-100">
+      <div className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-48 2xl:px-64">
         {/* Controls */}
         <div className="flex flex-wrap items-center gap-4 pb-4">
 
@@ -84,7 +85,7 @@ export default function ForumPage() {
         ) : (
           <div className="flex flex-col gap-4">
             {filteredPosts.map((p) => (
-              <PostCard key={p.forumPostId} post={p} />
+              <PostCard key={p.forumPostId} post={p} onLike={handleToggleLike} />
             ))}
             {!filteredPosts.length && (
               <p className="text-sm text-gray-500">{t("noPosts")}</p>
