@@ -256,7 +256,6 @@ export default function ProfileSettings({
               <label className="block text-base font-semibold mb-1">
                 {t("profile.firstNameLabel")}
               </label>
-              {/* Fehlermeldung */}
               {errors.firstName && (
                 <p className="text-red-500 text-sm -mt-1 mb-1">
                   {errors.firstName}
@@ -281,7 +280,6 @@ export default function ProfileSettings({
               <label className="block text-base font-semibold mb-1">
                 {t("profile.lastNameLabel")}
               </label>
-              {/* Fehlermeldung */}
               {errors.lastName && (
                 <p className="text-red-500 text-sm -mt-1 mb-1">
                   {errors.lastName}
@@ -306,7 +304,6 @@ export default function ProfileSettings({
               <label className="block text-base font-semibold mb-1">
                 {t("profile.emailLabel")}
               </label>
-              {/* Fehlermeldung */}
               {errors.email && (
                 <p className="text-red-500 text-sm -mt-1 mb-1">
                   {errors.email}
