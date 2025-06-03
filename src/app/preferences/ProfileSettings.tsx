@@ -133,7 +133,7 @@ export default function ProfileSettings({
     }));
   };
 
-  /** Wird am Anfang von handleSave ausgeführt */
+  /** Starts at the beginning of handleSave */
   const validateForm = () => {
     const draft: Errors = {
       firstName: firstName.trim() === "" ? requiredMsg : "",
