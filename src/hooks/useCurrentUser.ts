@@ -3,20 +3,13 @@ import { getCurrentUser, updateUser }      from '@/lib/handlers/userHandler';
 import type { User, UserUpdateData }       from '@/types/user';
 
 /**
- * Returns the authenticated user **and** exposes a helper for partial updates.
- *
- * ```ts
- * const { user, loading, update, updating, error } = useCurrentUser();
- * await update({ firstName: 'Ada', email: 'ada@lovelace.dev' });
- * ```
+ * Custom hook to manage the authenticated user.
+ * 
+ * Returns the authenticated user and exposes a helper for partial updates.
  */
 export function useCurrentUser() {
-  /* ------------------------------------------------------------------ */
-  /*  Fetch user once on mount                                          */
-  /* ------------------------------------------------------------------ */
   const [user,    setUser]    = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     getCurrentUser()
@@ -25,9 +18,7 @@ export function useCurrentUser() {
       .finally(() => setLoading(false));
   }, []);
 
-  /* ------------------------------------------------------------------ */
-  /*  Update logic                                                      */
-  /* ------------------------------------------------------------------ */
+  // update logic
   const [updating, setUpdating] = useState(false);
   const [error,    setError]    = useState<Error | null>(null);
 
@@ -47,7 +38,7 @@ export function useCurrentUser() {
       try {
         await updateUser(changes);                       // network call
         setUser(prev => (prev ? { ...prev, ...changes } // local merge
-                              : prev));
+          : prev));
       } catch (err) {
         setError(err as Error);
         throw err;
@@ -58,6 +49,5 @@ export function useCurrentUser() {
     [user],
   );
 
-  /* ------------------------------------------------------------------ */
   return { user, loading, update, updating, error };
 }
