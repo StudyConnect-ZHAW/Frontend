@@ -1,6 +1,17 @@
 import { Category, CategoryCreateData } from "@/types/category";
 import { parseResponse } from "../api/parseResponse";
 
+/**
+ * Category handler functions for communicating with the category API.
+ *
+ * Provides:
+ *  • createCategory – create a new forum category
+ *  • getAllCategories – fetch all categories
+ *  • getCategoryById – fetch a specific category by ID
+ *  • deleteCategory – remove a category by ID
+ *
+ * All requests include credentials (cookie-based auth).
+ */
 export async function createCategory(
   data: CategoryCreateData
 ): Promise<string> {
