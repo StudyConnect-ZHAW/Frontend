@@ -12,26 +12,20 @@ import NotificationsSettings from "./NotificationSettings";
 
 import PageHeader from "@/components/PageHeader";
 import { useTranslation } from "react-i18next";
-import { useForumCategories } from "@/hooks/useForumCategories"; // ⬅️ NEU
+import { useForumCategories } from "@/hooks/useForumCategories";
 
 export default function SettingsPage() {
-  /* ------------------------------------------------------------------ */
-  /* local UI state                                                     */
-  /* ------------------------------------------------------------------ */
+  // local UI state
   const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
 
-  /* ------------------------------------------------------------------ */
-  /* data: categories are fetched once here and passed down as props    */
-  /* ------------------------------------------------------------------ */
+  // data: categories are fetched once here and passed down as props 
   const {
     categories,
     loading: loadingCats,
     error: catsError,
   } = useForumCategories();
 
-  /* ------------------------------------------------------------------ */
-  /* i18n                                                               */
-  /* ------------------------------------------------------------------ */
+  // i18n
   const { t } = useTranslation(["preferences", "common"]);
 
   const settingsBlocks = [

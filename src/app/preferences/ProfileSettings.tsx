@@ -8,21 +8,20 @@ import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import type { Category } from "@/types/category";
 
-/* --------------------------------------------------------------------------
- *  ProfileSettings
- * --------------------------------------------------------------------------
- *  Lets the user update:
- *    • profile picture
- *    • first / last name
- *    • ZHAW e‑mail address
- *    • preferred forum modules (categories)
- *    • weekly availability
+/**
+ * Component to manage and update user profile settings.
  *
- *  Categories are fetched **once** by the parent SettingsPage and delivered
- *  here via props → no additional round‑trip when the modal opens.
- * -------------------------------------------------------------------------*/
-
-/* ---------- helper types ------------------------------------------------- */
+ * Allows the user to update:
+ *  • first name, last name & ZHAW e-mail address
+ *
+ * Displays:
+ *  • profile picture
+ *  • preferred modules
+ *  • weekly availability
+ * (not yet updateable – will be added in a future issue)
+ *
+ * Uses current user data and props from parent.
+ */
 
 type Availability = {
   [day: string]: { active: boolean; from?: string; to?: string };
@@ -31,8 +30,6 @@ type Availability = {
 type Field = "firstName" | "lastName" | "email";
 type Errors = Record<Field, string>;
 
-/* ---------- props -------------------------------------------------------- */
-
 type Props = {
   onClose: () => void;
   categories: Category[];
@@ -40,15 +37,13 @@ type Props = {
   catsError?: string | null;
 };
 
-/* ---------- component ---------------------------------------------------- */
-
 export default function ProfileSettings({
   onClose,
   categories,
   loadingCats,
   catsError,
 }: Props) {
-  /* ---------------- local state ---------------------------------------- */
+  // local state
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -62,7 +57,7 @@ export default function ProfileSettings({
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /* Snapshot after last successful save → used to detect if form is dirty */
+  // Snapshot after last successful save → used to detect if form is dirty
   const baseline = useRef({
     firstName: "",
     lastName: "",
@@ -70,14 +65,14 @@ export default function ProfileSettings({
     modules: [] as string[],
   });
 
-  /* Keep track of the latest toast so we can replace it instead of stacking */
+  // Keep track of the latest toast so we can replace it instead of stacking
   const lastToastId = useRef<string | undefined>(undefined);
 
-  /* ---------------- hooks & i18n -------------------------------------- */
+  // hooks & i18n
   const { t } = useTranslation(["preferences", "common"]);
   const { user, update } = useCurrentUser();
 
-  /* ---------------- populate inputs when user loads ------------------- */
+  // populate inputs when user loads
   useEffect(() => {
     if (!user) {
       return;
@@ -97,7 +92,6 @@ export default function ProfileSettings({
     }
   }, [user]);
 
-  /* ---------------- weekday helpers ---------------------------------- */
   const weekdays = [
     t("common:weekday.monday"),
     t("common:weekday.tuesday"),
@@ -133,7 +127,7 @@ export default function ProfileSettings({
     }));
   };
 
-  /** Starts at the beginning of handleSave */
+  // Starts at the beginning of handleSave
   const validateForm = () => {
     const draft: Errors = {
       firstName: firstName.trim() === "" ? requiredMsg : "",
@@ -142,9 +136,11 @@ export default function ProfileSettings({
     };
 
     setErrors(draft);
+
     return Object.values(draft).every((msg) => msg === "");
   };
-  /* ---------------- avatar ------------------------------------------- */
+
+  // avatar
   const handleEditPicture = () => fileInputRef.current?.click();
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -153,7 +149,7 @@ export default function ProfileSettings({
     }
   };
 
-  /* ---------------- save --------------------------------------------- */
+  // save
   const handleSave = async () => {
     if (!user) {
       return;
@@ -183,6 +179,7 @@ export default function ProfileSettings({
         t("common:toast.titleError"),
         t("preferences:toast.invalidEmail")
       );
+      
       return;
     }
 
@@ -212,7 +209,7 @@ export default function ProfileSettings({
     }
   };
 
-  /* ---------------- loading / error UI ------------------------------- */
+  // loading / error UI
   if (loadingCats) {
     return <p className="p-8">{t("common:loading")}</p>;
   }
@@ -220,9 +217,6 @@ export default function ProfileSettings({
     return <p className="p-8 text-red-500">{catsError}</p>;
   }
 
-  /* -------------------------------------------------------------------- */
-  /*  UI                                                                  */
-  /* -------------------------------------------------------------------- */
   return (
     <div className="flex flex-col h-[85vh] dark:primary-bg dark:text-primary rounded-2xl overflow-hidden shadow-lg">
       <div className="overflow-y-auto pt-2 px-8 pb-8 space-y-6 flex-1">
@@ -342,6 +336,7 @@ export default function ProfileSettings({
           <div className="flex flex-wrap gap-3">
             {categories.map((cat) => {
               const isSelected = selectedModules.includes(cat.forumCategoryId);
+
               return (
                 <button
                   key={cat.forumCategoryId}
@@ -379,6 +374,7 @@ export default function ProfileSettings({
           <div className="space-y-2">
             {weekdays.map((day) => {
               const isActive = availability[day]?.active || false;
+              
               return (
                 <div
                   key={day}
