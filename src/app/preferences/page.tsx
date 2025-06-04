@@ -61,9 +61,6 @@ export default function SettingsPage() {
     },
   ];
 
-  /* ------------------------------------------------------------------ */
-  /* render                                                             */
-  /* ------------------------------------------------------------------ */
   return (
     <main className="min-h-full flex flex-col">
       <PageHeader title={t("title")} />
