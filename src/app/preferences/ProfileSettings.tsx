@@ -47,7 +47,7 @@ export default function ProfileSettings({
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("https://i.pravatar.cc/250");
+  const [avatarUrl, setAvatarUrl] = useState("/default_image.jpg");
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [availability, setAvailability] = useState<Availability>({});
   const [errors, setErrors] = useState<Errors>({
@@ -179,7 +179,7 @@ export default function ProfileSettings({
         t("common:toast.titleError"),
         t("preferences:toast.invalidEmail")
       );
-      
+
       return;
     }
 
@@ -374,7 +374,7 @@ export default function ProfileSettings({
           <div className="space-y-2">
             {weekdays.map((day) => {
               const isActive = availability[day]?.active || false;
-              
+
               return (
                 <div
                   key={day}
