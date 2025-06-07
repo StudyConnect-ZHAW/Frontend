@@ -12,6 +12,7 @@ import { SortOption, useForumFilter } from "@/hooks/useForumFilters";
 import { useForumPosts } from "@/hooks/useForumPosts";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getLikedPostIds } from "@/lib/handlers/postHandler";
 
 export default function ForumPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -22,6 +23,7 @@ export default function ForumPage() {
 
   const {
     posts,
+    likedPostIds,
     loading: loadingPosts,
     handleCreatePost,
     handleToggleLike,
@@ -85,7 +87,12 @@ export default function ForumPage() {
         ) : (
           <div className="flex flex-col gap-4">
             {filteredPosts.map((p) => (
-              <PostCard key={p.forumPostId} post={p} onLike={handleToggleLike} />
+              <PostCard
+                key={p.forumPostId}
+                post={p}
+                onLike={handleToggleLike}
+                isLiked={likedPostIds.has(p.forumPostId)}
+              />
             ))}
             {!filteredPosts.length && (
               <p className="text-sm text-gray-500">{t("noPosts")}</p>

@@ -85,3 +85,26 @@ export async function toggleLike(postId: string): Promise<void> {
 
   return parseResponse<void>(res);
 }
+
+/**
+ * Fetches the posts that the current user has liked.
+ * 
+ * @returns A list of post IDs which the current user has liked.
+ */
+export async function getLikedPostIds(): Promise<string[]> {
+  const res = await fetch(`/api/posts/likes`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const likes = await parseResponse<
+    {
+      likeId: string;
+      userId: string;
+      forumPostId: string;
+      likedAt: string;
+    }[]
+  >(res);
+
+  return likes.map((like) => like.forumPostId);
+}

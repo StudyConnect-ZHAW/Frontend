@@ -1,6 +1,7 @@
 import {
   createPost,
   getAllPosts,
+  getLikedPostIds,
   getPostById,
   toggleLike,
 } from "@/lib/handlers/postHandler";
@@ -10,23 +11,29 @@ import { useTranslation } from "react-i18next";
 
 export function useForumPosts() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [likedPostIds, setLikedPostIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const { t } = useTranslation();
 
   useEffect(() => {
-    fetchPosts();
+    fetchPostsAndLikes();
   }, []);
 
-  const fetchPosts = async () => {
+  const fetchPostsAndLikes = async () => {
     try {
       setLoading(true);
-      const data = await getAllPosts();
-      setPosts(data);
+      const [postsData, likedIds] = await Promise.all([
+        getAllPosts(),
+        getLikedPostIds(),
+      ]);
+
+      setPosts(postsData);
+      setLikedPostIds(new Set(likedIds));
       setError(null);
     } catch (err) {
-      console.error("Failed to fetch posts", err);
+      console.error("Failed to fetch posts or likes", err);
       setError(t("common:error.loadingPosts", "Failed to load posts."));
     } finally {
       setLoading(false);
@@ -45,18 +52,30 @@ export function useForumPosts() {
 
   const handleToggleLike = async (postId: string) => {
     try {
-      await toggleLike(postId);
-
-      // TODO: Like count isn't updated in time for this call (backend problem)
-      const updatedPost = await getPostById(postId);
-
       setPosts((prev) =>
         prev.map((p) =>
-          p.forumPostId === postId ? updatedPost : p
+          p.forumPostId === postId
+            ? {
+              ...p,
+              likeCount: likedPostIds.has(postId)
+                ? p.likeCount - 1
+                : p.likeCount + 1,
+            }
+            : p
         )
       );
 
-      setError(null);
+      setLikedPostIds((prev) => {
+        const newSet = new Set(prev);
+        if (newSet.has(postId)) {
+          newSet.delete(postId);
+        } else {
+          newSet.add(postId);
+        }
+        return newSet;
+      });
+
+      await toggleLike(postId);
     } catch (err) {
       console.error("Failed to toggle like", err);
       setError(t("common:toast.titleError", "Failed to update like."));
@@ -65,6 +84,7 @@ export function useForumPosts() {
 
   return {
     posts,
+    likedPostIds,
     loading,
     error,
     handleCreatePost,
