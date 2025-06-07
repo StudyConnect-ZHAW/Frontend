@@ -3,14 +3,16 @@
 import { Post } from "@/types/posts";
 import { useTranslation } from "react-i18next";
 import { FiMessageSquare, FiThumbsUp } from "react-icons/fi";
+import { FaThumbsUp } from "react-icons/fa"; // Solid thumb
 import Link from 'next/link';
 
 interface Props {
   post: Post;
   onLike: (postId: string) => void;
+  isLiked: boolean;
 }
 
-export default function PostCard({ post, onLike }: Props) {
+export default function PostCard({ post, onLike, isLiked }: Props) {
   const { i18n } = useTranslation();
   const createdAt = new Date(post.created);
   const formattedDate = new Intl.DateTimeFormat(i18n.language, {
@@ -24,10 +26,10 @@ export default function PostCard({ post, onLike }: Props) {
       <div className="flex flex-col items-center justify-start px-3 py-4 min-w-[50px]">
         <button
           onClick={() => onLike(post.forumPostId)}
-          className="text-gray-600 hover:text-primary cursor-pointer"
+          className={`cursor-pointer ${isLiked ? "text-primary" : "text-gray-600 hover:text-primary"}`}
           title="Like this post"
         >
-          <FiThumbsUp className="text-xl" />
+          {isLiked ? <FaThumbsUp className="text-xl" /> : <FiThumbsUp className="text-xl" />}
         </button>
         <span className="text-xs text-gray-600 mt-1">{post.likeCount}</span>
       </div>
@@ -50,9 +52,6 @@ export default function PostCard({ post, onLike }: Props) {
 
         {/* Footer with stats */}
         <footer className="mt-2 flex gap-4 text-xs text-gray-600">
-          <span className="flex items-center gap-1">
-            <FiThumbsUp /> {post.likeCount}
-          </span>
           <span className="flex items-center gap-1">
             <FiMessageSquare /> {post.commentCount}
           </span>
