@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 /**
  * Enum defining available button visual variants.
  */
@@ -9,24 +11,26 @@ export enum ButtonVariant {
   /** Used for cancel/close actions. */
   Ghost = "ghost",
   /** Used for dangerous actions like deletion. */
-  Danger = "danger"
+  Danger = "danger",
 }
 
 type ButtonProps = {
   /** The text to display inside the button. */
-  text: string;
+  text?: string;
   /** The type of button (determines styling). */
   type: ButtonVariant;
   /** Function to be called when the button is clicked. */
   onClick: () => void;
-}
+  /** Optional custom content inside the button. */
+  children?: ReactNode;
+};
 
 /**
  * A reusable Button component that supports different visual types.
  *
  * @param {ButtonProps} props - The props for the Button component.
  */
-const Button = ({ text, type, onClick }: ButtonProps) => {
+const Button = ({ text, type, onClick, children }: ButtonProps) => {
   const baseStyles = "px-4 py-2 rounded-md font-semibold transition button";
 
   /** Apply CSS for each button variant from globals.css */
@@ -38,8 +42,11 @@ const Button = ({ text, type, onClick }: ButtonProps) => {
   };
 
   return (
-    <button onClick={onClick} className={`${baseStyles} ${variantStyles[type]}`}>
-      {text}
+    <button
+      onClick={onClick}
+      className={`${baseStyles} ${variantStyles[type]}`}
+    >
+      {children ?? text}
     </button>
   );
 };

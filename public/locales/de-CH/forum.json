@@ -1,5 +1,25 @@
 {
   "title": "Forum",
   "post": "Beitrag",
-  "comment": "Kommentar"
+  "comments": "Kommentare",
+  "placeholder": {
+    "postTitle": "Beitragstitel",
+    "postContent": "Was möchtest du mitteilen?",
+    "selectCategory": "Kategorie auswählen",
+    "search": "Suchen..."
+  },
+  "button": {
+    "createPost": "Beitrag Erstellen"
+  },
+  "category": {
+    "general": "Allgemein"
+  },
+  "sort": {
+    "newest": "Neueste zuerst",
+    "mostComments": "Meiste Kommentare",
+    "mostLikes": "Meiste Likes"
+  },
+  "date": {
+    "invalid": "Ungültiges Datum"
+  }
 }
