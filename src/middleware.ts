@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 
 interface JwtPayload {
   // Token expiry timestamp (in seconds since Unix epoch)
-  exp: number; 
+  exp: number;
 }
 
 export function middleware(request: NextRequest) {
@@ -37,7 +37,6 @@ export const config = {
     '/',
     '/preferences/:path*',
     '/groups/:path*',
-    '/chat/:path*',
     '/calendar/:path*',
     '/forum/:path*',
   ],

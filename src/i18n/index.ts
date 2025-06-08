@@ -8,7 +8,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: `${fallbackLanguage}`,
-    ns: ['common', 'calendar', 'chat', 'forum', 'groups', 'preferences'],
+    ns: ['common', 'calendar', 'forum', 'groups', 'preferences'],
     defaultNS: 'common',
     load: 'currentOnly',
     backend: {

@@ -9,7 +9,6 @@ import {
   FiUsers,
   FiMessageSquare,
   FiCalendar,
-  FiStar,
 } from "react-icons/fi";
 
 // Navigation items for the sidebar
@@ -17,9 +16,8 @@ const navItems = [
   { icon: FiHome, label: "Home", path: "/" },
   { icon: FiUser, label: "Profile", path: "/preferences" },
   { icon: FiUsers, label: "Groups", path: "/groups" },
-  { icon: FiMessageSquare, label: "Chat", path: "/chat" },
   { icon: FiCalendar, label: "Calendar", path: "/calendar" },
-  { icon: FiStar, label: "Forum", path: "/forum" },
+  { icon: FiMessageSquare, label: "Forum", path: "/forum" },
 ];
 
 /**

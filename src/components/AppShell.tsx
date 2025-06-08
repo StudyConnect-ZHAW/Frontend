@@ -13,7 +13,6 @@ const knownRoutes = [
   '/',
   '/preferences',
   '/groups',
-  '/chat',
   '/calendar',
   '/forum',
   '/login'
