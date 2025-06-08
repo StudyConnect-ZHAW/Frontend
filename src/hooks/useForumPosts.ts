@@ -51,30 +51,21 @@ export function useForumPosts() {
 
   const handleToggleLike = async (postId: string) => {
     try {
+      const added = await togglePostLike(postId);
+
       setPosts((prev) =>
         prev.map((p) =>
           p.forumPostId === postId
-            ? {
-              ...p,
-              likeCount: likedPostIds.has(postId)
-                ? p.likeCount - 1
-                : p.likeCount + 1,
-            }
+            ? { ...p, likeCount: p.likeCount + (added ? 1 : -1) }
             : p
         )
       );
 
       setLikedPostIds((prev) => {
-        const newSet = new Set(prev);
-        if (newSet.has(postId)) {
-          newSet.delete(postId);
-        } else {
-          newSet.add(postId);
-        }
-        return newSet;
+        const updated = new Set(prev);
+        added ? updated.add(postId) : updated.delete(postId);
+        return updated;
       });
-
-      await togglePostLike(postId);
     } catch (err) {
       console.error("Failed to toggle like", err);
       setError(t("common:toast.titleError", "Failed to update like."));
@@ -88,5 +79,6 @@ export function useForumPosts() {
     error,
     handleCreatePost,
     handleToggleLike,
+    refresh: fetchPostsAndLikes,
   };
 }

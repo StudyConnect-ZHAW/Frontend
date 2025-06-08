@@ -6,11 +6,15 @@ import {
   createComment,
 } from "@/lib/handlers/commentHandler";
 import { Comment } from "@/types/comment";
+import { useTranslation } from "react-i18next";
 
 export function useComments(postId: string) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [likedCommentIds, setLikedCommentIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchComments();
@@ -38,22 +42,37 @@ export function useComments(postId: string) {
   };
 
   const handleToggleLike = async (commentId: string) => {
-    await toggleCommentLike(commentId);
-    setLikedCommentIds((prev) => {
-      const updated = new Set(prev);
-      if (updated.has(commentId)) {
-        updated.delete(commentId);
-      } else {
-        updated.add(commentId);
-      }
-      return updated;
-    });
+    try {
+      const added = await toggleCommentLike(commentId); // boolean
+
+      const updateLikeRecursively = (comments: Comment[]): Comment[] =>
+        comments.map((c) => ({
+          ...c,
+          likeCount:
+            c.forumCommentId === commentId
+              ? c.likeCount + (added ? 1 : -1)
+              : c.likeCount,
+          replies: c.replies ? updateLikeRecursively(c.replies) : [],
+        }));
+
+      setComments((prev) => updateLikeRecursively(prev));
+
+      setLikedCommentIds((prev) => {
+        const updated = new Set(prev);
+        added ? updated.add(commentId) : updated.delete(commentId);
+        return updated;
+      });
+    } catch (err) {
+      console.error("Failed to toggle comment like", err);
+      setError(t("common:toast.titleError", "Failed to update like."));
+    }
   };
 
   return {
     comments,
     likedCommentIds,
     loading,
+    error,
     submitComment,
     handleToggleLike,
     refresh: fetchComments,

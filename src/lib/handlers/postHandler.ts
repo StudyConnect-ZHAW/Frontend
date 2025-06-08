@@ -81,15 +81,16 @@ export async function deletePostById(postId: string): Promise<void> {
  * Adds or removes a like by the current user on a post.
  * 
  * @param postId The ID of the post.
- * @returns 
+ * @returns True if the like was added, false if the like was removed.
  */
-export async function togglePostLike(postId: string): Promise<void> {
+export async function togglePostLike(postId: string): Promise<boolean> {
   const res = await fetch(`/api/posts/${postId}/likes`, {
     method: "PUT",
     credentials: "include",
   });
 
-  return parseResponse<void>(res);
+  const data = await parseResponse<{ addedLike: boolean }>(res);
+  return data.addedLike;
 }
 
 /**

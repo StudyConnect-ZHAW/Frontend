@@ -52,15 +52,16 @@ export async function deleteComment(commentId: string): Promise<void> {
  * Adds or removes a like by the current user on a comment.
  * 
  * @param commentId The ID of the comment.
- * @returns 
+ * @returns True if the like was added, false if the like was removed.
  */
-export async function toggleCommentLike(commentId: string): Promise<void> {
+export async function toggleCommentLike(commentId: string): Promise<boolean> {
   const res = await fetch(`/api/comments/${commentId}/likes`, {
     method: 'PUT',
     credentials: 'include',
   });
 
-  return parseResponse<void>(res);
+  const data = await parseResponse<{ addedLike: boolean }>(res);
+  return data.addedLike;
 }
 
 /**

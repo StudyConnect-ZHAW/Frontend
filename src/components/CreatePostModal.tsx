@@ -69,6 +69,8 @@ export default function CreatePostModal({
         <h2 className="text-lg font-semibold mb-4">{t("titleCreate")}</h2>
 
         <div className="space-y-3">
+
+          {/* Post title */}
           <div>
             {titleError && (
               <p className="text-red-500 text-sm mb-1">
@@ -85,6 +87,8 @@ export default function CreatePostModal({
               }}
             />
           </div>
+
+          {/* Category selector */}
           <div>
             {categoryError && (
               <p className="text-red-500 text-sm mb-1">
@@ -92,7 +96,7 @@ export default function CreatePostModal({
               </p>
             )}
             <select
-              className={`w-full border px-3 py-2 rounded ${categoryError ? "border-red-500" : "border-gray-300"}`}
+              className={`bg-sidebar-bg text-primary w-full border px-3 py-2 rounded ${categoryError ? "border-red-500" : "border-gray-300"}`}
               value={categoryId}
               onChange={(e) => {
                 setCategoryId(e.target.value);
@@ -108,6 +112,7 @@ export default function CreatePostModal({
             </select>
           </div>
 
+          {/* Post content input */}
           <div>
             {contentError && (
               <p className="text-red-500 text-sm mb-1">
