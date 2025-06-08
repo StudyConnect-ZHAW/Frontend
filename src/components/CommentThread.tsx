@@ -5,15 +5,26 @@ import { Comment } from '@/types/comment';
 import { useTranslation } from 'react-i18next';
 import CommentInput from '@/components/CommentInput';
 import { createComment } from '@/lib/handlers/commentHandler';
+import { FiThumbsUp } from "react-icons/fi";
+import { FaThumbsUp } from "react-icons/fa";
 
 interface Props {
   comment: Comment;
   depth: number;
   postId: string;
   onCommentsUpdated: () => void;
+  isLiked: (commentId: string) => boolean;
+  onLike: (commentId: string) => void;
 }
 
-export default function CommentThread({ comment, depth, postId, onCommentsUpdated }: Props) {
+export default function CommentThread({
+  comment,
+  depth,
+  postId,
+  onCommentsUpdated,
+  isLiked,
+  onLike,
+}: Props) {
   const { i18n } = useTranslation();
   const [showReply, setShowReply] = useState(false);
 
@@ -23,9 +34,20 @@ export default function CommentThread({ comment, depth, postId, onCommentsUpdate
     timeStyle: 'short',
   }).format(createdAt);
 
+  const liked = isLiked(comment.forumCommentId);
+
   return (
-    <div className={`ml-${Math.min(depth * 4, 20)} border-l border-gray-600 pl-4`}>
-      <div className="text-sm text-primary bg-sidebar-bg rounded-md p-3 shadow-sm">
+    <div className={`ml-${Math.min(depth * 4, 20)} pl-4`}>
+      <div className="text-sm text-primary">
+        {/* Like button */}
+        <button
+          onClick={() => onLike(comment.forumCommentId)}
+          className={`${liked ? "text-primary" : "text-gray-500 hover:text-primary"}`}
+          title="Like this comment"
+        >
+          {liked ? <FaThumbsUp className="text-sm" /> : <FiThumbsUp className="text-sm" />}
+        </button>
+
         <div className="mb-1 text-xs text-gray-500">
           {formattedDate} • {comment.user.firstName} {comment.user.lastName}
         </div>
@@ -34,7 +56,7 @@ export default function CommentThread({ comment, depth, postId, onCommentsUpdate
         {/* Reply toggle button */}
         <button
           onClick={() => setShowReply((prev) => !prev)}
-          className="text-xs text-blue-600 hover:underline mt-2"
+          className="text-xs text-blue-600 hover:underline mt-2 cursor-pointer"
         >
           {showReply ? 'Cancel' : 'Reply'}
         </button>
@@ -54,7 +76,7 @@ export default function CommentThread({ comment, depth, postId, onCommentsUpdate
         )}
       </div>
 
-      {/* Children comments */}
+      {/* Recursive replies */}
       {comment.replies?.map((child: Comment) => (
         <CommentThread
           key={child.forumCommentId}
@@ -62,6 +84,8 @@ export default function CommentThread({ comment, depth, postId, onCommentsUpdate
           depth={depth + 1}
           postId={postId}
           onCommentsUpdated={onCommentsUpdated}
+          isLiked={isLiked}
+          onLike={onLike}
         />
       ))}
     </div>

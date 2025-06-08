@@ -3,7 +3,7 @@ import {
   getAllPosts,
   getLikedPostIds,
   getPostById,
-  toggleLike,
+  togglePostLike,
 } from "@/lib/handlers/postHandler";
 import { Post, PostCreateData } from "@/types/posts";
 import { useEffect, useState } from "react";
@@ -75,7 +75,7 @@ export function useForumPosts() {
         return newSet;
       });
 
-      await toggleLike(postId);
+      await togglePostLike(postId);
     } catch (err) {
       console.error("Failed to toggle like", err);
       setError(t("common:toast.titleError", "Failed to update like."));

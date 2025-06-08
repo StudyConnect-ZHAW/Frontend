@@ -3,43 +3,48 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import PageHeader from "@/components/PageHeader";
 import { FiArrowLeft } from "react-icons/fi";
 import { Post } from "@/types/posts";
-import { Comment } from "@/types/comment";
 import { useTranslation } from "react-i18next";
 import { getPostById } from "@/lib/handlers/postHandler";
 import { createComment, getCommentsForPost } from "@/lib/handlers/commentHandler";
-import CommentThread from "@/components/CommentThread";
 import Logo from "@/components/Logo";
 import CommentInput from "@/components/CommentInput";
+import CommentThread from "@/components/CommentThread";
+import { useComments } from "@/hooks/useForumComments";
 
 export default function PostDetailPage() {
   const { t, i18n } = useTranslation(["forum", "common"]);
   const { pid } = useParams<{ pid: string }>();
 
   const [post, setPost] = useState<Post | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingPost, setLoadingPost] = useState(true);
+
+  const {
+    comments,
+    likedCommentIds,
+    loading: loadingComments,
+    submitComment,
+    handleToggleLike,
+    refresh: refreshComments,
+  } = useComments(pid);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchPost() {
       try {
         const postData = await getPostById(pid);
-        const commentData = await getCommentsForPost(pid);
         setPost(postData);
-        setComments(commentData);
       } catch (err) {
         console.error('Failed to load post detail page:', err);
       } finally {
-        setLoading(false);
+        setLoadingPost(false);
       }
     }
 
-    fetchData();
+    fetchPost();
   }, [pid]);
 
-  if (loading || !post) {
+  if (loadingPost || !post) {
     return (
       <div className="flex items-center justify-center h-full text-primary text-xl">
         {t('common:loading')}
@@ -66,7 +71,7 @@ export default function PostDetailPage() {
 
       {/* Middle: Post */}
       <div className="grow px-4 sm:px-8 md:px-16 lg:px-32 xl:px-48 2xl:px-64">
-        <section className="rounded-xl border border-main bg-sidebar-bg p-5 shadow-sm mb-6">
+        <section className="rounded-xl border border-main bg-sidebar-bg p-5 shadow-sm mb-3">
           <div className="text-sm text-gray-500 mb-1">
             {formattedDate} • {post.user.firstName} {post.user.lastName}
           </div>
@@ -78,12 +83,7 @@ export default function PostDetailPage() {
 
         <CommentInput
           onSubmit={async (text) => {
-            await createComment(pid, {
-              parentCommentId: null,
-              content: text,
-            });
-            const updated = await getCommentsForPost(pid);
-            setComments(updated);
+            await submitComment(text);
           }}
         />
 
@@ -103,10 +103,9 @@ export default function PostDetailPage() {
                     comment={comment}
                     depth={0}
                     postId={pid}
-                    onCommentsUpdated={async () => {
-                      const updated = await getCommentsForPost(pid);
-                      setComments(updated);
-                    }}
+                    onCommentsUpdated={refreshComments}
+                    isLiked={(id) => likedCommentIds.has(id)}
+                    onLike={handleToggleLike}
                   />
                 );
               })}

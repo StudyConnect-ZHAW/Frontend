@@ -2,14 +2,17 @@
   "title": "Forum",
   "post": "Post",
   "comments": "Comments",
+  "titleCreate": "Create Post",
   "placeholder": {
     "postTitle": "Post Title",
     "postContent": "What do you want to share?",
     "selectCategory": "Select category",
-    "search": "Search..."
+    "search": "Search...",
+    "joinConversation": "Join the conversation"
   },
   "button": {
-    "createPost": "Create Post"
+    "createPost": "Create Post",
+    "reply": "Reply"
   },
   "category": {
     "general": "General"

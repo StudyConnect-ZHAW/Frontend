@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react";
+import Button, { ButtonVariant } from "./Button";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onSubmit: (text: string) => Promise<void>;
@@ -9,22 +11,20 @@ interface Props {
 
 export default function CommentInput({ onSubmit, placeholder }: Props) {
   const [text, setText] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { t } = useTranslation(["forum", "common"]);
 
   const handleSubmit = async () => {
     if (!text.trim()) { return; }
 
     try {
-      setSubmitting(true);
       setError(null);
       await onSubmit(text.trim());
       setText(""); // Clear after submit
     } catch (err) {
       console.error("Failed to submit comment:", err);
       setError("Failed to submit comment.");
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -33,17 +33,16 @@ export default function CommentInput({ onSubmit, placeholder }: Props) {
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder={placeholder || "Write a comment..."}
+        placeholder={placeholder || t("placeholder.joinConversation")}
         className="w-full border border-main bg-sidebar-bg text-primary rounded-md p-3 resize-y min-h-[80px] mb-2"
       />
       {error && <p className="text-sm text-red-500 mb-2">{error}</p>}
-      <button
+
+      <Button
+        text={t("button.reply")}
+        type={ButtonVariant.Primary}
         onClick={handleSubmit}
-        disabled={submitting}
-        className="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition disabled:opacity-50"
-      >
-        {submitting ? "Posting..." : "Post"}
-      </button>
+      />
     </div>
   );
 }
