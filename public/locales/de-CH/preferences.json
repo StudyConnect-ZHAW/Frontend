@@ -2,41 +2,25 @@
   "title": "Benutzereinstellungen",
   "general": {
     "title": "Allgemein",
-    "subtitle": "System, Sprache, Ansicht",
+    "subtitle": "System, Sprache",
     "languageLabel": "Sprache"
   },
   "appearance": {
     "title": "Erscheinungsbild",
-    "subtitle": "Thema, Dichte, Layout",
+    "subtitle": "Zwischen hellem und dunklem Modus wechseln",
     "themeLabel": "Thema",
     "theme": {
       "light": "Hell",
       "dark": "Dunkel"
-    },
-    "densityLabel": "Dichte",
-    "density": {
-      "normal": "Normal",
-      "spacious": "Geräumig",
-      "compact": "Kompakt"
-    },
-    "layoutLabel": "Layout",
-    "layout": {
-      "grid": "Raster",
-      "list": "Liste"
     }
   },
   "privacy": {
     "title": "Privatsphäre",
-    "subtitle": "DnD, Kamera",
-    "allowCameraLabel": "Kamerazugriff erlauben",
-    "doNotDisturbLabel": "Bitte nicht stören"
+    "subtitle": "Noch nicht verfügbar"
   },
   "notifications": {
     "title": "Benachrichtigung und Aktivität",
-    "subtitle": "Sounds, Stummschalten, Chat-Benachrichtigungen",
-    "activateSoundsLabel": "Sounds aktivieren",
-    "notificationsForChats": "Benachrichtigungen für Chats",
-    "showPopupNotifications": "Pop-up Hinweise anzeigen"
+    "subtitle": "Noch nicht verfügbar"
   },
   "account": {
     "title": "Konto",
@@ -47,14 +31,20 @@
     "title": "Profil",
     "subtitle": "Profilbild, Bio, Name",
     "nameLabel": "Name",
+    "firstNameLabel": "Vorname",
+    "lastNameLabel": "Nachname",
+    "emailLabel": "Email",
     "profilePictureLabel": "Profilbild",
     "modulePreferencesLabel": "Modulpräferenzen",
-    "modulePreferencesInfo": "Halte Strg (Windows) oder Cmd (Mac), um mehrere Module auszuwählen.",
+    "modulePreferencesInfo": "Klicke, um Module auszuwählen",
     "availabilityLabel": "Verfügbarkeit (Wochentage & Zeiten)"
   },
   "toast": {
     "emailSuccess": "Deine Email wurde erfolgreich aktualisiert.",
     "emailError": "Deine Email konnte nicht aktualisiert werden. Bitte versuch es erneut.",
     "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+  },
+  "errors": {
+    "required": "Dieses Feld darf nicht leer sein."
   }
 }

@@ -2,41 +2,25 @@
   "title": "Preferences",
   "general": {
     "title": "General",
-    "subtitle": "System, Language, Views",
+    "subtitle": "System, Language",
     "languageLabel": "Language"
   },
   "appearance": {
     "title": "Appearance",
-    "subtitle": "Theme, Density, Layout",
+    "subtitle": "Switch between Light and Dark Mode",
     "themeLabel": "Theme",
     "theme": {
       "light": "Light",
       "dark": "Dark"
-    },
-    "densityLabel": "Density",
-    "density": {
-      "normal": "Normal",
-      "spacious": "Spacious",
-      "compact": "Compact"
-    },
-    "layoutLabel": "Layout",
-    "layout": {
-      "grid": "Grid",
-      "list": "List"
     }
   },
   "privacy": {
     "title": "Privacy",
-    "subtitle": "DnD, Camera",
-    "allowCameraLabel": "Allow Camera Access",
-    "doNotDisturbLabel": "Do Not Disturb"
+    "subtitle": "Not yet available"
   },
   "notifications": {
     "title": "Notifications and Activity",
-    "subtitle": "Sound, Mute, Chat Notifications",
-    "activateSoundsLabel": "Activate Sounds",
-    "notificationsForChats": "Show Notifications for Chats",
-    "showPopupNotifications": "Show Pop-Up Notifications"
+    "subtitle": "Not yet available"
   },
   "account": {
     "title": "Account",
@@ -47,14 +31,20 @@
     "title": "Profile",
     "subtitle": "Profile Picture, Bio, Name",
     "nameLabel": "Name",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "emailLabel": "Email",
     "profilePictureLabel": "Profile Picture",
     "modulePreferencesLabel": "Module Preferences",
-    "modulePreferencesInfo": "Hold Ctrl (Windows) or Cmd (Mac) to select multiple modules.",
+    "modulePreferencesInfo": "Click on the module to set your preferences.",
     "availabilityLabel": "Availability (Weekdays and Time)"
   },
-    "toast": {
+  "toast": {
     "emailSuccess": "Your email has been successfully updated.",
     "emailError": "Your email could not be updated. Please try again.",
     "invalidEmail": "Please enter a valid email address."
+  },
+  "errors": {
+    "required": "This field cannot be empty."
   }
 }
