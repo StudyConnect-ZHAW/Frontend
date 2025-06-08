@@ -12,7 +12,6 @@ import { SortOption, useForumFilter } from "@/hooks/useForumFilters";
 import { useForumPosts } from "@/hooks/useForumPosts";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getLikedPostIds } from "@/lib/handlers/postHandler";
 
 export default function ForumPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);

@@ -76,14 +76,12 @@ export default function CreatePostModal({
               </p>
             )}
             <input
-              className={`w-full border px-3 py-2 rounded ${
-                titleError ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`w-full border px-3 py-2 rounded ${titleError ? "border-red-500" : "border-gray-300"}`}
               placeholder={t("placeholder.postTitle")}
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
-                if (titleError) setTitleError(false);
+                if (titleError) { setTitleError(false); }
               }}
             />
           </div>
@@ -94,13 +92,11 @@ export default function CreatePostModal({
               </p>
             )}
             <select
-              className={`w-full border px-3 py-2 rounded ${
-                categoryError ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`w-full border px-3 py-2 rounded ${categoryError ? "border-red-500" : "border-gray-300"}`}
               value={categoryId}
               onChange={(e) => {
                 setCategoryId(e.target.value);
-                if (categoryError) setCategoryError(false);
+                if (categoryError) { setCategoryError(false); }
               }}
             >
               <option value="">{t("placeholder.selectCategory")}</option>
@@ -119,15 +115,13 @@ export default function CreatePostModal({
               </p>
             )}
             <textarea
-              className={`w-full border px-3 py-2 rounded ${
-                contentError ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`w-full border px-3 py-2 rounded ${contentError ? "border-red-500" : "border-gray-300"}`}
               placeholder={t("placeholder.postContent")}
               rows={4}
               value={content}
               onChange={(e) => {
                 setContent(e.target.value);
-                if (contentError) setContentError(false);
+                if (contentError) { setContentError(false); }
               }}
             />
           </div>

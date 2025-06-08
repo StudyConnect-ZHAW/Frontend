@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import Button, { ButtonVariant } from "./Button";
@@ -26,7 +26,7 @@ export default function CommentInput({ onSubmit, placeholder }: Props) {
       console.error("Failed to submit comment:", err);
       setError("Failed to submit comment.");
     }
-  }
+  };
 
   return (
     <div className="mb-4">

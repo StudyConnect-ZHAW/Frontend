@@ -74,8 +74,6 @@ export async function getLikedCommentIds(): Promise<string[]> {
     credentials: 'include',
   });
 
-  console.log(res); // TODO: Remove
-
   const likes = await parseResponse<
     {
       likeId: string;

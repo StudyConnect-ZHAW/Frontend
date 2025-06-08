@@ -5,8 +5,7 @@ import { Comment } from '@/types/comment';
 import { useTranslation } from 'react-i18next';
 import CommentInput from '@/components/CommentInput';
 import { createComment } from '@/lib/handlers/commentHandler';
-import { FiThumbsUp } from "react-icons/fi";
-import { FaThumbsUp } from "react-icons/fa";
+import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
 
 interface Props {
   comment: Comment;
@@ -45,7 +44,7 @@ export default function CommentThread({
           className={`${liked ? "text-primary" : "text-gray-500 hover:text-primary"}`}
           title="Like this comment"
         >
-          {liked ? <FaThumbsUp className="text-sm" /> : <FiThumbsUp className="text-sm" />}
+          {liked ? <FaThumbsUp className="text-sm" /> : <FaRegThumbsUp className="text-sm" />}
         </button>
 
         <div className="mb-1 text-xs text-gray-500">

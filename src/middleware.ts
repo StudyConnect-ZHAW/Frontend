@@ -20,6 +20,7 @@ export function middleware(request: NextRequest) {
     // Check if token is expired
     if (decoded.exp < Math.floor(Date.now() / 1000)) {
       console.warn('Token expired:', decoded.exp);
+
       return NextResponse.redirect(new URL('/login?error=session_expired', request.url));
     }
 
@@ -27,6 +28,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   } catch (err) {
     console.error('Invalid token:', err);
+
     return NextResponse.redirect(new URL('/login?error=invalid_token', request.url));
   }
 }

@@ -2,7 +2,6 @@ import {
   createPost,
   getAllPosts,
   getLikedPostIds,
-  getPostById,
   togglePostLike,
 } from "@/lib/handlers/postHandler";
 import { Post, PostCreateData } from "@/types/posts";

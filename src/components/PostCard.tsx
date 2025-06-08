@@ -2,8 +2,8 @@
 
 import { Post } from "@/types/posts";
 import { useTranslation } from "react-i18next";
-import { FiMessageSquare, FiThumbsUp } from "react-icons/fi";
-import { FaThumbsUp } from "react-icons/fa"; // Solid thumb
+import { FiMessageSquare } from "react-icons/fi";
+import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
 import Link from 'next/link';
 
 interface Props {
@@ -29,7 +29,7 @@ export default function PostCard({ post, onLike, isLiked }: Props) {
           className={`cursor-pointer ${isLiked ? "text-primary" : "text-gray-600 hover:text-primary"}`}
           title="Like this post"
         >
-          {isLiked ? <FaThumbsUp className="text-xl" /> : <FiThumbsUp className="text-xl" />}
+          {isLiked ? <FaThumbsUp className="text-xl" /> : <FaRegThumbsUp className="text-xl" />}
         </button>
         <span className="text-xs text-gray-600 mt-1">{post.likeCount}</span>
       </div>

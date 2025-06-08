@@ -7,7 +7,6 @@ import { FiArrowLeft } from "react-icons/fi";
 import { Post } from "@/types/posts";
 import { useTranslation } from "react-i18next";
 import { getPostById } from "@/lib/handlers/postHandler";
-import { createComment, getCommentsForPost } from "@/lib/handlers/commentHandler";
 import Logo from "@/components/Logo";
 import CommentInput from "@/components/CommentInput";
 import CommentThread from "@/components/CommentThread";
@@ -23,7 +22,6 @@ export default function PostDetailPage() {
   const {
     comments,
     likedCommentIds,
-    loading: loadingComments,
     submitComment,
     handleToggleLike,
     refresh: refreshComments,
