@@ -53,10 +53,7 @@ export default function Sidebar() {
               href={path}
               key={label}
               aria-label={label}
-              className={`text-[35px] transition-all duration-200 cursor-pointer ${isActive
-                ? `text-icon scale-125`
-                : `hover:scale-125 hover:text-icon`
-                }`}
+              className={`text-4xl duration-200 cursor-pointer ${isActive ? `text-icon scale-125` : `hover:scale-125 hover:text-icon`}`}
             >
               <Icon />
             </Link>

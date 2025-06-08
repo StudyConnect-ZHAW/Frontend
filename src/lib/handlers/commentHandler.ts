@@ -61,6 +61,7 @@ export async function toggleCommentLike(commentId: string): Promise<boolean> {
   });
 
   const data = await parseResponse<{ addedLike: boolean }>(res);
+
   return data.addedLike;
 }
 

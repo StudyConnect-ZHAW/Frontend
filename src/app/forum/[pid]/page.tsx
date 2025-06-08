@@ -47,7 +47,7 @@ export default function PostDetailPage() {
       <div className="flex items-center justify-center h-full text-primary text-xl">
         {t('common:loading')}
       </div>
-    )
+    );
   }
 
   const createdAt = new Date(post.created);
@@ -61,7 +61,7 @@ export default function PostDetailPage() {
       {/* Left corner: Back button */}
       <Link
         href="/forum"
-        className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-main text-primary bg-sidebar-bg hover:bg-primary-bg transition shrink-0"
+        className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-main text-primary bg-sidebar-bg hover:bg-primary-bg"
         aria-label="Back to forum"
       >
         <FiArrowLeft className="text-2xl" />

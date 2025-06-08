@@ -63,7 +63,12 @@ export function useForumPosts() {
 
       setLikedPostIds((prev) => {
         const updated = new Set(prev);
-        added ? updated.add(postId) : updated.delete(postId);
+        if (added) {
+          updated.add(postId);
+        } else {
+          updated.delete(postId);
+        }
+
         return updated;
       });
     } catch (err) {

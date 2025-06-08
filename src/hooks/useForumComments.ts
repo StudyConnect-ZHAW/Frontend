@@ -59,7 +59,12 @@ export function useComments(postId: string) {
 
       setLikedCommentIds((prev) => {
         const updated = new Set(prev);
-        added ? updated.add(commentId) : updated.delete(commentId);
+        if (added) {
+          updated.add(commentId);
+        } else {
+          updated.delete(commentId);
+        }
+
         return updated;
       });
     } catch (err) {

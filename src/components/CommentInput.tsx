@@ -20,11 +20,13 @@ export default function CommentInput({ onSubmit, placeholder }: Props) {
 
     if (trimmed.length === 0) {
       setError(t("common:form.required", "This field is required."));
+
       return;
     }
 
     if (trimmed.length > 500) {
       setError("Max characters is 500");
+
       return;
     }
 
@@ -40,7 +42,7 @@ export default function CommentInput({ onSubmit, placeholder }: Props) {
         value={text}
         onChange={(e) => {
           setText(e.target.value);
-          if (error) setError(null);
+          if (error) { setError(null); }
         }}
         maxLength={1000}
         placeholder={placeholder || t("placeholder.joinConversation")}

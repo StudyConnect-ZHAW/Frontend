@@ -31,7 +31,7 @@ export default function CommentThread({
   const { t } = useTranslation(['forum', 'common']);
 
   const createdAt = new Date(comment.created);
-  const relativeDate = formatRelativeTime(createdAt)
+  const relativeDate = formatRelativeTime(createdAt);
 
   const liked = isLiked(comment.forumCommentId);
 

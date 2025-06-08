@@ -30,7 +30,7 @@ const eslintConfig = [
       "valid-typeof": "error",
 
       // Best Practices
-      "no-console": "warn",
+      //"no-console": "warn",
       "no-debugger": "warn",
       "no-unused-vars": "warn",
       "no-alert": "warn",

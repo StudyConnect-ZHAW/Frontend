@@ -90,6 +90,7 @@ export async function togglePostLike(postId: string): Promise<boolean> {
   });
 
   const data = await parseResponse<{ addedLike: boolean }>(res);
+
   return data.addedLike;
 }
 
