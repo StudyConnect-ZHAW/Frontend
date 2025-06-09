@@ -5,7 +5,7 @@ import PageHeader from '@/components/PageHeader';
 import WIPSection from "@/components/WIPSection";
 import Calendar from '@/components/Calendar';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
-import GroupsPage from "./groups/page";
+import GroupsPage from "../components/Group";
 
 // * HomePage component: displays welcome header, sections, and calendar for the current ZHAW user
 const HomePage = () => {
