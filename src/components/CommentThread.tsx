@@ -48,7 +48,7 @@ export default function CommentThread({
         </div>
 
         {/* Middle: Comment text */}
-        <div className="text-sm text-primary whitespace-pre-wrap mb-2">
+        <div className="text-sm text-primary whitespace-pre-wrap wrap-anywhere mb-2">
           {comment.content}
         </div>
 
