@@ -76,7 +76,7 @@ export default function PostDetailPage() {
 
           <h1 className="text-xl font-semibold mb-2">{post.title}</h1>
 
-          <p className="text-base text-primary whitespace-pre-wrap">{post.content}</p>
+          <p className="text-base text-primary whitespace-pre-wrap wrap-anywhere">{post.content}</p>
         </section>
 
         <CommentInput

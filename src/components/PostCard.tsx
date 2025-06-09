@@ -48,7 +48,7 @@ export default function PostCard({ post, onLike, isLiked }: Props) {
         </div>
 
         {/* Post content preview */}
-        <p className="line-clamp-2 text-sm leading-snug">{post.content}</p>
+        <p className="text-sm wrap-anywhere">{post.content}</p>
 
         {/* Footer with stats */}
         <footer className="mt-2 flex gap-4 text-xs text-gray-600">
