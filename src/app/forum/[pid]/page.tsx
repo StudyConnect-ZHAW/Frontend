@@ -61,7 +61,7 @@ export default function PostDetailPage() {
       {/* Left corner: Back button */}
       <Link
         href="/forum"
-        className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-main text-primary bg-sidebar-bg hover:bg-primary-bg"
+        className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-main text-primary bg-sidebar-bg hover:bg-primary-bg shrink-0"
         aria-label="Back to forum"
       >
         <FiArrowLeft className="text-2xl" />
