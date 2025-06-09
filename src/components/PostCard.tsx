@@ -40,7 +40,7 @@ export default function PostCard({ post, onLike, isLiked }: Props) {
         className="flex-1 p-4 hover:opacity-80 transition"
       >
         {/* Title */}
-        <h3 className="text-lg font-bold">{post.title}</h3>
+        <h3 className="text-lg font-bold wrap-anywhere">{post.title}</h3>
 
         {/* Meta info */}
         <div className="mb-2 text-xs text-gray-500">

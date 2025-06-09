@@ -74,7 +74,7 @@ export default function PostDetailPage() {
             {formattedDate} • {post.user.firstName} {post.user.lastName}
           </div>
 
-          <h1 className="text-xl font-semibold mb-2">{post.title}</h1>
+          <h1 className="text-xl font-semibold mb-2 wrap-anywhere">{post.title}</h1>
 
           <p className="text-base text-primary whitespace-pre-wrap wrap-anywhere">{post.content}</p>
         </section>

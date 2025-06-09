@@ -34,8 +34,8 @@ export default function GroupCard({ group, joined, memberCount, onJoin, onLeave 
         </Button>
       </div>
 
-      <h3 className="text-lg font-semibold text-primary mb-1">{group.name}</h3>
-      <p className="text-sm text-secondary mb-1">{group.description}</p>
+      <h3 className="text-lg font-semibold text-primary mb-1 wrap-anywhere">{group.name}</h3>
+      <p className="text-sm text-secondary mb-1 wrap-anywhere">{group.description}</p>
       <p className="text-sm text-secondary mb-1">{`${t('card.owner')}: ${ownerName}`}</p>
       <p className="text-sm text-secondary mb-1">{`${t('card.members')}: ${members}`}</p>
       <p className="text-sm text-secondary mb-1">{`${t('card.createdAt')}: ${date}`}</p>
