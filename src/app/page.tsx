@@ -2,9 +2,9 @@
 
 import { useTranslation } from "react-i18next";
 import PageHeader from '@/components/PageHeader';
-import WIPSection from "@/components/WIPSection";
 import Calendar from '@/components/Calendar';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import GroupsPage from "../components/Group";
 
 // * HomePage component: displays welcome header, sections, and calendar for the current ZHAW user
 const HomePage = () => {
@@ -34,13 +34,8 @@ const HomePage = () => {
         <div className="flex flex-row gap-8 h-full">
           {/* Left column */}
           <div className="flex flex-col gap-4 flex-grow basis-0">
-            <WIPSection />
-
-            {/* Shortcuts row */}
-            <div className="flex flex-row gap-4">
-              <WIPSection />
-              <WIPSection />
-              <WIPSection />
+            <div className="w-full max-w-4xl h-full border-main rounded-lg p-2">
+              <GroupsPage />
             </div>
           </div>
 
