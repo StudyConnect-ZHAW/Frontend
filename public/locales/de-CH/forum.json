@@ -1,5 +1,28 @@
 {
   "title": "Forum",
   "post": "Beitrag",
-  "comment": "Kommentar"
+  "comments": "Kommentare",
+  "titleCreate": "Beitrag Erstellen",
+  "placeholder": {
+    "postTitle": "Beitragstitel",
+    "postContent": "Was möchtest du mitteilen?",
+    "selectCategory": "Kategorie auswählen",
+    "search": "Suchen...",
+    "joinConversation": "Beteilige dich an der Diskussion"
+  },
+  "button": {
+    "createPost": "Beitrag Erstellen",
+    "reply": "Antworten"
+  },
+  "category": {
+    "general": "Allgemein"
+  },
+  "sort": {
+    "newest": "Neueste zuerst",
+    "mostComments": "Meiste Kommentare",
+    "mostLikes": "Meiste Likes"
+  },
+  "date": {
+    "invalid": "Ungültiges Datum"
+  }
 }

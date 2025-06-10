@@ -1,5 +1,28 @@
 {
   "title": "Forum",
   "post": "Post",
-  "comment": "Comment"
+  "comments": "Comments",
+  "titleCreate": "Create Post",
+  "placeholder": {
+    "postTitle": "Post Title",
+    "postContent": "What do you want to share?",
+    "selectCategory": "Select category",
+    "search": "Search...",
+    "joinConversation": "Join the conversation"
+  },
+  "button": {
+    "createPost": "Create Post",
+    "reply": "Reply"
+  },
+  "category": {
+    "general": "General"
+  },
+  "sort": {
+    "newest": "Newest first",
+    "mostComments": "Most comments",
+    "mostLikes": "Most likes"
+  },
+  "date": {
+    "invalid": "Invalid Date"
+  }
 }

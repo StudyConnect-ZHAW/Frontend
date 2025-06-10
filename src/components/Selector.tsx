@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface Option<T extends string> {
   label: string;
   value: T;

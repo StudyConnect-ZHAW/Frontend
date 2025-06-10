@@ -13,7 +13,6 @@ const knownRoutes = [
   '/',
   '/preferences',
   '/groups',
-  '/chat',
   '/calendar',
   '/forum',
   '/login'
@@ -35,7 +34,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   // Determine if the sidebar should be hidden based on route
   const hideSidebar = useMemo(() => {
-    return hiddenRoutes.includes(pathname) || !knownRoutes.includes(pathname);
+    if (hiddenRoutes.includes(pathname)) { return true; }
+
+    // Sidebar should show for all known base routes and their subpaths
+    return !knownRoutes.some(route => pathname === route || pathname.startsWith(`${route}/`));
   }, [pathname]);
 
   useEffect(() => {

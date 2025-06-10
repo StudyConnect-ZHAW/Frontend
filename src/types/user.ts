@@ -27,3 +27,12 @@ export interface UserUpdateData {
   lastName: string;
   email: string;
 }
+
+/**
+ * Payload to update an existing user in the backend.
+ */
+export interface UserUpdateData {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
