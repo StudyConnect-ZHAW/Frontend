@@ -28,6 +28,6 @@ export default function AuthPanel() {
           className="w-full h-auto transition-all duration-300 hover:scale-105 hover:drop-shadow-lg"
         />
       </button>
-        </div>
-    );
+    </div>
+  );
 }
