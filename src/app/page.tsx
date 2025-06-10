@@ -2,7 +2,6 @@
 
 import { useTranslation } from "react-i18next";
 import PageHeader from '@/components/PageHeader';
-import WIPSection from "@/components/WIPSection";
 import Calendar from '@/components/Calendar';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import GroupsPage from "../components/Group";

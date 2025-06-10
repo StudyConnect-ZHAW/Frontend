@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import PageHeader from "@/components/PageHeader";
 import GroupCard from "@/components/GroupCard";
 import SearchInput from "@/components/SearchInput";
 import Selector from "@/components/Selector";
