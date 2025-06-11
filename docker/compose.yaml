@@ -9,7 +9,7 @@ services:
       - studyconnect-network
     build:
       context: ../
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/DockerfileProd
     environment:
       - NEXT_PUBLIC_API_URL=http://backend:8080/api/
     ports:
